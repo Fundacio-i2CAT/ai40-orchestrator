@@ -35,10 +35,7 @@ EXAMPLE JSON
 @app.route("/service/instance", methods=["POST"])
 def create():
     data = dict(request.json)
-    result = mongodb.db[mongodb.collection_si].insert({"service_description":
-                                                                    DBRef(mongodb.collection_sd,
-                                                                          ObjectId(data['service_description_id']))
-                                                       })
+    result = mongodb.db[mongodb.collection_si].insert(parse_json.generate_insert(data))
     if result is not None:
         return jsonify(str(result))
     else:
