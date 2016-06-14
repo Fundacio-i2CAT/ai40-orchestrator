@@ -35,7 +35,7 @@ EXAMPLE JSON
 @app.route("/service/instance", methods=["POST"])
 def create():
     data = dict(request.json)
-    result = mongodb.db[mongodb.collection_si].insert(parse_json.generate_insert(data))
+    result = mongodb.db[mongodb.collection_si].insert(parse_json.add_validated(data))
     if result is not None:
         return jsonify(str(result))
     else:
@@ -47,6 +47,7 @@ EXAMPLE JSON
 {
     "_id" : "57599969ec7a4c184fcdf33e",
     "service_description_id" : "57599969ec7a4c184fcdf33e"
+    "user" : "name2"
 }
 '''
 
@@ -57,10 +58,7 @@ def update(service_instance_id):
     if data['_id'] != service_instance_id:
         return status_code.action_error(service_instance_id)
     result = mongodb.db[mongodb.collection_si].update_one({"_id": ObjectId(service_instance_id)},
-                                                          {"$set": {"service_description":
-                                                                        DBRef(mongodb.collection_sd,
-                                                                              ObjectId(data['service_description_id']))
-                                                                    }
+                                                          {"$set": parse_json.encode_item(data)
                                                            },
                                                           upsert=False)
 
