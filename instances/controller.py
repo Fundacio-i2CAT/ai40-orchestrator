@@ -6,6 +6,7 @@ from flask import request
 from bson.objectid import ObjectId
 from flask import Blueprint
 import flask_restful
+import requests
 
 api_v1_bp = Blueprint('api_v1', __name__)
 api_v1 = flask_restful.Api(api_v1_bp)
@@ -22,10 +23,19 @@ EXAMPLE JSON
 
 class ServiceInstances(flask_restful.Resource):
     def get(self):
+
         result = mongodb.db[mongodb.collection_si].find({"activated": True},
                                                         {"activated": 0})
 
         return jsonify(parse_json.decoder_list(list(result)))
+        """
+        Ejemplo requests.get -> Resultado se ha de coger result.text!!!
+
+        result = requests.get('http://0.0.0.0:8080/catalog/api/v0.1/service')
+        print result.text
+        return jsonify(parse_json.decoder_list(list(result)))
+        """
+
 
     def post(self):
         data = dict(request.json)

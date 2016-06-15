@@ -1,5 +1,6 @@
 from bson.objectid import ObjectId
 
+
 def decoder_list(dct):
     for item in dct:
         if '_id' in item:
