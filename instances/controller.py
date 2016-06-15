@@ -6,7 +6,6 @@ from common import parse_json
 from common import status_code
 from flask import request
 from bson.objectid import ObjectId
-from bson.dbref import DBRef
 
 
 @app.route("/service/instance", methods=["GET"])
