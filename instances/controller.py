@@ -6,7 +6,7 @@ from flask import request
 from bson.objectid import ObjectId
 from flask import Blueprint
 import flask_restful
-import requests
+from instances.SimpleLifeCicleManager import SimpleLifeCicleManagerImpl
 
 api_v1_bp = Blueprint('api_v1', __name__)
 api_v1 = flask_restful.Api(api_v1_bp)
@@ -28,14 +28,6 @@ class ServiceInstances(flask_restful.Resource):
                                                         {"activated": 0})
 
         return jsonify(parse_json.decoder_list(list(result)))
-        """
-        Ejemplo requests.get -> Resultado se ha de coger result.text!!!
-
-        result = requests.get('http://0.0.0.0:8080/catalog/api/v0.1/service')
-        print result.text
-        return jsonify(parse_json.decoder_list(list(result)))
-        """
-
 
     def post(self):
         data = dict(request.json)
@@ -80,5 +72,12 @@ class ServiceInstanceId(flask_restful.Resource):
             return status_code.action_error(service_instance_id)
 
 
+class ServiceProjectId(flask_restful.Resource):
+    def get(self, service_project_id):
+        slcm = SimpleLifeCicleManagerImpl()
+        slcm.getCurrentState(service_project_id)
+
+
 api_v1.add_resource(ServiceInstances, '/service/instance')
 api_v1.add_resource(ServiceInstanceId, '/service/instance/<service_instance_id>')
+api_v1.add_resource(ServiceProjectId, '/service/instance/project/<service_project_id>')
