@@ -1,4 +1,4 @@
-#!/Users/davidvicens/PycharmProjects/orchestrator/venv/bin/python
+#!/home/david/PycharmProjects/orchestrator/venv/bin/python
 
 import sys
 import getopt
