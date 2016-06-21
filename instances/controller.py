@@ -1,15 +1,17 @@
-from database import mongodb
-from flask import jsonify
+import flask_restful
+from bson.objectid import ObjectId
 from common import parse_json
 from common import status_code
-from flask import request
-from bson.objectid import ObjectId
+from database import mongodb
 from flask import Blueprint
-import flask_restful
-from instances.SimpleLifeCicleManager import SimpleLifeCicleManagerImpl
+from flask import jsonify
+from flask import request
+from cicle_manager.simple_life_cicle_manager import SimpleLifeCicleManagerImpl
 
 api_v1_bp = Blueprint('api_v1', __name__)
 api_v1 = flask_restful.Api(api_v1_bp)
+
+slcm = SimpleLifeCicleManagerImpl()
 
 '''
 EXAMPLE JSON
@@ -74,8 +76,11 @@ class ServiceInstanceId(flask_restful.Resource):
 
 class ServiceProjectId(flask_restful.Resource):
     def get(self, service_project_id):
-        slcm = SimpleLifeCicleManagerImpl()
-        slcm.getCurrentState(service_project_id)
+        return slcm.getCurrentState(service_project_id)
+
+    def post(self, service_project_id):
+        data = dict(request.json)
+        return slcm.setDesiredState(service_project_id, data['state'])
 
 
 api_v1.add_resource(ServiceInstances, '/service/instance')
