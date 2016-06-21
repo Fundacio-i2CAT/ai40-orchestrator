@@ -78,7 +78,7 @@ class ServiceProjectId(flask_restful.Resource):
     def get(self, service_project_id):
         return slcm.getCurrentState(service_project_id)
 
-    def post(self, service_project_id):
+    def put(self, service_project_id):
         data = dict(request.json)
         return slcm.setDesiredState(service_project_id, data['state'])
 
