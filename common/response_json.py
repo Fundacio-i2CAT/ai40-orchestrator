@@ -8,6 +8,7 @@ def not_found(service_id):
     }
     resp = jsonify(message)
     resp.status_code = 404
+    construct_headers(resp)
     return resp
 
 
@@ -18,6 +19,7 @@ def action_error(service_id):
     }
     resp = jsonify(message)
     resp.status_code = 400
+    construct_headers(resp)
     return resp
 
 
@@ -27,4 +29,11 @@ def is_ok_no_content():
     }
     resp = jsonify(message)
     resp.status_code = 204
+    construct_headers(resp)
+    return resp
+
+
+def construct_headers(resp):
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Cache-Control'] = 'no-cache'
     return resp
