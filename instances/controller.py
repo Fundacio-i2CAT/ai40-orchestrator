@@ -1,7 +1,7 @@
 import flask_restful
 from bson.objectid import ObjectId
 from common import parse_json
-from common import status_code
+from common import response_json
 from database import mongodb
 from flask import Blueprint
 from flask import jsonify
@@ -37,29 +37,29 @@ class ServiceInstances(flask_restful.Resource):
         if result is not None:
             return jsonify(str(result))
         else:
-            return status_code.action_error(request.json)
+            return response_json.action_error(request.json)
 
 
 class ServiceInstanceId(flask_restful.Resource):
     def get(self, service_instance_id):
         result = mongodb.db[mongodb.collection_si].find_one(dict(_id=ObjectId(service_instance_id)))
         if result is None:
-            return status_code.not_found(service_instance_id)
+            return response_json.not_found(service_instance_id)
         return jsonify(parse_json.decoder_item(result))
 
     def put(self, service_instance_id):
         data = dict(request.json)
         if data['_id'] != service_instance_id:
-            return status_code.action_error(service_instance_id)
+            return response_json.action_error(service_instance_id)
         result = mongodb.db[mongodb.collection_si].update_one({"_id": ObjectId(service_instance_id)},
                                                               {"$set": parse_json.encode_item(data)
                                                                },
                                                               upsert=False)
 
         if result.matched_count == 1:
-            return status_code.is_ok_no_content()
+            return response_json.is_ok_no_content()
         else:
-            return status_code.action_error(data['_id'])
+            return response_json.action_error(data['_id'])
 
     def delete(self, service_instance_id):
         result = mongodb.db[mongodb.collection_si].update_one(dict(_id=ObjectId(service_instance_id)),
@@ -69,9 +69,9 @@ class ServiceInstanceId(flask_restful.Resource):
                                                               })
 
         if result.matched_count == 1:
-            return status_code.is_ok_no_content()
+            return response_json.is_ok_no_content()
         else:
-            return status_code.action_error(service_instance_id)
+            return response_json.action_error(service_instance_id)
 
 
 class ServiceProjectId(flask_restful.Resource):

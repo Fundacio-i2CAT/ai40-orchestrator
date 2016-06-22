@@ -28,5 +28,3 @@ def is_ok_no_content():
     resp = jsonify(message)
     resp.status_code = 204
     return resp
-
-
