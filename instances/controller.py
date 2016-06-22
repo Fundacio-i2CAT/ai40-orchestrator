@@ -82,18 +82,21 @@ class ServiceProjectId(flask_restful.Resource):
 
     def put(self, service_instance_id):
         state = dict(request.json)
+        # Si nos piden a un estado PROVISIONED --> ERROR
+        if state['state'].upper() == FinalState.PROVISIONED.value:
+            return response_json.action_error(service_instance_id)
         data = find_one(service_instance_id)
         if data is None:
             return response_json.not_found('Not found ' + service_instance_id)
         if get_state(state['state'].upper()) is None:
             return response_json.not_found('Not found ' + service_instance_id + ' and state = ' + state['state'])
-        #Miramos el estado actual
+        # Miramos el estado actual
         if data.get('status').upper() == state['state'].upper():
             result = {'state': state['state']}
             return result
         slcm = SimpleLifeCicleManagerImpl(data)
         code = slcm.set_desired_state(state['state'])
-        #Actualizamos en base de datos
+        # Actualizamos en base de datos
         data_state = {"status": state['state'].lower()}
         result = update_one(service_instance_id, data_state)
         if result.matched_count != 1:
