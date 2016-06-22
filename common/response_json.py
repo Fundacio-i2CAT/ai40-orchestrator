@@ -1,10 +1,10 @@
 from flask import jsonify
 
 
-def not_found(service_id):
+def not_found(message):
     message = {
             'status': 404,
-            'message': 'Not Found: ' + service_id
+            'message': message
     }
     resp = jsonify(message)
     resp.status_code = 404
@@ -22,6 +22,16 @@ def action_error(service_id):
     construct_headers(resp)
     return resp
 
+
+def connect_vm_error(e):
+    message = {
+        'status': 500,
+        'message': e
+    }
+    resp = jsonify(message)
+    resp.status_code = 500
+    construct_headers(resp)
+    return resp
 
 def is_ok_no_content():
     message = {

@@ -1,10 +1,13 @@
 import paramiko
 from common.utils import get_state
+import ast
+
+from paramiko.ssh_exception import NoValidConnectionsError
 
 
 def connect_by_ssh(context, command, is_current_state):
-    ssh = None
     result = {}
+    ssh = None
     try:
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -34,3 +37,26 @@ def connect_by_ssh(context, command, is_current_state):
 
     return result
 
+
+def instance_ssh(context):
+    ssh = None
+    try:
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+        ssh.connect(hostname=context.get('host'), username=context.get('user_name'),
+                    password=context.get('password'), port=int(context.get('port')))
+    except NoValidConnectionsError, e:
+        ssh = None
+    finally:
+        if ssh is not None:
+            ssh.close()
+    return ssh
+
+
+def get_connect_instances(data):
+    instance = None
+    if data.get('context_type').lower() == 'ssh':
+        context = data.get('context')
+        instance = instance_ssh(context)
+    return instance

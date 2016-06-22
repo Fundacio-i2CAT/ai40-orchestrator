@@ -24,9 +24,3 @@ def encode_item(item):
     if 'service_description_id' in item:
         item['service_description_id'] = ObjectId(item['service_description_id'])
     return item
-
-
-def add_validated(item):
-    if 'activated' not in item:
-        item['activated'] = True
-    return item
