@@ -28,9 +28,10 @@ class ServiceInstances(flask_restful.Resource):
         slcm = SimpleLifeCicleManagerImpl(data)
         instance = slcm.get_instance()
         if instance is not None:
+            data = parse_json.encode_item(data)
             result = mongodb.db[mongodb.collection_si].insert_one(add_validated_status(data))
             if result.inserted_id is not None:
-                return jsonify(str(result.inserted_id))
+                return jsonify({"service_instance_id": str(result.inserted_id)})
             else:
                 return response_json.action_error(request.json)
         else:
@@ -60,6 +61,8 @@ class ServiceInstanceId(flask_restful.Resource):
 
     def delete(self, service_instance_id):
         data = find_one(service_instance_id)
+        if data is None:
+            return response_json.not_found('Not found ' + service_instance_id)
         slcm = SimpleLifeCicleManagerImpl(parse_json.decoder_item(data))
         data_vm = slcm.set_desired_state(FinalState.INACTIVE.value)
         if data_vm is None:
