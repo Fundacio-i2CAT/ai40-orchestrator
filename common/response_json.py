@@ -33,6 +33,7 @@ def connect_vm_error(e):
     construct_headers(resp)
     return resp
 
+
 def is_ok_no_content():
     message = {
         'status': 204
