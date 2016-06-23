@@ -60,9 +60,13 @@ class ServiceInstanceId(flask_restful.Resource):
 
     def delete(self, service_instance_id):
         data = find_one(service_instance_id)
-        print data
         slcm = SimpleLifeCicleManagerImpl(parse_json.decoder_item(data))
-        slcm.set_desired_state(FinalState.INACTIVE.value)
+        data_vm = slcm.set_desired_state(FinalState.INACTIVE.value)
+        if data_vm is None:
+            context = data.get('context')
+            message_json = "It isn't possible to connect. Hostname = " + \
+                           context.get('host') + " Port = " + str(context.get('port'))
+            return response_json.connect_vm_error(message_json)
         # Actualizamos en base de datos
         data_state = {"status": FinalState.INACTIVE.value, "activated": False}
         result = update_one(service_instance_id, data_state)

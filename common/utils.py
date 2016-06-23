@@ -9,7 +9,6 @@ import json
 
 
 def get_state(state):
-    print state
     switcher = {
         "ACTIVE": FinalState.ACTIVE.value,
         "INACTIVE": FinalState.INACTIVE.value,

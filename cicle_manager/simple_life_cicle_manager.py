@@ -1,13 +1,11 @@
 from common import paramiko_conexions
 from cicle_manager.life_cicle_manager import LifeCicleManager
-import ast
 from common.utils import get_state
 from common.paramiko_conexions import get_connect_instances
 
 
 class SimpleLifeCicleManagerImpl(LifeCicleManager):
     def __init__(self, data):
-        print data
         self._instance = get_connect_instances(data)
         self._data = data
 
@@ -19,7 +17,6 @@ class SimpleLifeCicleManagerImpl(LifeCicleManager):
 
 
 def connect_vm(data, is_current_state, status):
-    print status
     result = None
     if data.get('context_type').lower() == 'ssh':
         context = data.get('context')

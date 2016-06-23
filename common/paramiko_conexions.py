@@ -1,7 +1,5 @@
 import paramiko
 from common.utils import get_state
-import ast
-
 from paramiko.ssh_exception import NoValidConnectionsError
 
 
@@ -31,6 +29,9 @@ def connect_by_ssh(context, command, is_current_state):
             result['state'] = get_state(s_status.upper())
         else:
             result['code'] = stdout.channel.recv_exit_status()
+    except NoValidConnectionsError, e:
+        ssh = None
+        result = None
     finally:
         if ssh is not None:
             ssh.close()
