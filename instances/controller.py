@@ -16,6 +16,7 @@ api_v1_bp = Blueprint('api_v1', __name__)
 api_v1 = flask_restful.Api(api_v1_bp)
 
 
+
 class ServiceInstances(flask_restful.Resource):
     def get(self):
         result = mongodb.db[mongodb.collection_si].find({"activated": True},
@@ -24,7 +25,6 @@ class ServiceInstances(flask_restful.Resource):
         return jsonify(parse_json.decoder_list(list(result)))
 
     def post(self):
-        print request.json
         data = dict(request.json)
         slcm = SimpleLifeCicleManagerImpl(data)
         instance = slcm.get_instance()
