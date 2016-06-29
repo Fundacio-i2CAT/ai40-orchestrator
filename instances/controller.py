@@ -24,6 +24,7 @@ class ServiceInstances(flask_restful.Resource):
         return jsonify(parse_json.decoder_list(list(result)))
 
     def post(self):
+        print request.json
         data = dict(request.json)
         slcm = SimpleLifeCicleManagerImpl(data)
         instance = slcm.get_instance()
