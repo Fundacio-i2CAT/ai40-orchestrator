@@ -1,16 +1,16 @@
 from common import paramiko_conexions
 from cicle_manager.life_cicle_manager import LifeCicleManager
-from common.utils import get_state
+from common.utils import get_state_slcm
 from common.paramiko_conexions import get_connect_instances
 
 
 class SimpleLifeCicleManagerImpl(LifeCicleManager):
-    def __init__(self, data):
+    def __init__(self, data, is_new_instance):
         self._instance = get_connect_instances(data)
         self._data = data
 
     def set_desired_state(self, state):
-        return connect_vm(self._data, False, get_state(state.upper()))
+        return connect_vm(self._data, False, get_state_slcm(state.upper()))
 
     def get_current_state(self):
         return connect_vm(self._data, True, '')

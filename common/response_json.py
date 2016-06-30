@@ -25,11 +25,11 @@ def action_error(service_id):
 
 def connect_vm_error(e):
     message = {
-        'status': 500,
+        'status': 400,
         'message': e
     }
     resp = jsonify(message)
-    resp.status_code = 500
+    resp.status_code = 400
     construct_headers(resp)
     return resp
 

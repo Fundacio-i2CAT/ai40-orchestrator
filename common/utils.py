@@ -3,18 +3,30 @@ from common import parse_json
 from database import mongodb
 from enums.desired_state import DesiredState
 from enums.final_state import FinalState
+from enums.openstack_enum import OpenstackEnum
 from common.config_parser import URL_CATALOG_CONTEXT
 import requests
 import json
 
 
-def get_state(state):
+def get_state_slcm(state):
     switcher = {
         "ACTIVE": FinalState.ACTIVE.value,
         "INACTIVE": FinalState.INACTIVE.value,
         "RUNNING": DesiredState.RUNNING.value,
         "DEPLOYED": DesiredState.DEPLOYED.value,
         "PROVISIONED": get_command_provisioned(state),
+    }
+    return switcher.get(state)
+
+
+def get_state_olcm(state):
+    switcher = {
+        "ACTIVE": OpenstackEnum.ACTIVE.value,
+        "INACTIVE": OpenstackEnum.SHUTOFF.value,
+        "RUNNING": OpenstackEnum.RUNNING.value,
+        "DEPLOYED": OpenstackEnum.DEPLOYED.value,
+        "DESTROYED": OpenstackEnum.DESTROYED.value,
     }
     return switcher.get(state)
 
@@ -33,11 +45,12 @@ def get_context(service_project_id):
     return data
 
 
-def add_validated_status(item):
+def add_validated_status(item, openstack_id):
     if 'activated' not in item:
         item['activated'] = True
     if 'status' not in item:
         item['status'] = 'PROVISIONED'
+    item['context']['openstack']['openstack_id'] = openstack_id
     return item
 
 
