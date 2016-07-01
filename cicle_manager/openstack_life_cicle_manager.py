@@ -2,7 +2,6 @@ from cicle_manager.life_cicle_manager import LifeCicleManager
 from common.openstack_common import create_connection
 from common.openstack_common import create_instance
 from common.openstack_common import get_instance
-from common.utils import get_state_olcm
 from enums.openstack_enum import OpenstackEnum
 from common.response_json import not_found
 from common.utils import get_state_olcm
@@ -26,7 +25,11 @@ class OpenstackLifeCicleManagerImpl(LifeCicleManager):
                 return None
         else:
             dict_fs = get_state_olcm(state.upper())
-            return self._instance.action(self._conn.session, dict_fs)
+            try:
+                self._instance.action(self._conn.session, dict_fs)
+                return {"code": 1, "msg": "OK"}
+            except Exception as e:
+                return None
 
     def get_current_state(self):
         try:

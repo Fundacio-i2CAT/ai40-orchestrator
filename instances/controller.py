@@ -106,6 +106,8 @@ class ServiceProjectId(flask_restful.Resource):
             return result
         lcm = get_cicle_manager_type(data)
         code = lcm.set_desired_state(state['state'])
+        if code is None:
+            return response_json.action_error('This instance was already in state ' + state['state'])
         # Actualizamos en base de datos
         data_state = {"status": state['state'].lower()}
         result = update_one(service_instance_id, data_state)
