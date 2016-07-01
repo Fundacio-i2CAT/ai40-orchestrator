@@ -27,6 +27,7 @@ def get_state_olcm(state):
         "RUNNING": OpenstackEnum.RUNNING.value,
         "DEPLOYED": OpenstackEnum.DEPLOYED.value,
         "DESTROYED": OpenstackEnum.DESTROYED.value,
+        "SHUTOFF": OpenstackEnum.SHUTOFF.value,
     }
     return switcher.get(state)
 

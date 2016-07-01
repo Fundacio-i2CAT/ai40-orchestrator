@@ -13,9 +13,10 @@ from flask import Blueprint
 from flask import jsonify
 from flask import request
 
-
 api_v1_bp = Blueprint('api_v1', __name__)
 api_v1 = flask_restful.Api(api_v1_bp)
+
+dict_instances = {}
 
 
 class ServiceInstances(flask_restful.Resource):
@@ -36,6 +37,7 @@ class ServiceInstances(flask_restful.Resource):
             else:
                 result = mongodb.db[mongodb.collection_si].insert_one(add_validated_status(data, ''))
             if result.inserted_id is not None:
+                dict_instances.update({str(result.inserted_id): lcm})
                 return jsonify({"service_instance_id": str(result.inserted_id)})
             else:
                 return response_json.action_error(request.json)
@@ -51,7 +53,8 @@ class ServiceInstanceId(flask_restful.Resource):
         data = find_one(service_instance_id)
         if data is None or not data['activated']:
             return response_json.not_found('Not found ' + service_instance_id)
-        lcm = get_cicle_manager_type(data)
+        lcm = get_cls_in_dict(data)
+        put_cls_in_dict(service_instance_id, lcm)
         return get_current_status_and_update(lcm, service_instance_id)
 
     def put(self, service_instance_id):
@@ -71,7 +74,7 @@ class ServiceInstanceId(flask_restful.Resource):
             return response_json.not_found('Not found ' + service_instance_id)
         data = parse_json.decoder_item(data)
         state_enum = get_state_enum_value(data['context_type'].lower())
-        lcm = get_cicle_manager_type(data)
+        lcm = get_cls_in_dict(data)
         code = lcm.set_desired_state(state_enum)
         if code is None:
             context = data.get('context')
@@ -82,6 +85,7 @@ class ServiceInstanceId(flask_restful.Resource):
         data_state = {"status": state_enum, "activated": False}
         result = update_one(service_instance_id, data_state)
         if result.matched_count == 1:
+            put_cls_in_dict(service_instance_id, lcm)
             return response_json.is_ok_no_content()
         else:
             return response_json.action_error(service_instance_id)
@@ -92,7 +96,8 @@ class ServiceProjectId(flask_restful.Resource):
         data = find_one(service_instance_id)
         if data is None or not data['activated']:
             return response_json.not_found('Not found ' + service_instance_id)
-        lcm = get_cicle_manager_type(data)
+        lcm = get_cls_in_dict(data)
+        put_cls_in_dict(service_instance_id, lcm)
         return get_current_status_and_update(lcm, service_instance_id)
 
     def put(self, service_instance_id):
@@ -109,7 +114,7 @@ class ServiceProjectId(flask_restful.Resource):
         if data.get('status').upper() == state['state'].upper():
             result = {'state': state['state']}
             return result
-        lcm = get_cicle_manager_type(data)
+        lcm = get_cls_in_dict(data)
         code = lcm.set_desired_state(state['state'])
         if code is None:
             return response_json.action_error('This instance was already in state ' + state['state'])
@@ -118,6 +123,7 @@ class ServiceProjectId(flask_restful.Resource):
         result = update_one(service_instance_id, data_state)
         if result.matched_count != 1:
             return response_json.action_error(service_instance_id)
+        put_cls_in_dict(service_instance_id, lcm)
         return code
 
 
@@ -130,6 +136,17 @@ def get_cicle_manager_type(data):
     cls = get_cls(data['context_type'].lower())
     return cls(data)
 
+
+def get_cls_in_dict(data):
+    if str(data['_id']) in dict_instances.keys():
+        return dict_instances[str(data['_id'])]
+    else:
+        return get_cicle_manager_type(data)
+
+
+def put_cls_in_dict(service_instance_id, lcm):
+    if service_instance_id not in dict_instances.keys():
+        dict_instances.update({service_instance_id: lcm})
 
 def get_current_status_and_update(lcm, service_instance_id):
     result = lcm.get_current_state()
