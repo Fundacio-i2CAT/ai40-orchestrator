@@ -19,5 +19,4 @@ def get_cls(context_type):
 
 
 def get_state_enum_value(context_type):
-    print context_type
     return enum_dict[context_type]
