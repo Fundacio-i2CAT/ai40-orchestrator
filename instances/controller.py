@@ -67,7 +67,9 @@ class ServiceInstanceId(flask_restful.Resource):
             return response_json.not_found('Not found ' + service_instance_id)
         data = parse_json.decoder_item(data)
         lcm = get_cicle_manager_type(data)
-        lcm.set_desired_state(get_state_enum_value(data['context_type']))
+        code = lcm.set_desired_state(get_state_enum_value(data['context_type']))
+        if code is -1:
+            return response_json.not_found('Not found ' + service_instance_id)
         '''
         if data_vm is None:
             context = data.get('context')
