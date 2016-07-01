@@ -50,7 +50,8 @@ def add_validated_status(item, openstack_id):
         item['activated'] = True
     if 'status' not in item:
         item['status'] = 'PROVISIONED'
-    item['context']['openstack']['openstack_id'] = openstack_id
+    if 'openstack' in item['context']:
+        item['context']['openstack']['openstack_id'] = openstack_id
     return item
 
 

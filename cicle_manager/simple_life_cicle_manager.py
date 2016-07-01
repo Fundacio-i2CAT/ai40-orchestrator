@@ -5,7 +5,7 @@ from common.paramiko_conexions import get_connect_instances
 
 
 class SimpleLifeCicleManagerImpl(LifeCicleManager):
-    def __init__(self, data, is_new_instance):
+    def __init__(self, data):
         self._instance = get_connect_instances(data)
         self._data = data
 

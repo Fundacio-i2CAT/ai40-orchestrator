@@ -31,8 +31,10 @@ class ServiceInstances(flask_restful.Resource):
         instance = lcm.get_instance()
         if instance is not None:
             data = parse_json.encode_item(data)
-
-            result = mongodb.db[mongodb.collection_si].insert_one(add_validated_status(data, instance.id))
+            if hasattr(instance, 'id'):
+                result = mongodb.db[mongodb.collection_si].insert_one(add_validated_status(data, instance.id))
+            else:
+                result = mongodb.db[mongodb.collection_si].insert_one(add_validated_status(data, ''))
             if result.inserted_id is not None:
                 return jsonify({"service_instance_id": str(result.inserted_id)})
             else:
@@ -68,15 +70,16 @@ class ServiceInstanceId(flask_restful.Resource):
         if data is None:
             return response_json.not_found('Not found ' + service_instance_id)
         data = parse_json.decoder_item(data)
+        state_enum = get_state_enum_value(data['context_type'].lower())
         lcm = get_cicle_manager_type(data)
-        code = lcm.set_desired_state(get_state_enum_value(data['context_type']))
+        code = lcm.set_desired_state(state_enum)
         if code is None:
             context = data.get('context')
             message_json = "It isn't possible to connect. Hostname = " + \
                            context.get('host') + " Port = " + str(context.get('port'))
             return response_json.not_found(message_json)
         # Actualizamos en base de datos
-        data_state = {"status": get_state_enum_value(data['context_type']), "activated": False}
+        data_state = {"status": state_enum, "activated": False}
         result = update_one(service_instance_id, data_state)
         if result.matched_count == 1:
             return response_json.is_ok_no_content()
@@ -124,7 +127,7 @@ api_v1.add_resource(ServiceProjectId, '/service/instance/<service_instance_id>/s
 
 
 def get_cicle_manager_type(data):
-    cls = get_cls(data['context_type'])
+    cls = get_cls(data['context_type'].lower())
     return cls(data)
 
 
