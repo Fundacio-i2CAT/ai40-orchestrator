@@ -21,7 +21,7 @@ class OpenstackLifeCicleManagerImpl(LifeCicleManager):
                 self._instance.delete(self._conn.session)
                 return 1
             except Exception as e:
-                return -1
+                return None
         else:
             dict_fs = get_state_olcm(state.upper())
             return self._instance.action(self._conn.session, dict_fs)

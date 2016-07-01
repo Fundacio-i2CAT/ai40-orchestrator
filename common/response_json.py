@@ -23,17 +23,6 @@ def action_error(service_id):
     return resp
 
 
-def connect_vm_error(e):
-    message = {
-        'status': 400,
-        'message': e
-    }
-    resp = jsonify(message)
-    resp.status_code = 400
-    construct_headers(resp)
-    return resp
-
-
 def is_ok_no_content():
     message = {
         'status': 204

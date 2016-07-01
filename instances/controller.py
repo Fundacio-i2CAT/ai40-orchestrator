@@ -68,15 +68,11 @@ class ServiceInstanceId(flask_restful.Resource):
         data = parse_json.decoder_item(data)
         lcm = get_cicle_manager_type(data)
         code = lcm.set_desired_state(get_state_enum_value(data['context_type']))
-        if code is -1:
-            return response_json.not_found('Not found ' + service_instance_id)
-        '''
-        if data_vm is None:
+        if code is None:
             context = data.get('context')
             message_json = "It isn't possible to connect. Hostname = " + \
                            context.get('host') + " Port = " + str(context.get('port'))
-            return response_json.connect_vm_error(message_json)
-        '''
+            return response_json.not_found(message_json)
         # Actualizamos en base de datos
         data_state = {"status": get_state_enum_value(data['context_type']), "activated": False}
         result = update_one(service_instance_id, data_state)
