@@ -45,7 +45,7 @@ class ServiceInstances(flask_restful.Resource):
             context = data.get('context')
             message_json = "It isn't possible to connect. Hostname = " + \
                            context.get('host') + " Port = " + str(context.get('port'))
-            return response_json.connect_vm_error(message_json)
+            return response_json.not_found(message_json)
 
 
 class ServiceInstanceId(flask_restful.Resource):
@@ -147,6 +147,7 @@ def get_cls_in_dict(data):
 def put_cls_in_dict(service_instance_id, lcm):
     if service_instance_id not in dict_instances.keys():
         dict_instances.update({service_instance_id: lcm})
+
 
 def get_current_status_and_update(lcm, service_instance_id):
     result = lcm.get_current_state()
