@@ -31,6 +31,7 @@ class ServiceInstances(flask_restful.Resource):
         instance = lcm.get_instance()
         if instance is not None:
             data = parse_json.encode_item(data)
+
             result = mongodb.db[mongodb.collection_si].insert_one(add_validated_status(data, instance.id))
             if result.inserted_id is not None:
                 return jsonify({"service_instance_id": str(result.inserted_id)})
@@ -45,10 +46,11 @@ class ServiceInstances(flask_restful.Resource):
 
 class ServiceInstanceId(flask_restful.Resource):
     def get(self, service_instance_id):
-        result = find_one(service_instance_id)
-        if result is None:
+        data = find_one(service_instance_id)
+        if data is None or not data['activated']:
             return response_json.not_found('Not found ' + service_instance_id)
-        return jsonify(parse_json.decoder_item(result))
+        lcm = get_cicle_manager_type(data)
+        return get_current_status_and_update(lcm, service_instance_id)
 
     def put(self, service_instance_id):
         data = dict(request.json)
@@ -88,7 +90,7 @@ class ServiceProjectId(flask_restful.Resource):
         if data is None or not data['activated']:
             return response_json.not_found('Not found ' + service_instance_id)
         lcm = get_cicle_manager_type(data)
-        return lcm.get_current_state()
+        return get_current_status_and_update(lcm, service_instance_id)
 
     def put(self, service_instance_id):
         state = dict(request.json)
@@ -124,3 +126,12 @@ api_v1.add_resource(ServiceProjectId, '/service/instance/<service_instance_id>/s
 def get_cicle_manager_type(data):
     cls = get_cls(data['context_type'])
     return cls(data)
+
+
+def get_current_status_and_update(lcm, service_instance_id):
+    result = lcm.get_current_state()
+    if 'status' in result:
+        result_update = update_one(service_instance_id, {"status": result['status']})
+        if result_update.matched_count != 1:
+            return response_json.action_error(service_instance_id)
+    return result
