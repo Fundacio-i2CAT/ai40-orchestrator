@@ -4,6 +4,8 @@ from common.openstack_common import create_instance
 from common.openstack_common import get_instance
 from common.utils import get_state_olcm
 from enums.openstack_enum import OpenstackEnum
+from common.response_json import not_found
+from common.utils import get_state_olcm
 
 
 class OpenstackLifeCicleManagerImpl(LifeCicleManager):
@@ -27,4 +29,8 @@ class OpenstackLifeCicleManagerImpl(LifeCicleManager):
             return self._instance.action(self._conn.session, dict_fs)
 
     def get_current_state(self):
-        return self._conn.compute.get_server(self._instance).status
+        try:
+            status = self._conn.compute.get_server(self._instance).status
+            return {"status": get_state_olcm(status)}
+        except Exception as e:
+            return not_found('Server not found ' + str(self._data['_id']))

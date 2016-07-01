@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class OpenstackEnum(Enum):
-    ACTIVE = "ACTIVE"
+    ACTIVE = "RUNNING"
     SHUTOFF = "DEPLOYED"
     PROVISIONED = "PROVISIONED"
     RUNNING = {"os-start": None}
