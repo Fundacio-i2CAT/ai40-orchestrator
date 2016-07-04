@@ -5,6 +5,7 @@ from common.openstack_common import get_instance
 from enums.openstack_enum import OpenstackEnum
 from common.response_json import not_found
 from common.utils import get_state_olcm
+from common.openstack_common import assign_float_ip
 
 
 class OpenstackLifeCicleManagerImpl(LifeCicleManager):

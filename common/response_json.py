@@ -12,6 +12,16 @@ def not_found(message):
     return resp
 
 
+def internal_server_error(message):
+    message = {
+        'status': 500,
+        'message': message
+    }
+    resp = jsonify(message)
+    resp.status_code = 500
+    construct_headers(resp)
+    return resp
+
 def action_error(service_id):
     message = {
         'status': 400,

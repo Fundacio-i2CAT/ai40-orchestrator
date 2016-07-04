@@ -12,6 +12,7 @@ from enums.final_state import FinalState
 from flask import Blueprint
 from flask import jsonify
 from flask import request
+from common.openstack_common import assign_float_ip
 
 api_v1_bp = Blueprint('api_v1', __name__)
 api_v1 = flask_restful.Api(api_v1_bp)
@@ -33,11 +34,15 @@ class ServiceInstances(flask_restful.Resource):
         if instance is not None:
             data = parse_json.encode_item(data)
             if hasattr(instance, 'id'):
+                code_result = assign_float_ip(lcm.get_conn(), instance, data['context']['host'])
+                if code_result is -1:
+                    return response_json.internal_server_error("It isn't possbile assign float ip to " + data['context']['host'])
                 result = mongodb.db[mongodb.collection_si].insert_one(add_validated_status(data, instance.id))
             else:
                 result = mongodb.db[mongodb.collection_si].insert_one(add_validated_status(data, ''))
             if result.inserted_id is not None:
                 dict_instances.update({str(result.inserted_id): lcm})
+
                 return jsonify({"service_instance_id": str(result.inserted_id)})
             else:
                 return response_json.action_error(request.json)
