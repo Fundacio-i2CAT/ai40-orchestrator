@@ -37,7 +37,7 @@ def time_limit(seconds):
 def assign_float_ip(conn, instance, ip_float):
     is_assigned = False
     try:
-        with time_limit(1):
+        with time_limit(3):
             while not is_assigned:
                 is_assigned = assign_float_ip2(conn, instance, ip_float)
         return 1
