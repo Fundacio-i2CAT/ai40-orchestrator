@@ -10,10 +10,7 @@ from common.utils import get_state_olcm
 class OpenstackLifeCicleManagerImpl(LifeCicleManager):
     def __init__(self, data):
         self._conn = create_connection(data['context']['openstack'])
-        if 'openstack_id' not in data['context']['openstack']:
-            self._instance = create_instance(self._conn, data['context']['openstack'])
-        else:
-            self._instance = get_instance(self._conn, data['context']['openstack']['openstack_id'])
+        self._instance = create_instance(self._conn, data['context']['openstack'])
         self._data = data
 
     def set_desired_state(self, state):

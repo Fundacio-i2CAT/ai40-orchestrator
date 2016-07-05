@@ -37,9 +37,9 @@ class ServiceInstances(flask_restful.Resource):
                 code_result = assign_float_ip(lcm.get_conn(), instance, data['context']['host'])
                 if code_result is -1:
                     return response_json.internal_server_error("It isn't possbile assign float ip to " + data['context']['host'])
-                result = mongodb.db[mongodb.collection_si].insert_one(add_validated_status(data, instance.id))
+                result = mongodb.db[mongodb.collection_si].insert_one(add_validated_status(data))
             else:
-                result = mongodb.db[mongodb.collection_si].insert_one(add_validated_status(data, ''))
+                result = mongodb.db[mongodb.collection_si].insert_one(add_validated_status(data))
             if result.inserted_id is not None:
                 dict_instances.update({str(result.inserted_id): lcm})
 
@@ -137,16 +137,16 @@ api_v1.add_resource(ServiceInstanceId, '/service/instance/<service_instance_id>'
 api_v1.add_resource(ServiceProjectId, '/service/instance/<service_instance_id>/state')
 
 
-def get_cicle_manager_type(data):
-    cls = get_cls(data['context_type'].lower())
-    return cls(data)
-
-
 def get_cls_in_dict(data):
     if str(data['_id']) in dict_instances.keys():
         return dict_instances[str(data['_id'])]
     else:
         return get_cicle_manager_type(data)
+
+
+def get_cicle_manager_type(data):
+    cls = get_cls(data['context_type'].lower())
+    return cls(data)
 
 
 def put_cls_in_dict(service_instance_id, lcm):

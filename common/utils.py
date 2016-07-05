@@ -46,13 +46,11 @@ def get_context(service_project_id):
     return data
 
 
-def add_validated_status(item, openstack_id):
+def add_validated_status(item):
     if 'activated' not in item:
         item['activated'] = True
     if 'status' not in item:
         item['status'] = 'PROVISIONED'
-    if 'openstack' in item['context']:
-        item['context']['openstack']['openstack_id'] = openstack_id
     return item
 
 
