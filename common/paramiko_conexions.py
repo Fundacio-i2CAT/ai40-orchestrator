@@ -26,7 +26,7 @@ def connect_by_ssh(context, command, is_current_state):
             for line in iter(stdout.readline, ''):
                 s_status = line.rstrip()
             result['code'] = stdout.channel.recv_exit_status()
-            result['status'] = get_state_slcm(s_status.upper())
+            result['state'] = get_state_slcm(s_status.upper())
         else:
             result['code'] = stdout.channel.recv_exit_status()
     except NoValidConnectionsError, e:

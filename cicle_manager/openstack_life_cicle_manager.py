@@ -31,6 +31,6 @@ class OpenstackLifeCicleManagerImpl(LifeCicleManager):
     def get_current_state(self):
         try:
             status = self._conn.compute.get_server(self._instance).status
-            return {"status": get_state_olcm(status)}
+            return {"state": get_state_olcm(status)}
         except Exception as e:
             return not_found('Server not found ' + str(self._data['_id']))
