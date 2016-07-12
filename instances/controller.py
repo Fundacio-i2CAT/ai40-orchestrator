@@ -132,9 +132,40 @@ class ServiceProjectId(flask_restful.Resource):
         return code
 
 
+class ServiceInstances2(flask_restful.Resource):
+    def get(self):
+        result = mongodb.db[mongodb.collection_si].find({"activated": True},
+                                                        {"activated": 0})
+
+        return jsonify(parse_json.decoder_list(list(result)))
+
+    def post(self):
+        data = dict(request.json)
+        result = mongodb.db[mongodb.collection_si].insert_one(add_validated_status(data))
+        if result.inserted_id is not None:
+            return jsonify({"service_instance_id": str(result.inserted_id)})
+        else:
+            return response_json.action_error(request.json)
+
+
+class ServiceInstanceId2(flask_restful.Resource):
+    def get(self, service_instance_id):
+        data = find_one(service_instance_id)
+        return jsonify(parse_json.decoder_item(data))
+
+    def put(self, service_instance_id):
+        data = dict(request.json)
+        result = update_one(service_instance_id, data)
+        if result.matched_count == 1:
+            return response_json.is_ok_no_content()
+        else:
+            return response_json.action_error(data['_id'])
+
 api_v1.add_resource(ServiceInstances, '/service/instance')
 api_v1.add_resource(ServiceInstanceId, '/service/instance/<service_instance_id>')
 api_v1.add_resource(ServiceProjectId, '/service/instance/<service_instance_id>/state')
+api_v1.add_resource(ServiceInstances2, '/service/instance2')
+api_v1.add_resource(ServiceInstanceId2, '/service/instance2/<service_instance_id>')
 
 
 def get_cls_in_dict(data):
