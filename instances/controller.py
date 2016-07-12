@@ -4,6 +4,7 @@ from common import response_json
 from common.dict_cls import get_cls
 from common.dict_cls import get_state_enum_value
 from common.utils import add_validated_status
+from common.utils import add_status
 from common.utils import find_one
 from common.utils import get_state_slcm
 from common.utils import update_one
@@ -155,7 +156,7 @@ class ServiceInstanceId2(flask_restful.Resource):
 
     def put(self, service_instance_id):
         data = dict(request.json)
-        result = update_one(service_instance_id, data)
+        result = update_one(service_instance_id, add_status(data))
         if result.matched_count == 1:
             return response_json.is_ok_no_content()
         else:

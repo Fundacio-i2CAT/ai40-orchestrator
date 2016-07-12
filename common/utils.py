@@ -54,6 +54,11 @@ def add_validated_status(item):
     return item
 
 
+def add_status(item):
+    item['status'] = item['state']
+    return item
+
+
 def find_one(service_instance_id):
     return mongodb.db[mongodb.collection_si].find_one(dict(_id=ObjectId(service_instance_id)))
 
