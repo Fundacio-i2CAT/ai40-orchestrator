@@ -16,6 +16,7 @@ def get_state_slcm(state):
         "RUNNING": DesiredState.RUNNING.value,
         "DEPLOYED": DesiredState.DEPLOYED.value,
         "PROVISIONED": get_command_provisioned(state),
+        "FAILED": FinalState.FAILED.value,
     }
     return switcher.get(state)
 
