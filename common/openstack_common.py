@@ -7,6 +7,7 @@ from openstack.exceptions import HttpException
 
 class TimeoutException(Exception): pass
 
+
 def create_connection(data):
     return connection.Connection(auth_url=data['auth_url'], username=data['username'], password=data['password'],
                                  project_id=data['project_id'], user_domain_name=data['user_domain_name'])
@@ -37,7 +38,7 @@ def time_limit(seconds):
 def assign_float_ip(conn, instance, ip_float):
     is_assigned = False
     try:
-        with time_limit(3):
+        with time_limit(5):
             while not is_assigned:
                 is_assigned = assign_float_ip2(conn, instance, ip_float)
         return 1
