@@ -8,4 +8,3 @@ class OpenstackEnum(Enum):
     RUNNING = {"os-start": None}
     DEPLOYED = {"os-stop": None}
     DESTROYED = "DESTROYED"
-    BUILD = "BUILD"
