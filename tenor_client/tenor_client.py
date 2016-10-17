@@ -50,15 +50,14 @@ class TenorClient(object):
         response = requests.post('{0}/ns-instances'.format(self._base_url), 
                                  headers={'Content-Type': 'application/json'},
                                  json=ns_data)
+        print response.text
         print response.status_code
         
 if __name__ == "__main__":
     print "Tenor client demo"
     tc = TenorClient("http://localhost:4000")
-    print tc.create_vnf("117",
-                        "http://10.8.0.6/alpine.img",
-                        "laskjd")
-    print tc.create_ns("117","117","laksjd")
+    print tc.create_vnf("121","http://10.8.0.6/alpine.img","alpine")
+    print tc.create_ns("121","121","alpine")
     nsds = tc.get_ns()
     ids = [ { 'id': x['nsd']['id'], 
               'oid': x['_id']['$oid'], 
