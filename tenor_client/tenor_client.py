@@ -60,29 +60,103 @@ class TenorClient(object):
         return response.status_code
 
     def get_ns(self):
-        """Get the lists of ns already created"""
+        """Get the list of ns already created"""
         response = requests.get('{0}/network-services'.format(self._base_url))
+        return json.loads(response.text)
+
+    def get_vnf(self):
+        """Get the list of vnfs already created"""
+        response = requests.get('{0}/vnfs'.format(self._base_url))
+        return json.loads(response.text)
+
+    def get_vnf_instances(self):
+        """Get the list of vnfs already created"""
+        response = requests.get('{0}/vnfs'.format(self._base_url))
         return json.loads(response.text)
         
     def instantiate_ns(self,ns_id=None,pop_id=None,callback_url="http://example.com",flavour="basic"):
         """Instantiates a ns on openstack, if no argument provided proceeds with the last one on the stack"""
         if not ns_id:
             nsds = self.get_ns()
-            ns_id = nsds[-1]['nsd']['id']
-        ns_data = {'ns_id': ns_id, 'pop_id': pop_id, "callbackUrl": callback_url, "flavour": flavour}
+            ns_id = self.get_last_ns_id()
+        ns_data = {'ns_id': ns_id._id, 'pop_id': pop_id, "callbackUrl": callback_url, "flavour": flavour}
         response = requests.post('{0}/ns-instances'.format(self._base_url), 
                                  headers={'Content-Type': 'application/json'},
                                  json=ns_data)
         print response.text
         print response.status_code
         
+    def get_last_vnf_id(self):
+        """Gets last vnf_id"""
+        response = requests.get('{0}/vnfs'.format(self._base_url))
+        vnfs = json.loads(response.text)
+        ids = sorted([ x['vnfd']['id'] for x in vnfs ])
+        if len(ids) == 0:
+            return TenorId(1899)
+        ide = TenorId(ids[-1])
+        return ide
+
+    def get_last_ns_id(self):
+        """Gets last ns_id"""
+        response = requests.get('{0}/network-services'.format(self._base_url))
+        nss = json.loads(response.text)
+        ids = sorted([ x['nsd']['id'] for x in nss ])
+        if len(ids) == 0:
+            return TenorId(1899)
+        ide = TenorId(ids[-1])
+        return ide
+    
+    def delete_all_ns(self):
+        nss = self.get_ns()
+        for ns in nss:
+            requests.delete("{0}/network-services/{1}".format(self._base_url,ns['nsd']['id']))
+        return
+
+    def delete_all_vnfs(self):
+        vnfs = self.get_vnf()
+        for vnf in vnfs:
+            requests.delete("{0}/vnfs/{1}".format(self._base_url,vnf['vnfd']['id']))
+        return
+
+class TenorId(object):
+    """Manages mixed ids ... ints for vnfs and unicode for nsd"""
+    def __init__(self,value):
+        self._id = value
+    
+    def __add__(self,other):
+        if type(self._id) is int:
+            return str(self._id+other)
+        elif type(self._id) is unicode:
+            ords = [ ord(x) for x in self._id ]
+            ords[-1] = ords[-1]+other
+            ords[0] = ords[0]+other
+            unis = [ unichr(x) for x in ords ]
+            return ''.join(unis)
+
+    def __repr__(self):
+        return str(self._id)
+
 if __name__ == "__main__":
     print "Tenor client demo"
 
     tc = TenorClient("http://localhost:4000")
-    print tc.create_existing_vnf("124","6e23f9e5-d72c-48b1-94e2-7edff0d8adf5","minimal-2")
-    print tc.create_existing_ns("124","124","minimal-2")
-    print tc.instantiate_ns()
+    vnf_id = tc.get_last_vnf_id()+1
+    print tc.create_vnf(vnf_id,
+                        "http://10.8.0.6/minimal.img",
+                        "minimal-2")
+    print tc.create_ns(tc.get_last_ns_id()+1,
+                       vnf_id,
+                       "minimal-2")
+    
+
+    # tc.delete_all_ns()
+    # tc.delete_all_vnfs()
+
+    # print tc.instantiate_ns()
+    
+    # print tc.create_existing_vnf("124","6e23f9e5-d72c-48b1-94e2-7edff0d8adf5","minimal-2")
+    # print tc.create_existing_ns("124","124","minimal-2")
+    # print tc.instantiate_ns()
 
     # print tc.create_vnf("122","http://10.8.0.6/minimal.img","minimal-2")
     # print tc.create_ns("122","122","minimal-2")
