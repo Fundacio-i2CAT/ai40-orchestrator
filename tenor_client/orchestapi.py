@@ -12,11 +12,22 @@ app = Flask(__name__)
 api_v2_bp = Blueprint('api_v2', __name__)
 api_v2 = Api(app)
 
+tenor_client = TenorClient('http://localhost:4000')
+
 class ServiceInstances(flask_restful.Resource):
+
     def get(self):
-        result = mongodb.db[mongodb.collection_si].find({"activated": True},
-                                                        {"activated": 0})
-        return jsonify(parse_json.decoder_list(list(result)))
+        return tenor_client.get_ns_instances()
+
+    def post(self):
+        data = request.get_json()
+        context = data["context"]
+
+        return data
+
+#    def post(self):
+        
+        
 
 class Register(flask_restful.Resource):
 

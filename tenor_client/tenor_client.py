@@ -64,6 +64,11 @@ class TenorClient(object):
         response = requests.get('{0}/network-services'.format(self._base_url))
         return json.loads(response.text)
 
+    def get_ns_instances(self):
+        """Get the list of ns instances already created"""
+        response = requests.get('{0}/ns-instances'.format(self._base_url))
+        return json.loads(response.text)
+
     def get_vnf(self):
         """Get the list of vnfs already created"""
         response = requests.get('{0}/vnfs'.format(self._base_url))
