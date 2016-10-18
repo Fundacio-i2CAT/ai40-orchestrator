@@ -9,7 +9,9 @@ class TenorClient(object):
 
     def __init__(self,base_url='http://localhost:4000',
                  vnfd_template='./tenor_client/templates/min-f.json',
-                 nsd_template='./tenor_client/templates/min-n.json'):
+                 nsd_template='./tenor_client/templates/min-n.json',
+                 existing_vnfd_template='./tenor_client/templates/existing-f.json',
+                 existing_nsd_template='./tenor_client/templates/existing-n.json'):
         self._base_url = base_url
 
         with open(vnfd_template,'r') as f:
@@ -18,6 +20,27 @@ class TenorClient(object):
         with open(nsd_template,'r') as f:
             self._n_template = Template(f.read())    
 
+        with open(existing_vnfd_template,'r') as f:
+            self._ef_template = Template(f.read())    
+
+        with open(existing_nsd_template,'r') as f:
+            self._en_template = Template(f.read())    
+
+    def create_existing_vnf(self,vnf_id,vm_image,name):
+        """Creates a vnf using the already existing id in openstack"""
+        rdata = self._ef_template.render(vnf_id=vnf_id,vm_image=vm_image,name=name)
+        response = requests.post('{0}/vnfs'.format(self._base_url), 
+                                 headers={'Content-Type': 'application/json'},
+                                 json=json.loads(rdata))
+        return response.status_code
+
+    def create_existing_ns(self,ns_id,vnf_id,name):
+        """Creates a ns using the template corresponding to existing nsd"""
+        rdata = self._en_template.render(ns_id=ns_id,vnf_id=vnf_id,name=name)
+        response = requests.post('{0}/network-services'.format(self._base_url), 
+                                 headers={'Content-Type': 'application/json'},
+                                 json=json.loads(rdata))
+        return response.status_code
 
     def create_vnf(self,vnf_id,vm_image,name):
         """Creates a vnf"""
@@ -55,13 +78,18 @@ class TenorClient(object):
         
 if __name__ == "__main__":
     print "Tenor client demo"
+
     tc = TenorClient("http://localhost:4000")
-    print tc.create_vnf("121","http://10.8.0.6/alpine.img","alpine")
-    print tc.create_ns("121","121","alpine")
-    nsds = tc.get_ns()
-    ids = [ { 'id': x['nsd']['id'], 
-              'oid': x['_id']['$oid'], 
-              'vnfds': x['nsd']['vnfds'] } for x in nsds]
-    for nsd in ids:
-        print ids
-    tc.instantiate_ns()
+    print tc.create_existing_vnf("124","6e23f9e5-d72c-48b1-94e2-7edff0d8adf5","minimal-2")
+    print tc.create_existing_ns("124","124","minimal-2")
+    print tc.instantiate_ns()
+
+    # print tc.create_vnf("122","http://10.8.0.6/minimal.img","minimal-2")
+    # print tc.create_ns("122","122","minimal-2")
+    # nsds = tc.get_ns()
+    # ids = [ { 'id': x['nsd']['id'], 
+    #           'oid': x['_id']['$oid'], 
+    #           'vnfds': x['nsd']['vnfds'] } for x in nsds]
+    # for nsd in ids:
+    #     print ids
+    # tc.instantiate_ns()

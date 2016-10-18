@@ -17,7 +17,7 @@
 		    "storage": {
 			"size_unit": "GB",
 			"persistence": false,
-			"size": 10
+			"size": 2
 		    },
 		    "network_interface_bandwidth": "",
 		    "platform_pcie_parameters": {
@@ -31,14 +31,14 @@
 			"overlay_tunnel": "GRE"
 		    },
 		    "data_processing_acceleration_library": "",
-		    "memory": 1,
+		    "memory": 4,
 		    "memory_parameters": {
 			"large_pages_required": false,
 			"numa_allocation_policy": ""
 		    },
 		    "cpu_support_accelerator": "AES-NI"
 		},
-		"alias": "{{ name }}",
+		"alias": "test",
 		"id": "vdu0",
 		"networking_resources": "",
 		"monitoring_parameters_specific": [
@@ -57,18 +57,13 @@
 		    }
 		],
 		"monitoring_parameters": [
-		    {
-			"metric": "cpuidle",
-			"unit": "%",
-			"desc": "CPU Idle"
-		    }
 		],
 		"scale_in_out": {
 		    "minimum": 1,
 		    "maximum": 1
 		},
 		"vm_image_md5": "2d59cf7c633684bcf6b20fa8206dc252",
-		"vm_image_format": "qcow2"
+		"vm_image_format": "openstack_id"
 	    }
 	],
 	"name": "{{ name }}",
@@ -183,7 +178,7 @@
 	    }
 	],
 	"type": "vPXAAS",
-	"description": "{{ name }}",
+	"description": "Test VNF example with Existing ID",
 	"id": {{ vnf_id }}
     }
 }
