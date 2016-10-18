@@ -17,7 +17,7 @@
 	"host": "87.236.219.21", 
 	"tenor": {
 	    "base_url": "http://localhost:4000", 
-	    "vm_image": "6e23f9e5-d72c-48b1-94e2-7edff0d8adf5",
+	    "vm_image": "706d574b-c5d5-4e57-9e32-05cac6b083f9",
 	    "vm_image_format": "openstack_id",
 	    "name": "test-existing-id", 
 	    "flavor": "flavor0"
