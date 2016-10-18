@@ -4,7 +4,7 @@
 from flask import Flask, jsonify, request, Blueprint
 import flask_restful
 from flask_restful import Api
-from tenor_client import TenorClient
+from tenor_client import TenorClient,TenorId
 import requests 
 import json
 
@@ -21,59 +21,18 @@ class ServiceInstances(flask_restful.Resource):
 
     def post(self):
         data = request.get_json()
-        context = data["context"]
+        context = data['context']['tenor']
+        name = context['name']
+        ns_id = tenor_client.get_last_ns_id()+1
+        vnf_id = tenor_client.get_last_vnf_id()+1
+        if context['vm_image_format'] == "openstack_id":
+            tenor_client.create_existing_vnf(vnf_id,context['vm_image'],context['name'])
+            tenor_client.create_existing_ns(ns_id,vnf_id,context['name'])
+        else:
+            tenor_client.create_vnf(vnf_id,context['vm_image'],context['name'])
+            tenor_client.create_ns(ns_id,vnf_id,context['name'])
+        return tenor_client.instantiate_ns(TenorId(ns_id))
 
-        return data
-
-#    def post(self):
-        
-        
-
-class Register(flask_restful.Resource):
-
-    def post(self):
-        data = request.get_json()
-        print data
-        service = data['service']
-        descriptor = data['descriptor']
-        headers = {
-            'Content-Type': 'application/json',
-        }
-        r = requests.post('http://localhost:4000/{0}'.format(service), 
-                          headers=headers, 
-                          json=descriptor)
-        return r.status_code
-
-class Nsd(flask_restful.Resource):
-
-    def get(self):
-        r = requests.get('http://localhost:4000/network-services')
-        nsds = json.loads(r.text)
-        ids = []
-        for i in nsds:
-            ids.append({"id": i['nsd']['id'],'date': i['updated_at']})
-        return ids
-
-    def post(self,ns_id=None):
-        r = requests.get('http://localhost:4000/network-services')
-        nsds = json.loads(r.text)
-        if not ns_id:
-            ns_id = nsds[-1]['nsd']['id']
-        headers = {
-            'Content-Type': 'application/json',
-        }
-        data = {
-            "ns_id": ns_id,
-            "callbackUrl": "http://example.com", "flavour": "basic", "pop_id": "26"
-        }
-        r = requests.post('http://localhost:4000/ns-instances', 
-                          headers=headers, 
-                          json=data)
-        return r.text
-
-
-api_v2.add_resource(Register,'/register')
-api_v2.add_resource(Nsd, '/nsd')
 api_v2.add_resource(ServiceInstances, '/service/instance')
 
 # api_v1.add_resource(ServiceInstanceId, '/service/instance/<service_instance_id>')

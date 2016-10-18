@@ -85,11 +85,14 @@ class TenorClient(object):
             nsds = self.get_ns()
             ns_id = self.get_last_ns_id()
         ns_data = {'ns_id': ns_id._id, 'pop_id': pop_id, "callbackUrl": callback_url, "flavour": flavour}
+        
         response = requests.post('{0}/ns-instances'.format(self._base_url), 
                                  headers={'Content-Type': 'application/json'},
                                  json=ns_data)
-        print response.text
-        print response.status_code
+        try:
+            return json.loads(response.text)
+        except:
+            return { "error" : response.text }
         
     def get_last_vnf_id(self):
         """Gets last vnf_id"""
@@ -154,8 +157,8 @@ if __name__ == "__main__":
                        "minimal-2")
     
 
-    # tc.delete_all_ns()
-    # tc.delete_all_vnfs()
+    tc.delete_all_ns()
+    tc.delete_all_vnfs()
 
     # print tc.instantiate_ns()
     

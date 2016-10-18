@@ -17,10 +17,9 @@
 	"host": "87.236.219.21", 
 	"tenor": {
 	    "base_url": "http://localhost:4000", 
-	    "ns_id": "1900", 
 	    "vm_image": "http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img",
 	    "vm_image_format": "qcow2",
-	    "name": "test-orchestrator", 
+	    "name": "bajada-cirros", 
 	    "flavor": "flavor0"
 	}, 
 	"password": "test", 
