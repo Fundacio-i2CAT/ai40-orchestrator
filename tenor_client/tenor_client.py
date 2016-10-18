@@ -171,7 +171,7 @@ if __name__ == "__main__":
     #     print x['id']
     #     print 
 
-#    print json.dumps(tc.get_ns_instances("58063ba2df67b559d5000005"))
+    #    print json.dumps(tc.get_ns_instances("58063ba2df67b559d5000005"))
 
     # tc.delete_all_ns()
     # tc.delete_all_vnfs()
