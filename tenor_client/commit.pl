@@ -11,7 +11,9 @@ my @files = ( "commit.pl",
 	      "../requirements.txt",
 	      "tests.sh",
 	      "samples/*.json",
+	      "samples/*.md",
 	      "templates/*.json",
+	      "templates/*.md",
 	      "README.md"
 	    );
 
