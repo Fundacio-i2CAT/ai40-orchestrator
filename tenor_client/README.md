@@ -38,3 +38,4 @@ add openstack call at tenor/vnf-provisioning/routes/vnf.rb
     put '/vnf-instances/:vnfr_id/config' do |vnfr_id|
 ```
 
+we will also need some cloud-init abled images 
