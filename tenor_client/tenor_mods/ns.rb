@@ -157,6 +157,7 @@ class Provisioner < NsProvisioning
 
                     next if vnf['vnfr_id'].nil?
                     # ESTRUCTURA DE LA AUTH
+                    # AQUI ABAJO
                     auth = { auth: { tenant: pop_auth['tenant_name'], username: pop_auth['username'], password: pop_auth['password'], url: { keystone: popUrls[:keystone] } }, callback_url: callback_url }
                     begin
                         response = RestClient.post settings.vnf_manager + '/vnf-provisioning/vnf-instances/' + vnf['vnfr_id'] + '/destroy', auth.to_json, content_type: :json
