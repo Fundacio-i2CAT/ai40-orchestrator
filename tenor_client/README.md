@@ -1,8 +1,8 @@
 # TeNOR client
 
-Registering images to deploy VNF and NS on an Openstack (proof of concept using TeNOR)
+Registering images to deploy VNF and NS over Openstack (proof of concept using TeNOR)
 
-## Installation and execution
+## Installation and execution (from orchestrator root directory)
 
 ```
 $ virtualenv venv

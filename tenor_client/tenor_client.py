@@ -163,10 +163,8 @@ if __name__ == "__main__":
     # print tc.create_ns(tc.get_last_ns_id()+1,
     #                    vnf_id,
     #                    "minimal-2")
-
     data = tc.get_ns_instances("580649cedf67b559d500000c")
     print json.dumps(data)
-
     # for x in data:
     #     print x['id']
     #     print 
