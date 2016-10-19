@@ -22,13 +22,17 @@ class Root(flask_restful.Resource):
                            "purpose": "REST API Structure" } )
         api_dict.append( { "uri": "/service/instance", "method": "GET", 
                            "purpose": "Gets NS instances in TeNOR" } )
+        api_dict.append( { "uri": "/service/instance/<ns_id>", "method": "GET", 
+                           "purpose": "Gets NS instances in TeNOR" } )
         api_dict.append( { "uri": "/service/instance", "method": "POST", 
                            "purpose": "Registers and instantiates a stack on openstack via TeNOR" } )
         return api_dict
 
-class ServiceInstances(flask_restful.Resource):
+class ServiceInstance(flask_restful.Resource):
 
-    def get(self):
+    def get(self,ns_id=None):
+        if ns_id:
+            return tenor_client.get_ns_instances(ns_id)
         return tenor_client.get_ns_instances()
 
     def post(self):
@@ -46,7 +50,10 @@ class ServiceInstances(flask_restful.Resource):
         return tenor_client.instantiate_ns(TenorId(ns_id))
 
 api_v2.add_resource(Root, '/')
-api_v2.add_resource(ServiceInstances, '/service/instance')
+api_v2.add_resource(ServiceInstance, 
+                    '/service/instance',
+                    '/service/instance/<ns_id>',
+                    endpoint='user')
 
 # api_v1.add_resource(ServiceInstanceId, '/service/instance/<service_instance_id>')
 # api_v1.add_resource(ServiceProjectId, '/service/instance/<service_instance_id>/state')
