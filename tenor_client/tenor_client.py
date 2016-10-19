@@ -154,6 +154,17 @@ class TenorClient(object):
             return single
         return json.loads(response.text)
 
+    def delete_all_ns_instances(self):
+        ns_instances = self.get_ns_instances()
+        for ns_instance in ns_instances:
+            print ns_instance['id']
+            r = requests.delete("{0}/ns-instances/{1}".format(self._base_url,ns_instance['id']))
+            print ns_instance
+            print "{0}/ns-instances/{1}".format(self._base_url,ns_instance['id'])
+            print r.status_code
+        return
+
+
 if __name__ == "__main__":
     tc = TenorClient("http://localhost:4000")
     # vnf_id = tc.get_last_vnf_id()+1
@@ -173,6 +184,7 @@ if __name__ == "__main__":
 
     tc.delete_all_ns()
     tc.delete_all_vnfs()
+    print tc.delete_all_ns_instances()
 
     # print tc.instantiate_ns()
     
