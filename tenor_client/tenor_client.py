@@ -97,7 +97,7 @@ class TenorClient(object):
         """Get the list of vnfs already created"""
         response = requests.get('{0}/vnfs'.format(self._base_url))
         return json.loads(response.text)
-        
+    
     def instantiate_ns(self,ns_id=None,pop_id=None,callback_url="http://10.8.0.6",flavour="basic"):
         """Instantiates a ns on openstack, if no argument provided proceeds with the last one on the stack"""
         if not ns_id:
@@ -165,40 +165,19 @@ class TenorClient(object):
             print r.status_code
         return
 
+    def stop_ns(self,ns_tenor_id):
+        """Stops an NS Instance ... shutoff all the VNF instances associated"""
+        r = requests.put('{0}/ns-instances/{1}/stop'.format(self._base_url,ns_tenor_id))
+        return r
+
+    def start_ns(self,ns_tenor_id):
+        """Starts an NS Instance ... sets active all the VNF instances associated"""
+        r = requests.put('{0}/ns-instances/{1}/start'.format(self._base_url,ns_tenor_id))
+        return r
+
 
 if __name__ == "__main__":
+
     tc = TenorClient("http://localhost:4000")
-    # vnf_id = tc.get_last_vnf_id()+1
-    # print tc.create_vnf(vnf_id,
-    #                     "http://10.8.0.6/minimal.img",
-    #                     "minimal-2")
-    # print tc.create_ns(tc.get_last_ns_id()+1,
-    #                    vnf_id,
-    #                    "minimal-2")
-    # data = tc.get_ns_instances("580649cedf67b559d500000c")
-    # print json.dumps(data)
-    # for x in data:
-    #     print x['id']
-    #     print 
-
-    #    print json.dumps(tc.get_ns_instances("58063ba2df67b559d5000005"))
-
-    tc.delete_all_ns()
-    tc.delete_all_vnfs()
-    print tc.delete_all_ns_instances()
-
-    # print tc.instantiate_ns()
-    
-    # print tc.create_existing_vnf("12000","0f5dd00c-7e99-4a33-b11f-0319b188e513","PXaaS")
-    # print tc.create_existing_ns("12000","1200","PXaaS")
-    # print tc.instantiate_ns()
-
-    # print tc.create_vnf("122","http://10.8.0.6/minimal.img","minimal-2")
-    # print tc.create_ns("122","122","minimal-2")
-    # nsds = tc.get_ns()
-    # ids = [ { 'id': x['nsd']['id'], 
-    #           'oid': x['_id']['$oid'], 
-    #           'vnfds': x['nsd']['vnfds'] } for x in nsds]
-    # for nsd in ids:
-    #     print ids
-    # tc.instantiate_ns()
+    print tc.stop_ns('580861e7df67b5156e000000')
+#    print json.dumps(tc.get_vnf_instances())

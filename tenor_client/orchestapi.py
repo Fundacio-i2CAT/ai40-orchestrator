@@ -7,6 +7,9 @@ from flask_restful import Api
 from tenor_client import TenorClient,TenorId
 import requests 
 import json
+import sys
+sys.path.append("./enums/")
+from final_state import FinalState
 
 app = Flask(__name__)
 api_v2_bp = Blueprint('api_v2', __name__)
@@ -49,14 +52,23 @@ class ServiceInstance(flask_restful.Resource):
             tenor_client.create_ns(ns_id,vnf_id,context['name'])
         return tenor_client.instantiate_ns(TenorId(ns_id))
 
+    def put(self,ns_id=None):
+        if not ns_id:
+            return "404"
+        state = request.get_json()
+        r = None
+        if state['state'].upper() == 'START':
+            r = tenor_client.start_ns(ns_id)
+        if state['state'].upper() == 'STOP':
+            r = tenor_client.stop_ns(ns_id)
+        return r.status_code
+
 api_v2.add_resource(Root, '/')
 api_v2.add_resource(ServiceInstance, 
                     '/service/instance',
                     '/service/instance/<ns_id>',
-                    '/service/instance/<ns_id>/<state>',
+                    '/service/instance/<ns_id>/state',
                     endpoint='user')
-
-
 
 # api_v1.add_resource(ServiceInstanceId, '/service/instance/<service_instance_id>')
 # api_v1.add_resource(ServiceProjectId, '/service/instance/<service_instance_id>/state')

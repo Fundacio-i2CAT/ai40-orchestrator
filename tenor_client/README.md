@@ -19,6 +19,15 @@ $ curl -XPOST http://localhost:5000/orchestrator/api/v0.2/service/instance -H "C
 $ curl -XPOST http://localhost:5000/orchestrator/api/v0.2/service/instance -H "Content-Type: application/json" --data-binary @./tenor_client/samples/catalog_v2-new.json
 ```
 
+## Starting/stopping all VNF Instances associated with a Network Service instance
+
+580861e7df67b5156e000000 <- TeNOR Network Service Instance ID
+
+```
+$ curl -XPUT http://localhost:5000/orchestrator/api/v0.2/service/instance/580861e7df67b5156e000000/state -H "Content-Type: application/json" --data '{ "state": "STaRT"}'
+$ curl -XPUT http://localhost:5000/orchestrator/api/v0.2/service/instance/580861e7df67b5156e000000/state -H "Content-Type: application/json" --data '{ "state": "StOP"}'
+```
+
 ### Stop/start issue with TeNOR
 
 ```
