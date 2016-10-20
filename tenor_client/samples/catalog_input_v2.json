@@ -1,7 +1,7 @@
 {
     "service": {
 	"_id": "5790c80b79374a205a3bdf53", 
-	"name": "Adam Datacenter"
+	"name": "Test demo 1"
     }, 
     "context_type": "tenor", 
     "project": {
@@ -17,9 +17,9 @@
 	"host": "87.236.219.21", 
 	"tenor": {
 	    "base_url": "http://localhost:4000", 
-	    "vm_image": "94813bcd-089c-490a-bf63-7819d2f84ac8",
+	    "vm_image": "17db41d7-7957-4ea9-ac1d-89992d241ca7",
 	    "vm_image_format": "openstack_id",
-	    "name": "Trusty", 
+	    "name": "Debian1", 
 	    "flavor": "flavor0"
 	}, 
 	"password": "test", 

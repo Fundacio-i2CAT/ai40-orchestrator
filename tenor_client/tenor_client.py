@@ -14,11 +14,13 @@ class TenorId(object):
         if type(self._id) is int:
             return str(self._id+other)
         elif type(self._id) is unicode:
-            ords = [ ord(x) for x in self._id ]
-            ords[-1] = ords[-1]+other
-            ords[0] = ords[0]+other
-            unis = [ unichr(x) for x in ords ]
-            return ''.join(unis)
+            number = int(self._id)
+            return str(number+1).decode('unicode-escape')
+            # ords = [ ord(x) for x in self._id ]
+            # ords[-1] = ords[-1]+other
+            # ords[0] = ords[0]+other
+            # unis = [ unichr(x) for x in ords ]
+            # return ''.join(unis)
 
     def __repr__(self):
         return str(self._id)
@@ -179,5 +181,9 @@ class TenorClient(object):
 if __name__ == "__main__":
 
     tc = TenorClient("http://localhost:4000")
-    print tc.stop_ns('580861e7df67b5156e000000')
-#    print json.dumps(tc.get_vnf_instances())
+    a = TenorId(u'2193')
+    print type(a+1)
+    print a+1
+    b = TenorId(21938)
+    print type(b+1)
+    print b+1

@@ -17,9 +17,9 @@
 	"host": "87.236.219.21", 
 	"tenor": {
 	    "base_url": "http://localhost:4000", 
-	    "vm_image": "http://10.8.0.6/Debian.vdi",
+	    "vm_image": "http://10.8.0.6/minimal.img",
 	    "vm_image_format": "vdi",
-	    "name": "defin", 
+	    "name": "Minimal", 
 	    "flavor": "flavor0"
 	}, 
 	"password": "test", 
