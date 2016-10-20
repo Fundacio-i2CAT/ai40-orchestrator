@@ -139,7 +139,7 @@ class Provisioner < NsProvisioning
             logger.info 'Starting thread for removing VNF and NS instances.'
             Thread.new do
                 # operation = proc {
-                @nsInstance['vnfrs'].each do |vnf|
+               @nsInstance['vnfrs'].each do |vnf|
                     logger.info 'Terminate VNF ' + vnf['vnfr_id'].to_s
                     logger.info 'Pop_id: ' + vnf['pop_id'].to_s
                     raise 'VNF not defined' if vnf['pop_id'].nil?
@@ -157,7 +157,6 @@ class Provisioner < NsProvisioning
 
                     next if vnf['vnfr_id'].nil?
                     # ESTRUCTURA DE LA AUTH
-                    # AQUI ABAJO
                     auth = { auth: { tenant: pop_auth['tenant_name'], username: pop_auth['username'], password: pop_auth['password'], url: { keystone: popUrls[:keystone] } }, callback_url: callback_url }
                     begin
                         response = RestClient.post settings.vnf_manager + '/vnf-provisioning/vnf-instances/' + vnf['vnfr_id'] + '/destroy', auth.to_json, content_type: :json
@@ -192,8 +191,9 @@ class Provisioner < NsProvisioning
             @instance['vnfrs'].each do |vnf|
                 logger.info 'Starting VNF ' + vnf['vnfr_id'].to_s
                 event = { event: 'start' }
+                datatosend = { event: 'start', 'authentication': @nsInstance['authentication'] }
                 begin
-                    response = RestClient.put settings.vnf_manager + '/vnf-provisioning/vnf-instances/' + vnf['vnfr_id'] + '/config', event.to_json, content_type: :json
+                    response = RestClient.put settings.vnf_manager + '/vnf-provisioning/vnf-instances/' + vnf['vnfr_id'] + '/config', datatosend.to_json, content_type: :json
                 rescue Errno::ECONNREFUSED
                     logger.error 'VNF Manager unreachable.'
                     halt 500, 'VNF Manager unreachable'
@@ -210,8 +210,9 @@ class Provisioner < NsProvisioning
             @instance['vnfrs'].each do |vnf|
                 logger.debug vnf
                 event = { event: 'stop' }
+                datatosend = { event: 'stop', 'authentication': @nsInstance['authentication'] }
                 begin
-                    response = RestClient.put settings.vnf_manager + '/vnf-provisioning/vnf-instances/' + vnf['vnfr_id'] + '/config', event.to_json, content_type: :json
+                    response = RestClient.put settings.vnf_manager + '/vnf-provisioning/vnf-instances/' + vnf['vnfr_id'] + '/config', datatosend.to_json, content_type: :json
                 rescue Errno::ECONNREFUSED
                     logger.error 'VNF Manager unreachable.'
                     halt 500, 'VNF Manager unreachable'

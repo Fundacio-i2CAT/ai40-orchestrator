@@ -17,7 +17,7 @@
 		    "storage": {
 			"size_unit": "GB",
 			"persistence": false,
-			"size": 20
+			"size": 6
 		    },
 		    "network_interface_bandwidth": "",
 		    "platform_pcie_parameters": {
@@ -67,8 +67,8 @@
 		    "minimum": 1,
 		    "maximum": 1
 		},
-		"vm_image_md5": "2d59cf7c633684bcf6b20fa8206dc252",
-		"vm_image_format": "qcow2"
+		"vm_image_md5": "a52aa0ee635460836bba4a54c0f0852d",
+		"vm_image_format": "vdi"
 	    }
 	],
 	"name": "{{ name }}",

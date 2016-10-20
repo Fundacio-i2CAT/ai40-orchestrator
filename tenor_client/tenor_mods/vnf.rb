@@ -277,6 +277,8 @@ class Provisioning < VnfProvisioning
 
         # Validate JSON format
         config_info = parse_json(request.body.read)
+        
+        puts config_info
 
         # Return if have an invalid event type
         halt 400, 'Invalid event type.' unless ['start', 'stop', 'restart', 'scale-in', 'scale-out'].include? config_info['event'].downcase
@@ -295,6 +297,27 @@ class Provisioning < VnfProvisioning
 
         # Build mAPI request
         # Atacar Openstack (alfonso.egio@i2cat.net 19/10/2016)
+
+        vim_info = {
+            'keystone' => 'http://84.88.40.75:35357/v2.0',
+            'tenant' => 'admin',
+            'username' => 'tenor',
+            'password' => 'iasmngr',
+            'heat' => 'http://84.88.40.75:8004/v1'
+        }
+
+        token_info = request_auth_token(vim_info)
+        auth_token = token_info['access']['token']['id']
+        puts auth_token
+        puts vnfr['vdu']
+        puts "ID="+vnfr.id.to_s
+#        puts "VMD_ID="+vnfr.vms_id.vdu0.to_s
+        vmd_id = vnfr.vms_id['vdu0']
+        puts vmd_id
+        puts "a98f9472-5527-4e2b-b0cf-cd33627a32bd"
+        system("nova "+config_info['event']+" "+vmd_id)
+#        RestClient.get(vim_info['heat'], 'X-Auth-Token' => auth_token, :accept => :json)
+        
         puts "***********************************************************"
         puts "***********************************************************"
         puts "*********** aqui es donde hay que modificar ***************"
@@ -302,10 +325,6 @@ class Provisioning < VnfProvisioning
         puts "***********************************************************"
         puts "***********************************************************"
         puts config_info['event']
-        puts "***********************************************************"
-        puts "***********************************************************"
-        puts "***********************************************************"
-        puts "***********************************************************"
         puts "***********************************************************"
         puts "***********************************************************"
         puts "***********************************************************"
@@ -340,11 +359,6 @@ class Provisioning < VnfProvisioning
         # Parse body message
         stack_info = parse_json(request.body.read)
         logger.debug 'Stack info: ' + stack_info.to_json
-        puts "STOPPING VNF-INSTANCE ********************************** "
-        puts "STOPPING VNF-INSTANCE ********************************** "
-        puts "STOPPING VNF-INSTANCE ********************************** "
-        puts "STOPPING VNF-INSTANCE ********************************** "
-        puts "STOPPING VNF-INSTANCE ********************************** "
         # Request an auth token
         token_info = request_auth_token(stack_info['vim_info'])
         auth_token = token_info['access']['token']['id']
