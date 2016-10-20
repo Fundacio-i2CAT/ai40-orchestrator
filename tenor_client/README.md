@@ -15,13 +15,14 @@ $ source venv/bin/activate
 
 ```
 $ curl -XGET http://localhost:5000/orchestrator/api/v0.2/service/instance
-$ curl -XPOST http://localhost:5000/orchestrator/api/v0.2/service/instance -H "Content-Type: application/json" --data-binary @./tenor_client/samples/catalog_v2.json
-$ curl -XPOST http://localhost:5000/orchestrator/api/v0.2/service/instance -H "Content-Type: application/json" --data-binary @./tenor_client/samples/catalog_v2-new.json
+$ curl -XPOST http://localhost:5000/orchestrator/api/v0.2/service/instance -H "Content-Type: application/json" --data-binary @./tenor_client/samples/catalog_input_v2.json
+$ curl -XPOST http://localhost:5000/orchestrator/api/v0.2/service/instance -H "Content-Type: application/json" --data-binary @./tenor_client/samples/catalog_input_v2-new.json
 ```
 
 ## Starting/stopping all VNF Instances associated with a Network Service instance
+## (access to a TeNOR SEG-forked instance required)
 
-580861e7df67b5156e000000 <- TeNOR Network Service Instance ID
+580861e7df67b5156e000000 <- Example TeNOR Network Service Instance ID
 
 ```
 $ curl -XPUT http://localhost:5000/orchestrator/api/v0.2/service/instance/580861e7df67b5156e000000/state -H "Content-Type: application/json" --data '{ "state": "STaRT"}'
