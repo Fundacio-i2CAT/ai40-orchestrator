@@ -187,3 +187,4 @@ if __name__ == "__main__":
     b = TenorId(21938)
     print type(b+1)
     print b+1
+    print tc.get_vnf_instances()

@@ -17,9 +17,9 @@
 	"host": "87.236.219.21", 
 	"tenor": {
 	    "base_url": "http://localhost:4000", 
-	    "vm_image": "17db41d7-7957-4ea9-ac1d-89992d241ca7",
+	    "vm_image": "ab72ab28-2025-4ffc-9b65-4c3b9063456a",
 	    "vm_image_format": "openstack_id",
-	    "name": "Debian1", 
+	    "name": "SsHDebiaN", 
 	    "flavor": "flavor0"
 	}, 
 	"password": "test", 
