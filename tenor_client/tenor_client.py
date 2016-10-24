@@ -177,14 +177,29 @@ class TenorClient(object):
         r = requests.put('{0}/ns-instances/{1}/start'.format(self._base_url,ns_tenor_id))
         return r
 
+    def get_ns_instance_vnfs_status_addresses(self,ns_instance_id):
+        """Check status and addresses for vnfs associated to an ns"""
+        response = requests.get('{0}/ns-instances/{1}'.format(self._base_url,ns_instance_id))
+        data = json.loads(response.text)
+        status_addresses = []
+        servers = []
+        for vnfr in data['vnfrs']:
+            sta = { 'status': vnfr['server']['status'],
+                    'addresses': [] }
+            for ad in vnfr['server']['addresses']:
+                for ip in ad[1]:
+                    sta['addresses'].append({'OS-EXT-IPS:type': ip['OS-EXT-IPS:type'], 'addr': ip['addr']})
+            servers.append(sta)
+            return servers
 
 if __name__ == "__main__":
 
     tc = TenorClient("http://localhost:4000")
-    a = TenorId(u'2193')
-    print type(a+1)
-    print a+1
-    b = TenorId(21938)
-    print type(b+1)
-    print b+1
-    print tc.get_vnf_instances()
+    # a = TenorId(u'2193')
+    # print type(a+1)
+    # print a+1
+    # b = TenorId(21938)
+    # print type(b+1)
+    # print b+1
+    # print tc.get_vnf_instances()
+    print tc.get_ns_instance_vnfs_status_addresses('580861e7df67b5156e000000')

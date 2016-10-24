@@ -35,7 +35,7 @@ class ServiceInstance(flask_restful.Resource):
 
     def get(self,ns_id=None):
         if ns_id:
-            return tenor_client.get_ns_instances(ns_id)
+            return tenor_client.get_ns_instance_vnfs_status_addresses(ns_id)
         return tenor_client.get_ns_instances()
 
     def post(self,ns_id=None):
@@ -76,10 +76,10 @@ api_v2.add_resource(ServiceInstance,
 if __name__ == "__main__":
     print "Tablecloth (instances.controller v2 via TeNOR) ..."
     PREFIX = "/orchestrator/api"
-    API_VERSION = "0.2"
+    API_VERSION = "0.1"
     app.register_blueprint(
         api_v2_bp,
         url_prefix='{prefix}/v{version}'.format(
             prefix=PREFIX,
             version=API_VERSION))
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0',port=8081)
