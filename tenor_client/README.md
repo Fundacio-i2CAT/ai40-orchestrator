@@ -28,3 +28,40 @@ $ curl -XPOST http://localhost:5000/orchestrator/api/v0.2/service/instance -H "C
 $ curl -XPUT http://localhost:5000/orchestrator/api/v0.2/service/instance/580861e7df67b5156e000000/state -H "Content-Type: application/json" --data '{ "state": "STaRT"}'
 $ curl -XPUT http://localhost:5000/orchestrator/api/v0.2/service/instance/580861e7df67b5156e000000/state -H "Content-Type: application/json" --data '{ "state": "StOP"}'
 ```
+
+## Checking VNF Instances and associated addresses via TeNOR
+
+
+### Curl
+
+```
+ curl -XGET http://localhost:8081/orchestrator/api/v0.1/service/instance/580861e7df67b5156e000000/state
+```
+
+### Response
+
+```
+[
+    {
+        "addresses": [
+            {
+                "OS-EXT-IPS:type": "fixed", 
+                "addr": "192.43.174.3"
+            }, 
+            {
+                "OS-EXT-IPS:type": "floating", 
+                "addr": "172.24.4.197"
+            }, 
+            {
+                "OS-EXT-IPS:type": "fixed", 
+                "addr": "192.155.1.3"
+            }, 
+            {
+                "OS-EXT-IPS:type": "floating", 
+                "addr": "172.24.4.196"
+            }
+        ], 
+        "status": "ACTIVE"
+    }
+]
+```
