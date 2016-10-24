@@ -15,6 +15,9 @@ from bson.json_util import dumps
 from bson import json_util
 from common import parse_json
 
+PREFIX = "/orchestrator/api"
+API_VERSION = "0.1"
+HEAD = PREFIX+'/v'+API_VERSION
 app = Flask(__name__)
 api_v2_bp = Blueprint('api_v2', __name__)
 api_v2 = Api(api_v2_bp)
@@ -25,28 +28,58 @@ class Root(flask_restful.Resource):
 
     def get(self):
         api_dict = [ ]
-        api_dict.append( { "uri": "/", "method": "GET", 
-                           "purpose": "REST API Structure" } )
-        api_dict.append( { "uri": "/service/instance", "method": "GET", 
-                           "purpose": "Gets NS instances in TeNOR" } )
-        api_dict.append( { "uri": "/service/instance/<ns_id>", "method": "GET", 
-                           "purpose": "Gets NS instance " } )
-        api_dict.append( { "uri": "/service/instance", "method": "POST", 
-                           "purpose": "Registers and instantiates a stack on openstack via TeNOR" } )
+        api_dict.append( { 'uri': HEAD+'/', 'method': 'GET', 
+                           'purpose': 'REST API Structure' } )
+        api_dict.append( { 'uri': HEAD+'/service/instance', 'method': 'GET', 
+                           'purpose': 'Gets NS instances in TeNOR' } )
+        api_dict.append( { 'uri': HEAD+'/service/instance/<ns_id>', 'method': 'GET', 
+                           'purpose': 'Gets NS instance ' } )
+        api_dict.append( { 'uri': HEAD+'/service/instance', 'method': 'POST', 
+                           'purpose': 'Registers and instantiates a stack on openstack via TeNOR' } )
         return api_dict
 
 class ServiceInstance(flask_restful.Resource):
 
     def get(self,ns_id=None):
         if ns_id:
-            try:
-                return tenor_client.get_ns_instance_vnfs_status_addresses(ns_id)
+            print ns_id
+            try: 
+                ns_instance = tenor_client.get_ns_instance_vnfs_status_addresses(ns_id)
+                if len(ns_instance) > 0:
+                    return ns_instance
+                else:
+                    return response_json.not_found("{0}".format(ns_id))
             except:
-                return response_json.not_found("{0} not found".format(ns_id))
+                return response_json.not_found("{0}".format(ns_id))
+ 
         try:
-            return tenor_client.get_ns_instances()
+            comp = tenor_client.get_ns_instances()
         except:
-            return response_json.internal_server_error()
+            return response_json.internal_server_error("Error retrieving")
+        resp = []
+        for c in comp:
+            o = { 'ns_id': c['id'],
+                  'routes': [
+                      { 
+                          'uri': HEAD+'/service/instance/{0}'.format(c['id']),
+                          'method': 'GET',
+                          'purpose': 'Retrieve NS instance information'
+                      },
+                      { 
+                          'uri': HEAD+'/service/instance/{0}/state'.format(c['id']),
+                          'method': 'PUT',
+                          'purpose': 'Start/Stop the VNF instances in the NSD (body: {"state":"start"} or {"state":"stop"}'
+                      },
+                      { 
+                          'uri': HEAD+'/service/instance/{0}'.format(c['id']),
+                          'method': 'DELETE',
+                          'purpose': 'Deletes the NS'
+                      }
+                  ]
+              }
+            resp.append(o)
+        return resp
+
             
     def post(self,ns_id=None):
         data = request.get_json()
@@ -61,18 +94,24 @@ class ServiceInstance(flask_restful.Resource):
         else:
             tenor_client.create_vnf(vnf_id,context['vm_image'],context['name'])
             tenor_client.create_ns(ns_id,vnf_id,context['name'])
-        return tenor_client.instantiate_ns(TenorId(ns_id))
+        data = tenor_client.instantiate_ns(TenorId(ns_id))
+        try:
+            return {'id': data['id'], 'state': 'PROVISIONED'}
+        except:
+            return response_json.internal_server_error("Error")
 
     def put(self,ns_id=None):
         if not ns_id:
-            return response_json.internal_server_error()
+            return response_json.internal_server_error("Error")
         state = request.get_json()
         r = None
         if state['state'].upper() == 'START':
             r = tenor_client.start_ns(ns_id)
         if state['state'].upper() == 'STOP':
             r = tenor_client.stop_ns(ns_id)
-        return r.status_code
+        if r.status_code == 409:
+            return response_json.conflict_error('{0} is stopped(running) can\'t stop(run) again'.format(ns_id))
+        return { 'message': 'OK', 'status': '200' }
 
 api_v2.add_resource(Root, '/')
 api_v2.add_resource(ServiceInstance, 
@@ -86,11 +125,9 @@ api_v2.add_resource(ServiceInstance,
 
 if __name__ == "__main__":
     print "Tablecloth (instances.controller v2 via TeNOR) ..."
-    PREFIX = "/orchestrator/api"
-    API_VERSION = "0.1"
     app.register_blueprint(
         api_v2_bp,
         url_prefix='{prefix}/v{version}'.format(
             prefix=PREFIX,
             version=API_VERSION))
-    app.run(debug=False,host='0.0.0.0',port=8081)
+    app.run(debug=True,host='0.0.0.0',port=8081)

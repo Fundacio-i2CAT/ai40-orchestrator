@@ -19,7 +19,7 @@
 	    "base_url": "http://localhost:4000", 
 	    "vm_image": "ab72ab28-2025-4ffc-9b65-4c3b9063456a",
 	    "vm_image_format": "openstack_id",
-	    "name": "SsHDebiaN", 
+	    "name": "DebiSSH", 
 	    "flavor": "flavor0"
 	}, 
 	"password": "test", 

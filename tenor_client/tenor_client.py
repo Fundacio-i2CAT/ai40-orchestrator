@@ -105,7 +105,6 @@ class TenorClient(object):
             nsds = self.get_ns()
             ns_id = self.get_last_ns_id()
         ns_data = {'ns_id': ns_id._id, 'pop_id': pop_id, "callbackUrl": callback_url, "flavour": flavour}
-        
         response = requests.post('{0}/ns-instances'.format(self._base_url), 
                                  headers={'Content-Type': 'application/json'},
                                  json=ns_data)
@@ -179,13 +178,16 @@ class TenorClient(object):
         status_addresses = []
         servers = []
         for vnfr in data['vnfrs']:
-            sta = { 'status': vnfr['server']['status'],
-                    'addresses': [] }
-            for ad in vnfr['server']['addresses']:
-                for ip in ad[1]:
-                    sta['addresses'].append({'OS-EXT-IPS:type': ip['OS-EXT-IPS:type'], 'addr': ip['addr']})
-            servers.append(sta)
-            return servers
+            try:
+                sta = { 'status': vnfr['server']['status'],
+                        'addresses': [] }
+                for ad in vnfr['server']['addresses']:
+                    for ip in ad[1]:
+                        sta['addresses'].append({'OS-EXT-IPS:type': ip['OS-EXT-IPS:type'], 'addr': ip['addr']})
+                servers.append(sta)
+            except:
+                pass
+        return servers
 
 if __name__ == "__main__":
 
@@ -197,7 +199,7 @@ if __name__ == "__main__":
     # print type(b+1)
     # print b+1
     # print tc.get_vnf_instances()
-    # tc.delete_all_ns_instances()
-    # tc.delete_all_ns()
-    # tc.delete_all_vnfs()
+    tc.delete_all_ns_instances()
+    tc.delete_all_ns()
+    tc.delete_all_vnfs()
     # print tc.get_ns_instance_vnfs_status_addresses('580861e7df67b5156e000000')

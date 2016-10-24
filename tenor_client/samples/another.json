@@ -17,9 +17,9 @@
 	"host": "87.236.219.21", 
 	"tenor": {
 	    "base_url": "http://localhost:4000", 
-	    "vm_image": "94813bcd-089c-490a-bf63-7819d2f84ac8",
+	    "vm_image": "6b9b14cc-d106-4d07-8b43-22035a3265fe",
 	    "vm_image_format": "openstack_id",
-	    "name": "Trusty Tahr 2", 
+	    "name": "Dilluns2", 
 	    "flavor": "flavor0"
 	}, 
 	"password": "test", 
@@ -31,3 +31,4 @@
 	"name": "Adam"
     }
 }
+

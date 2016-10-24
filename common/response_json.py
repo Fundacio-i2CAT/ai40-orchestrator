@@ -32,6 +32,16 @@ def action_error(service_id):
     construct_headers(resp)
     return resp
 
+def conflict_error(message):
+    message = {
+        'status': 409,
+        'message': 'Conflict:  ' + message
+    }
+    resp = jsonify(message)
+    resp.status_code = 409
+    construct_headers(resp)
+    return resp
+
 
 def is_ok_no_content():
     message = {
