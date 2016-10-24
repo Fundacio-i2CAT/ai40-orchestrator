@@ -4,14 +4,16 @@
 from flask import Flask, jsonify, request, Blueprint
 import flask_restful
 from flask_restful import Api
-from tenor_client import TenorClient,TenorId
+from tenor_client.tenor_client import TenorClient,TenorId
 import requests 
 import json
-import sys
-sys.path.append("./enums/")
-sys.path.append("./common/")
-from final_state import FinalState
-import response_json
+from enums.final_state import FinalState
+from database import mongodb
+from common import response_json
+from common.utils import add_validated_status
+from bson.json_util import dumps
+from bson import json_util
+from common import parse_json
 
 app = Flask(__name__)
 api_v2_bp = Blueprint('api_v2', __name__)
@@ -40,13 +42,17 @@ class ServiceInstance(flask_restful.Resource):
             try:
                 return tenor_client.get_ns_instance_vnfs_status_addresses(ns_id)
             except:
-                return 404
-        return tenor_client.get_ns_instances()
-
+                return response_json.not_found("{0} not found".format(ns_id))
+        try:
+            return tenor_client.get_ns_instances()
+        except:
+            return response_json.internal_server_error()
+            
     def post(self,ns_id=None):
         data = request.get_json()
         context = data['context']['tenor']
         name = context['name']
+        context_type = data['context_type']
         ns_id = tenor_client.get_last_ns_id()+1
         vnf_id = tenor_client.get_last_vnf_id()+1
         if context['vm_image_format'] == "openstack_id":
@@ -59,7 +65,7 @@ class ServiceInstance(flask_restful.Resource):
 
     def put(self,ns_id=None):
         if not ns_id:
-            return "404"
+            return response_json.internal_server_error()
         state = request.get_json()
         r = None
         if state['state'].upper() == 'START':
@@ -87,4 +93,4 @@ if __name__ == "__main__":
         url_prefix='{prefix}/v{version}'.format(
             prefix=PREFIX,
             version=API_VERSION))
-    app.run(debug=True,host='0.0.0.0',port=8081)
+    app.run(debug=False,host='0.0.0.0',port=8081)

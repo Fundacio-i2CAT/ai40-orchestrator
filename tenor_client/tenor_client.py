@@ -49,7 +49,6 @@ class TenorClient(object):
     def create_existing_vnf(self,vnf_id,vm_image,name):
         """Creates a vnf using the already existing id in openstack"""
         rdata = self._ef_template.render(vnf_id=vnf_id,vm_image=vm_image,name=name)
-        print rdata
         response = requests.post('{0}/vnfs'.format(self._base_url), 
                                  headers={'Content-Type': 'application/json'},
                                  json=json.loads(rdata))
@@ -160,11 +159,7 @@ class TenorClient(object):
     def delete_all_ns_instances(self):
         ns_instances = self.get_ns_instances()
         for ns_instance in ns_instances:
-            print ns_instance['id']
             r = requests.delete("{0}/ns-instances/{1}".format(self._base_url,ns_instance['id']))
-            print ns_instance
-            print "{0}/ns-instances/{1}".format(self._base_url,ns_instance['id'])
-            print r.status_code
         return
 
     def stop_ns(self,ns_tenor_id):
@@ -202,4 +197,7 @@ if __name__ == "__main__":
     # print type(b+1)
     # print b+1
     # print tc.get_vnf_instances()
-    print tc.get_ns_instance_vnfs_status_addresses('580861e7df67b5156e000000')
+    # tc.delete_all_ns_instances()
+    # tc.delete_all_ns()
+    # tc.delete_all_vnfs()
+    # print tc.get_ns_instance_vnfs_status_addresses('580861e7df67b5156e000000')
