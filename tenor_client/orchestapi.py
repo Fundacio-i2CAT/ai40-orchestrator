@@ -9,7 +9,9 @@ import requests
 import json
 import sys
 sys.path.append("./enums/")
+sys.path.append("./common/")
 from final_state import FinalState
+import response_json
 
 app = Flask(__name__)
 api_v2_bp = Blueprint('api_v2', __name__)
@@ -35,7 +37,10 @@ class ServiceInstance(flask_restful.Resource):
 
     def get(self,ns_id=None):
         if ns_id:
-            return tenor_client.get_ns_instance_vnfs_status_addresses(ns_id)
+            try:
+                return tenor_client.get_ns_instance_vnfs_status_addresses(ns_id)
+            except:
+                return 404
         return tenor_client.get_ns_instances()
 
     def post(self,ns_id=None):
