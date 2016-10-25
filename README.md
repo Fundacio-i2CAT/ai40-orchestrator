@@ -8,7 +8,7 @@ $ source venv/bin/activate
 (venv) $ python orchestapi.py
 ```
 
-## Post a new service see [example json file](tenor_client/samples/another.json)
+## Post a new service (see [example json file](tenor_client/samples/another.json))
 
 ```
 $ curl -XPOST http://localhost:8082/orchestrator/api/v0.1/service/instance -H "Content-Type: application/json" --data-binary @tenor_client/samples/another.json
