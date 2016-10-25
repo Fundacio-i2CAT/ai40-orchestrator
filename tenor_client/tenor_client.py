@@ -25,8 +25,8 @@ class TenorClient(object):
     def __init__(self,base_url='http://localhost:4000',
                  vnfd_template='./tenor_client/templates/min-f.json',
                  nsd_template='./tenor_client/templates/min-n.json',
-                 existing_vnfd_template='./tenor_client/templates/existing-f.json',
-                 existing_nsd_template='./tenor_client/templates/existing-n.json'):
+                 existing_vnfd_template='./tenor_client/templates/singleip-f.json',
+                 existing_nsd_template='./tenor_client/templates/singleip-n.json'):
         self._base_url = base_url
 
         with open(vnfd_template,'r') as f:
