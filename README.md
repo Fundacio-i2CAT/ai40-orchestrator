@@ -8,13 +8,12 @@ $ source venv/bin/activate
 (venv) $ python orchestapi.py
 ```
 
-## Post a new service [see another.json](tenor_client/samples/another.json)
+## Post a new service see [example json file](tenor_client/samples/another.json)
 
 ```
 $ curl -XPOST http://localhost:8082/orchestrator/api/v0.1/service/instance -H "Content-Type: application/json" --data-binary @tenor_client/samples/another.json
 ```
 
-### Response 
 
 ```
 {"state": "PROVISIONED", "id": "580f12c7df67b515c8000007"}
@@ -27,9 +26,6 @@ $ curl -XPOST http://localhost:8082/orchestrator/api/v0.1/service/instance -H "C
 ```
 $ curl -XGET http://localhost:8082/orchestrator/api/v0.1/service/instance
 ```
-
-
-### Response
 
 ```
 [
@@ -109,8 +105,6 @@ $ curl -XGET http://localhost:8082/orchestrator/api/v0.1/service/instance
 ```
 $ curl -XGET http://localhost:8082/orchestrator/api/v0.1/service/instance/580f064bdf67b515c8000006
 ```
-
-### Response
 
 ```
 {
