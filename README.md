@@ -1,5 +1,9 @@
 # Orquestrador Plataforma Anella Industrial 4.0
 
+## Requirements
+
+[TeNOR SEG-version](https://stash.i2cat.net/projects/AI40/repos/tenor/browse) installed and running
+
 ## Start:
 
 ```
