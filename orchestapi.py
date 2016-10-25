@@ -89,6 +89,12 @@ class ServiceInstance(flask_restful.Resource):
             return response_json.conflict_error('{0} is stopped(running) can\'t stop(run) again'.format(ns_id))
         return { 'message': 'OK', 'status': '200' }
 
+    def delete(self,ns_id):
+        if not ns_id:
+            return response_json.internal_server_error('No instance selected')
+        else:
+            return tenor_client.delete_ns(ns_id)
+
 api_v2.add_resource(Root, '/')
 api_v2.add_resource(ServiceInstance, 
                     '/service/instance',

@@ -128,6 +128,17 @@ class TenorClient(object):
         ide = TenorId(ids[-1])
         return ide
     
+    def delete_ns(self,ns_id):
+        try:
+            r = requests.delete("{0}/network-services/{1}".format(self._base_url,ns_id))
+            if r.status_code == 200:
+                return { 'message': '{0} instance successfully deleted'.format(ns_id),
+                         'status': 200 }
+            else:
+                return { 'message': 'Error' } 
+        except:
+            return { 'message': 'Exception caught' }
+
     def delete_all_ns(self):
         nss = self.get_ns()
         for ns in nss:
