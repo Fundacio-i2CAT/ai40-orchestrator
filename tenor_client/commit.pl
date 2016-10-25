@@ -8,6 +8,7 @@ map { $name .= " $_"; } @ARGV;
 
 my @files = ( "commit.pl",
 	      "*.py",
+	      "../README.md",
 	      "../requirements.txt",
 	      "../orchestapi.py",
 	      "../common/response_json.py",
