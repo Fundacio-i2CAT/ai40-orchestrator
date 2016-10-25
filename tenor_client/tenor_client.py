@@ -135,9 +135,9 @@ class TenorClient(object):
                 return { 'message': '{0} delete request successfully sent'.format(ns_id),
                          'status': 200 }
             else:
-                return { 'message': 'Error' } 
+                return r.status_code 
         except:
-            return { 'message': 'Exception caught' }
+            return 500
 
     def delete_all_ns(self):
         nss = self.get_ns()

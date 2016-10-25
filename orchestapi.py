@@ -3,13 +3,12 @@
 
 from flask import Flask, jsonify, request, Blueprint
 import flask_restful
-from flask_restful import Api
-from tenor_client.tenor_client import TenorClient,TenorId
-import requests 
+from flask_restful import Api, abort
+from tenor_client.tenor_client import TenorClient, TenorId
+import requests
 import json
 from enums.final_state import FinalState
 from database import mongodb
-from common import response_json
 from common.utils import add_validated_status
 from bson.json_util import dumps
 from bson import json_util
@@ -27,39 +26,39 @@ tenor_client = TenorClient('http://localhost:4000')
 class Root(flask_restful.Resource):
 
     def get(self):
-        api_dict = [ ]
-        api_dict.append( { 'uri': HEAD+'/', 'method': 'GET', 
-                           'purpose': 'REST API Structure' } )
-        api_dict.append( { 'uri': HEAD+'/service/instance', 'method': 'GET', 
-                           'purpose': 'Gets NS instances in TeNOR' } )
-        api_dict.append( { 'uri': HEAD+'/service/instance/<ns_id>', 'method': 'GET', 
-                           'purpose': 'Gets NS instance ' } )
-        api_dict.append( { 'uri': HEAD+'/service/instance', 'method': 'POST', 
-                           'purpose': 'Registers and instantiates a stack on openstack via TeNOR' } )
+        api_dict = []
+        api_dict.append({'uri': HEAD+'/', 'method': 'GET',
+                          'purpose': 'REST API Structure'})
+        api_dict.append({'uri': HEAD+'/service/instance', 'method': 'GET',
+                          'purpose': 'Gets NS instances in TeNOR'})
+        api_dict.append({'uri': HEAD+'/service/instance/<ns_id>', 'method': 'GET',
+                          'purpose': 'Gets NS instance'})
+        api_dict.append({'uri': HEAD+'/service/instance', 'method': 'POST',
+                           'purpose': 'Registers and instantiates a stack on openstack via TeNOR'})
         return api_dict
 
 class ServiceInstance(flask_restful.Resource):
 
-    def get(self,ns_id=None):
+    def get(self, ns_id=None):
         try:
             comp = tenor_client.get_ns_instances()
         except:
-            return response_json.internal_server_error("Error retrieving")
+            abort(500,message="Error retrieving NS instances")
         resp = []
         for c in comp:
             ns_data = tenor_client.get_ns_instance_vnfs_status_addresses(c['id'])
-            o = { 'id': c['id'], 'instances': ns_data }
-            if ns_id: 
+            o = {'id': c['id'], 'instances': ns_data}
+            if ns_id:
                 if c['id'] == ns_id:
                     return o
             else:
                 resp.append(o)
         if len(resp) == 0:
-            return response_json.not_found('[]')
+            return []
         else:
             return resp
-            
-    def post(self,ns_id=None):
+
+    def post(self, ns_id=None):
         data = request.get_json()
         context = data['context']['tenor']
         name = context['name']
@@ -67,39 +66,47 @@ class ServiceInstance(flask_restful.Resource):
         ns_id = tenor_client.get_last_ns_id()+1
         vnf_id = tenor_client.get_last_vnf_id()+1
         if context['vm_image_format'] == "openstack_id":
-            tenor_client.create_existing_vnf(vnf_id,context['vm_image'],context['name'])
-            tenor_client.create_existing_ns(ns_id,vnf_id,context['name'])
+            tenor_client.create_existing_vnf(vnf_id, context['vm_image'], context['name'])
+            tenor_client.create_existing_ns(ns_id, vnf_id, context['name'])
         else:
-            tenor_client.create_vnf(vnf_id,context['vm_image'],context['name'])
-            tenor_client.create_ns(ns_id,vnf_id,context['name'])
+            tenor_client.create_vnf(vnf_id, context['vm_image'], context['name'])
+            tenor_client.create_ns(ns_id, vnf_id, context['name'])
         data = tenor_client.instantiate_ns(TenorId(ns_id))
         try:
             return {'id': data['id'], 'state': 'PROVISIONED'}
         except:
-            return response_json.internal_server_error("Error")
+            abort(500,message="Internal error")
 
-    def put(self,ns_id=None):
+    def put(self, ns_id=None):
         if not ns_id:
-            return response_json.internal_server_error("Error")
+            abort(500,message="You should provide a NS id")
         state = request.get_json()
         ns_data = tenor_client.get_ns_instance_vnfs_status_addresses(ns_id)
         r = None
-        if state['state'].upper() == 'START':
-            r = tenor_client.start_ns(ns_id)
-        if state['state'].upper() == 'STOP':
-            r = tenor_client.stop_ns(ns_id)
+        try:
+            if state['state'].upper() == 'START':
+                r = tenor_client.start_ns(ns_id)
+            if state['state'].upper() == 'STOP':
+                r = tenor_client.stop_ns(ns_id)
+        except:
+            abort(500,message='Internal server error')
         if r.status_code == 409:
-            return response_json.conflict_error('{0} is stopped(running) can\'t stop(run) again'.format(ns_id))
-        if r.status_code in (200,201):
-            return { 'message': 'OK', 'status': '200' }
+            abort(409,message='{0} is stopped(running) can\'t stop(run) again'.format(ns_id))
+        if r.status_code in (200, 201):
+            return {'message': 'Successfully sent state signal'}
         else:
-            return response_json.not_found('{0} service not found'.format(ns_id))
+            abort(404,message='{0} NS not found'.format(ns_id))
 
-    def delete(self,ns_id):
+    def delete(self, ns_id):
         if not ns_id:
-            return response_json.internal_server_error('No instance selected')
+            abort(500,message='No instance selected')
         else:
-            return tenor_client.delete_ns_instance(ns_id)
+            r = tenor_client.delete_ns_instance(ns_id)
+            if type(r) is int:
+                abort(r,message='Error deleting {0}'.format(ns_id))
+            else:
+                return {'message': '{0} delete request successfully sent'.format(ns_id)}
+            
 
 class Log(flask_restful.Resource):
 
@@ -126,4 +133,4 @@ if __name__ == "__main__":
         url_prefix='{prefix}/v{version}'.format(
             prefix=PREFIX,
             version=API_VERSION))
-    app.run(debug=False,host='0.0.0.0',port=8082)
+    app.run(debug=True, host='0.0.0.0', port=8082)
