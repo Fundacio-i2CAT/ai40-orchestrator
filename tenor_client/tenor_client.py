@@ -94,19 +94,19 @@ class TenorClient(object):
         response = requests.get('{0}/vnfs'.format(self._base_url))
         return json.loads(response.text)
     
-    def instantiate_ns(self,ns_id=None,pop_id=None,callback_url="http://localhost:8082/orchestrator/api/v0.1/log",flavour="basic"):
+    def instantiate_ns(self,ns_id=None,pop_id=None,callback_url='http://localhost:8082/orchestrator/api/v0.1/log',flavour='basic'):
         """Instantiates a ns on openstack, if no argument provided proceeds with the last one on the stack"""
         if not ns_id:
             nsds = self.get_ns()
             ns_id = self.get_last_ns_id()
-        ns_data = {'ns_id': ns_id._id, 'pop_id': pop_id, "callbackUrl": callback_url, "flavour": flavour}
+        ns_data = {'ns_id': ns_id._id, 'pop_id': pop_id, 'callbackUrl': callback_url, 'flavour': flavour}
         response = requests.post('{0}/ns-instances'.format(self._base_url), 
                                  headers={'Content-Type': 'application/json'},
                                  json=ns_data)
         try:
             return json.loads(response.text)
         except:
-            return { "error" : response.text }
+            return { 'error' : response.text }
         
     def get_last_vnf_id(self):
         """Gets last vnf_id"""
@@ -130,7 +130,7 @@ class TenorClient(object):
     
     def delete_ns(self,ns_id):
         try:
-            r = requests.delete("{0}/network-services/{1}".format(self._base_url,ns_id))
+            r = requests.delete('{0}/network-services/{1}'.format(self._base_url,ns_id))
             if r.status_code == 200:
                 return { 'message': '{0} instance successfully deleted'.format(ns_id),
                          'status': 200 }
@@ -142,13 +142,13 @@ class TenorClient(object):
     def delete_all_ns(self):
         nss = self.get_ns()
         for ns in nss:
-            requests.delete("{0}/network-services/{1}".format(self._base_url,ns['nsd']['id']))
+            requests.delete('{0}/network-services/{1}'.format(self._base_url,ns['nsd']['id']))
         return
 
     def delete_all_vnfs(self):
         vnfs = self.get_vnf()
         for vnf in vnfs:
-            requests.delete("{0}/vnfs/{1}".format(self._base_url,vnf['vnfd']['id']))
+            requests.delete('{0}/vnfs/{1}'.format(self._base_url,vnf['vnfd']['id']))
         return
 
     def get_ns_instances(self,ns_instance_id=None):
@@ -164,7 +164,7 @@ class TenorClient(object):
     def delete_all_ns_instances(self):
         ns_instances = self.get_ns_instances()
         for ns_instance in ns_instances:
-            r = requests.delete("{0}/ns-instances/{1}".format(self._base_url,ns_instance['id']))
+            r = requests.delete('{0}/ns-instances/{1}'.format(self._base_url,ns_instance['id']))
         return
 
     def stop_ns(self,ns_tenor_id):
@@ -183,11 +183,11 @@ class TenorClient(object):
         try:
             data = json.loads(response.text)
         except:
-            return [ {"state" : "UNKNOWN"} ]
+            return [ {'state' : 'UNKNOWN'} ]
         status_addresses = []
         servers = []
         if not 'vnfrs' in data:
-            return [ {"state": "PROVISIONED"} ]
+            return [ {'state': 'PROVISIONED'} ]
         for vnfr in data['vnfrs']:
             try:
                 sta = { 'state': vnfr['server']['status'],
@@ -197,12 +197,12 @@ class TenorClient(object):
                         sta['addresses'].append({'OS-EXT-IPS:type': ip['OS-EXT-IPS:type'], 'addr': ip['addr']})
                 servers.append(sta)
             except:
-                servers.append({"state": "PROVISIONED"})
+                servers.append({'state': 'PROVISIONED'})
         return servers
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
-    tc = TenorClient("http://localhost:4000")
+    tc = TenorClient('http://localhost:4000')
     # a = TenorId(u'2193')
     # print type(a+1)
     # print a+1

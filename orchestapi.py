@@ -55,7 +55,7 @@ class ServiceInstance(flask_restful.Resource):
             else:
                 resp.append(o)
         if len(resp) == 0:
-            return None
+            return response_json.not_found('[]')
         else:
             return resp
 
@@ -83,6 +83,7 @@ class ServiceInstance(flask_restful.Resource):
         if not ns_id:
             return response_json.internal_server_error("Error")
         state = request.get_json()
+        ns_data = tenor_client.get_ns_instance_vnfs_status_addresses(ns_id)
         r = None
         if state['state'].upper() == 'START':
             r = tenor_client.start_ns(ns_id)
@@ -90,7 +91,10 @@ class ServiceInstance(flask_restful.Resource):
             r = tenor_client.stop_ns(ns_id)
         if r.status_code == 409:
             return response_json.conflict_error('{0} is stopped(running) can\'t stop(run) again'.format(ns_id))
-        return { 'message': 'OK', 'status': '200' }
+        if r.status_code in (200,201):
+            return { 'message': 'OK', 'status': '200' }
+        else:
+            return response_json.not_found('{0} service not found'.format(ns_id))
 
     def delete(self,ns_id):
         if not ns_id:
@@ -116,9 +120,6 @@ api_v2.add_resource(ServiceInstance,
                     '/service/instance/<ns_id>/state',
                     endpoint='user')
 
-# api_v1.add_resource(ServiceInstanceId, '/service/instance/<service_instance_id>')
-# api_v1.add_resource(ServiceProjectId, '/service/instance/<service_instance_id>/state')
-
 if __name__ == "__main__":
     print "Tablecloth (instances.controller v2 via TeNOR) ..."
     app.register_blueprint(
@@ -126,4 +127,4 @@ if __name__ == "__main__":
         url_prefix='{prefix}/v{version}'.format(
             prefix=PREFIX,
             version=API_VERSION))
-    app.run(debug=True,host='0.0.0.0',port=8082)
+    app.run(debug=False,host='0.0.0.0',port=8082)
