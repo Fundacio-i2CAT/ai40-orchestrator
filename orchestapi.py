@@ -99,7 +99,7 @@ class ServiceInstance(flask_restful.Resource):
         if not ns_id:
             return response_json.internal_server_error('No instance selected')
         else:
-            return tenor_client.delete_ns(ns_id)
+            return tenor_client.delete_ns_instance(ns_id)
 
 class Log(flask_restful.Resource):
 
