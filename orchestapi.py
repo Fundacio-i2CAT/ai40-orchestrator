@@ -41,43 +41,19 @@ class Root(flask_restful.Resource):
 class ServiceInstance(flask_restful.Resource):
 
     def get(self,ns_id=None):
-        if ns_id:
-            print ns_id
-            try: 
-                ns_instance = tenor_client.get_ns_instance_vnfs_status_addresses(ns_id)
-                if len(ns_instance) > 0:
-                    return ns_instance
-                else:
-                    return response_json.not_found("{0}".format(ns_id))
-            except:
-                return response_json.not_found("{0}".format(ns_id))
- 
         try:
             comp = tenor_client.get_ns_instances()
         except:
             return response_json.internal_server_error("Error retrieving")
         resp = []
         for c in comp:
-            o = { 'ns_id': c['id'],
-                  'routes': [
-                      { 
-                          'uri': HEAD+'/service/instance/{0}'.format(c['id']),
-                          'method': 'GET',
-                          'purpose': 'Retrieve NS instance information'
-                      },
-                      { 
-                          'uri': HEAD+'/service/instance/{0}/state'.format(c['id']),
-                          'method': 'PUT',
-                          'purpose': 'Start/Stop the VNF instances in the NSD (body: {"state":"start"} or {"state":"stop"}'
-                      },
-                      { 
-                          'uri': HEAD+'/service/instance/{0}'.format(c['id']),
-                          'method': 'DELETE',
-                          'purpose': 'Deletes the NS'
-                      }
-                  ]
-              }
-            resp.append(o)
+            ns_data = tenor_client.get_ns_instance_vnfs_status_addresses(c['id'])
+            o = { 'id': c['id'], 'instances': ns_data }
+            if ns_id: 
+                if c['id'] == ns_id:
+                    return o
+            else:
+                resp.append(o)
         return resp
 
             
@@ -130,4 +106,4 @@ if __name__ == "__main__":
         url_prefix='{prefix}/v{version}'.format(
             prefix=PREFIX,
             version=API_VERSION))
-    app.run(debug=True,host='0.0.0.0',port=8081)
+    app.run(debug=True,host='0.0.0.0',port=8082)

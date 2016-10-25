@@ -16,11 +16,6 @@ class TenorId(object):
         elif type(self._id) is unicode:
             number = int(self._id)
             return str(number+1).decode('unicode-escape')
-            # ords = [ ord(x) for x in self._id ]
-            # ords[-1] = ords[-1]+other
-            # ords[0] = ords[0]+other
-            # unis = [ unichr(x) for x in ords ]
-            # return ''.join(unis)
 
     def __repr__(self):
         return str(self._id)
@@ -174,19 +169,24 @@ class TenorClient(object):
     def get_ns_instance_vnfs_status_addresses(self,ns_instance_id):
         """Check status and addresses for vnfs associated to an ns"""
         response = requests.get('{0}/ns-instances/{1}'.format(self._base_url,ns_instance_id))
-        data = json.loads(response.text)
+        try:
+            data = json.loads(response.text)
+        except:
+            return [ {"state" : "UNKNOWN"} ]
         status_addresses = []
         servers = []
+        if not 'vnfrs' in data:
+            return [ {"state": "PROVISIONED"} ]
         for vnfr in data['vnfrs']:
             try:
-                sta = { 'status': vnfr['server']['status'],
+                sta = { 'state': vnfr['server']['status'],
                         'addresses': [] }
                 for ad in vnfr['server']['addresses']:
                     for ip in ad[1]:
                         sta['addresses'].append({'OS-EXT-IPS:type': ip['OS-EXT-IPS:type'], 'addr': ip['addr']})
                 servers.append(sta)
             except:
-                pass
+                servers.append({"state": "PROVISIONED"})
         return servers
 
 if __name__ == "__main__":
