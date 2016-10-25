@@ -132,7 +132,7 @@ class TenorClient(object):
         try:
             r = requests.delete('{0}/ns-instances/{1}'.format(self._base_url,ns_id))
             if r.status_code == 200:
-                return { 'message': '{0} instance successfully deleted'.format(ns_id),
+                return { 'message': '{0} delete request successfully sent'.format(ns_id),
                          'status': 200 }
             else:
                 return { 'message': 'Error' } 
