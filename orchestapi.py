@@ -58,7 +58,6 @@ class ServiceInstance(flask_restful.Resource):
             return response_json.not_found('[]')
         else:
             return resp
-
             
     def post(self,ns_id=None):
         data = request.get_json()
