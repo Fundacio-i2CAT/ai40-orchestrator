@@ -94,7 +94,7 @@ class TenorClient(object):
         response = requests.get('{0}/vnfs'.format(self._base_url))
         return json.loads(response.text)
     
-    def instantiate_ns(self,ns_id=None,pop_id=None,callback_url="http://10.8.0.6",flavour="basic"):
+    def instantiate_ns(self,ns_id=None,pop_id=None,callback_url="http://localhost:8082/orchestrator/api/v0.1/log",flavour="basic"):
         """Instantiates a ns on openstack, if no argument provided proceeds with the last one on the stack"""
         if not ns_id:
             nsds = self.get_ns()

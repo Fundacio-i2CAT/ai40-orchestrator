@@ -54,7 +54,10 @@ class ServiceInstance(flask_restful.Resource):
                     return o
             else:
                 resp.append(o)
-        return resp
+        if len(resp) == 0:
+            return None
+        else:
+            return resp
 
             
     def post(self,ns_id=None):
@@ -95,7 +98,18 @@ class ServiceInstance(flask_restful.Resource):
         else:
             return tenor_client.delete_ns(ns_id)
 
+class Log(flask_restful.Resource):
+
+    def post(self):
+        data = request.get_json()
+        print data
+
+    def get(self):
+        data = request.get_json()
+        print data
+
 api_v2.add_resource(Root, '/')
+api_v2.add_resource(Log, '/log')
 api_v2.add_resource(ServiceInstance, 
                     '/service/instance',
                     '/service/instance/<ns_id>',
@@ -112,4 +126,4 @@ if __name__ == "__main__":
         url_prefix='{prefix}/v{version}'.format(
             prefix=PREFIX,
             version=API_VERSION))
-    app.run(debug=False,host='0.0.0.0',port=8082)
+    app.run(debug=True,host='0.0.0.0',port=8082)
