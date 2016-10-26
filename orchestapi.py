@@ -125,6 +125,11 @@ api_v2.add_resource(ServiceInstance,
                     '/service/instance/<ns_id>',
                     '/service/instance/<ns_id>/state')
 
+api_v2.add_resource(ServiceInstance, 
+                    '/projects/instance',
+                    '/projects/instance/<ns_id>',
+                    '/projects/instance/<ns_id>/state')
+
 if __name__ == "__main__":
     print "Tablecloth (instances.controller v2 via TeNOR) ..."
     app.register_blueprint(
