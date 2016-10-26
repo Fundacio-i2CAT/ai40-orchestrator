@@ -123,8 +123,7 @@ api_v2.add_resource(Log, '/log')
 api_v2.add_resource(ServiceInstance, 
                     '/service/instance',
                     '/service/instance/<ns_id>',
-                    '/service/instance/<ns_id>/state',
-                    endpoint='user')
+                    '/service/instance/<ns_id>/state')
 
 if __name__ == "__main__":
     print "Tablecloth (instances.controller v2 via TeNOR) ..."
@@ -133,4 +132,4 @@ if __name__ == "__main__":
         url_prefix='{prefix}/v{version}'.format(
             prefix=PREFIX,
             version=API_VERSION))
-    app.run(debug=False, host='0.0.0.0', port=8082)
+    app.run(debug=True, host='0.0.0.0', port=8082)
