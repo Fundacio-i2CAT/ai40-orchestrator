@@ -90,6 +90,10 @@ class ServiceInstance(flask_restful.Resource):
                 r = tenor_client.start_ns(ns_id)
             if state['state'].upper() == 'STOP':
                 r = tenor_client.stop_ns(ns_id)
+            if state['state'].upper() == 'RUNNING':
+                r = tenor_client.start_ns(ns_id)
+            if state['state'].upper() == 'DEPLOYED':
+                r = tenor_client.stop_ns(ns_id)
         except:
             abort(500,message='Internal server error')
         if r.status_code == 409:
