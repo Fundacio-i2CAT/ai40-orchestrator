@@ -47,7 +47,7 @@ class ServiceInstance(flask_restful.Resource):
         resp = []
         for c in comp:
             ns_data = tenor_client.get_ns_instance_vnfs_status_addresses(c['id'])
-            o = {'id': c['id'], 'instances': ns_data}
+            o = {'id': c['id'], 'service_instance_id': c['id'], 'instances': ns_data}
             if ns_id:
                 if c['id'] == ns_id:
                     return o
@@ -73,7 +73,7 @@ class ServiceInstance(flask_restful.Resource):
             tenor_client.create_ns(ns_id, vnf_id, context['name'])
         data = tenor_client.instantiate_ns(TenorId(ns_id))
         try:
-            return {'id': data['id'], 'state': 'PROVISIONED'}
+            return {'id': data['id'], 'service_instance_id': data['id'], 'state': 'PROVISIONED'}
         except:
             abort(500,message="Internal error")
 
