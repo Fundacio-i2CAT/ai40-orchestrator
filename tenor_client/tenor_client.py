@@ -183,7 +183,7 @@ class TenorClient(object):
         try:
             data = json.loads(response.text)
         except:
-            return [ {'state' : 'LOST'} ]
+            return [ {'state' : 'UNKNOWN'} ]
         status_addresses = []
         servers = []
         if not 'vnfrs' in data:
