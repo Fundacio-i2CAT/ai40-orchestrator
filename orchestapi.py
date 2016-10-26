@@ -47,7 +47,12 @@ class ServiceInstance(flask_restful.Resource):
         resp = []
         for c in comp:
             ns_data = tenor_client.get_ns_instance_vnfs_status_addresses(c['id'])
-            o = {'id': c['id'], 'service_instance_id': c['id'], 'state': ns_data[0]['state']}
+            state = "PROVISIONED"
+            if ns_data[0]['state'] == 'ACTIVE':
+                state = 'RUNNING'
+            if ns_data[0]['state'] == 'SHUTOFF':
+                state = 'DEPLOYED'
+            o = {'id': c['id'], 'service_instance_id': c['id'], 'state': state}
             if 'addresses' in ns_data[0]:
                 o['addresses'] = ns_data[0]['addresses']
             if ns_id:
