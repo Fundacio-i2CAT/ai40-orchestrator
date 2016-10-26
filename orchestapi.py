@@ -111,14 +111,20 @@ class Log(flask_restful.Resource):
 
     def post(self):
         data = request.get_json()
-        reponse = requests.get('http://192.168.10.70:8010/api/projects')
-        print response
+        try:
+            reponse = requests.get('http://192.168.10.70:8010/api/projects')
+            print response
+        except:
+            print "Error forwarding callback"
         print data
 
     def get(self):
         data = request.get_json()
-        reponse = requests.get('http://192.168.10.70:8010/api/projects')
-        print response
+        try:
+            reponse = requests.get('http://192.168.10.70:8010/api/projects')
+            print response
+        except:
+            print "Error forwarding callback"
         print data
 
 api_v2.add_resource(Root, '/')
