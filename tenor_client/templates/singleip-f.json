@@ -3,6 +3,7 @@
     "vnfd": {
 	"vdu": [
 	    {
+		"bootstrap_script": "#!/bin/bash\ndate >> /root/yo-estuve-aqui.txt\n",
 		"resource_requirements": {
 		    "network_interface_bandwidth_unit": "",
 		    "hypervisor_parameters": {
@@ -103,20 +104,20 @@
 	"version": "1",
 	"vnf_lifecycle_events": [
 	    {
-		"authentication_username": "alfonso",
+		"authentication_username": "root",
 		"driver": "ssh",
 		"authentication_type": "PubKeyAuthentication",
-		"authentication": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC69wdUMDh2zq0QWesV2wJHLpG1PukTxZwOpgIR4tpPPEPCxJmanqdLD+2MVlLWRbw+D7VXYtQAbQU6wDlbJMfMWWHsGBFKnebGyccTzQtTgkl8EHmtOD1PsoaLJwdSVizldUubTwzrjq0P7yjkCrF5XP845TJbYpNOFpRN4EZlXIsPbzaFgKyF6XATvmiADen0woooCj0Yh+Esn2odzzm/LsuC3wuDjGnUhNFuvKI2NzcmPoGdS8SxA4Eke8tqFOwr36t10HTNPjmL9aUUq/thsUFqa4Zk4fDlniiJpzgn2ZyiNoP92g+5zCoq1sfiPj7QlNllj55iRZG84puHQx7n alfonso@metropolix",
+		"authentication": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVVSR69IR06snOq6FqEl51CSt9ubfMofwqxNDrQ78vkPYnZNGM/o+wLg4hCFxsBMBzcsDyGoOdsyACfjBYInk4m3RgSalpTBh9u4/bK1Td2zzq4I6iN5SSQzNxQ09f1SmAfuQRN0pJO3FyHribo+C1x2+vzVYYOdBLkH78B971Lp4J7sps0Wxfy2h3ZAXo3kpJVpCkH44n7NJZvp3hVmQuc+yMgW8Sq/NagDq/Vowra9jFnp/jgZsvwt9aUi3RTeWZ92lR2G3lJXP9yo1QevNwLvx1A7eNYUwBzchyUaOz2cGH6gEq9aGc37S6tR+LClq6jYtZKfTjEfupFDPMPhNv alfonso@knightmare",
 		"authentication_port": 22,
 		"flavor_id_ref": "flavor0",
 		"events": {
 		    "start": {
-			"command": "ls",
+			"command": "date >> hi.txt",
 			"template_file": "{\"controller\":\"get_attr[vdu0,CPfs0h,PublicIp]\"}",
 			"template_file_format": "JSON"
 		    },
 		    "stop": {
-			"command": "ls",
+			"command": "date >> bye.txt",
 			"template_file": "{}",
 			"template_file_format": "JSON"
 		    }

@@ -81,6 +81,7 @@ class ServiceInstance(flask_restful.Resource):
             tenor_client.create_vnf(vnf_id, context['vm_image'], context['name'])
             tenor_client.create_ns(ns_id, vnf_id, context['name'])
         data = tenor_client.instantiate_ns(TenorId(ns_id))
+        print data
         try:
             return {'id': data['id'], 'service_instance_id': data['id'], 'state': 'PROVISIONED'}
         except:
