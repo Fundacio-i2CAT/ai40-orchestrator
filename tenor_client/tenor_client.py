@@ -41,9 +41,12 @@ class TenorClient(object):
         with open(existing_nsd_template,'r') as f:
             self._en_template = Template(f.read())    
 
-    def create_existing_vnf(self,vnf_id,vm_image,name):
+    def create_existing_vnf(self,vnf_id,vm_image,name,bootstrap_script=None):
         """Creates a vnf using the already existing id in openstack"""
-        rdata = self._ef_template.render(vnf_id=vnf_id,vm_image=vm_image,name=name)
+        script = "#!/bin/bash\n"
+        if bootstrap_script:
+            script = bootstrap_script
+        rdata = self._ef_template.render(vnf_id=vnf_id,vm_image=vm_image,name=name,bootstrap_script=script)
         response = requests.post('{0}/vnfs'.format(self._base_url), 
                                  headers={'Content-Type': 'application/json'},
                                  json=json.loads(rdata))

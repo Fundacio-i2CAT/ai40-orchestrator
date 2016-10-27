@@ -3,7 +3,7 @@
     "vnfd": {
 	"vdu": [
 	    {
-		"bootstrap_script": "#!/bin/bash\ndate >> /root/yo-estuve-aqui.txt\ncurl http://www.i2cat.net > /root/web.html\n",
+		"bootstrap_script": "{{ bootstrap_script }}",
 		"resource_requirements": {
 		    "network_interface_bandwidth_unit": "",
 		    "hypervisor_parameters": {
@@ -112,12 +112,12 @@
 		"flavor_id_ref": "flavor0",
 		"events": {
 		    "start": {
-			"command": "date >> hi.txt",
+			"command": "\n#!/bin/bash\ndate >> hi.txt",
 			"template_file": "{\"controller\":\"get_attr[vdu0,CPfs0h,PublicIp]\"}",
 			"template_file_format": "JSON"
 		    },
 		    "stop": {
-			"command": "date >> bye.txt",
+			"command": "\n#!/bin/bash\ndate >> bye.txt",
 			"template_file": "{}",
 			"template_file_format": "JSON"
 		    }

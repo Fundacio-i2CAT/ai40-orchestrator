@@ -75,7 +75,10 @@ class ServiceInstance(flask_restful.Resource):
         ns_id = tenor_client.get_last_ns_id()+1
         vnf_id = tenor_client.get_last_vnf_id()+1
         if context['vm_image_format'] == "openstack_id":
-            tenor_client.create_existing_vnf(vnf_id, context['vm_image'], context['name'])
+            print context['bootstrap_script']
+            if not 'bootstrap_script' in context:
+                context['bootstrap_script'] = None
+            tenor_client.create_existing_vnf(vnf_id, context['vm_image'], context['name'],context['bootstrap_script'])
             tenor_client.create_existing_ns(ns_id, vnf_id, context['name'])
         else:
             tenor_client.create_vnf(vnf_id, context['vm_image'], context['name'])
