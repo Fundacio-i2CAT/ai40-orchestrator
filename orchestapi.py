@@ -4,7 +4,8 @@
 from flask import Flask, jsonify, request, Blueprint
 import flask_restful
 from flask_restful import Api, abort
-from tenor_client.tenor_client import TenorClient, TenorId
+from tenor_client.tenor_client import TenorClient
+from tenor_client.tenor_dummy_id import TenorDummyId
 import requests
 import json
 from enums.final_state import FinalState
@@ -16,26 +17,12 @@ from common import parse_json
 
 PREFIX = "/orchestrator/api"
 API_VERSION = "0.1"
-HEAD = PREFIX+'/v'+API_VERSION
+PORT=8082
 app = Flask(__name__)
 api_v2_bp = Blueprint('api_v2', __name__)
 api_v2 = Api(api_v2_bp)
 
 tenor_client = TenorClient('http://localhost:4000')
-
-class Root(flask_restful.Resource):
-
-    def get(self):
-        api_dict = []
-        api_dict.append({'uri': HEAD+'/', 'method': 'GET',
-                          'purpose': 'REST API Structure'})
-        api_dict.append({'uri': HEAD+'/service/instance', 'method': 'GET',
-                          'purpose': 'Gets NS instances in TeNOR'})
-        api_dict.append({'uri': HEAD+'/service/instance/<ns_id>', 'method': 'GET',
-                          'purpose': 'Gets NS instance'})
-        api_dict.append({'uri': HEAD+'/service/instance', 'method': 'POST',
-                           'purpose': 'Registers and instantiates a stack on openstack via TeNOR'})
-        return api_dict
 
 class ServiceInstance(flask_restful.Resource):
 
@@ -75,15 +62,14 @@ class ServiceInstance(flask_restful.Resource):
         ns_id = tenor_client.get_last_ns_id()+1
         vnf_id = tenor_client.get_last_vnf_id()+1
         if context['vm_image_format'] == "openstack_id":
-            print context['bootstrap_script']
             if not 'bootstrap_script' in context:
-                context['bootstrap_script'] = None
+                context['bootstrap_script'] = "#!/bin/bash"
             tenor_client.create_existing_vnf(vnf_id, context['vm_image'], context['name'],context['bootstrap_script'])
             tenor_client.create_existing_ns(ns_id, vnf_id, context['name'])
         else:
             tenor_client.create_vnf(vnf_id, context['vm_image'], context['name'])
             tenor_client.create_ns(ns_id, vnf_id, context['name'])
-        data = tenor_client.instantiate_ns(TenorId(ns_id))
+        data = tenor_client.instantiate_ns(TenorDummyId(ns_id))
         print data
         try:
             return {'id': data['id'], 'service_instance_id': data['id'], 'state': 'PROVISIONED'}
@@ -134,9 +120,7 @@ class Log(flask_restful.Resource):
         data = request.get_json()
         print data
 
-api_v2.add_resource(Root, '/')
 api_v2.add_resource(Log, '/log')
-
 api_v2.add_resource(ServiceInstance, 
                     '/service/instance',
                     '/service/instance/<ns_id>',
@@ -149,4 +133,4 @@ if __name__ == "__main__":
         url_prefix='{prefix}/v{version}'.format(
             prefix=PREFIX,
             version=API_VERSION))
-    app.run(debug=False, host='0.0.0.0', port=8082)
+    app.run(debug=False, host='0.0.0.0', port=PORT)

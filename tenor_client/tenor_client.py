@@ -4,21 +4,7 @@
 import requests 
 import json,ast
 from jinja2 import Template
-
-class TenorId(object):
-    """Manages mixed ids ... ints for vnfs and unicode for nsd"""
-    def __init__(self,value):
-        self._id = value
-    
-    def __add__(self,other):
-        if type(self._id) is int:
-            return str(self._id+other)
-        elif type(self._id) is unicode:
-            number = int(self._id)
-            return str(number+1).decode('unicode-escape')
-
-    def __repr__(self):
-        return str(self._id)
+from tenor_dummy_id import TenorDummyId 
 
 class TenorClient(object):
 
@@ -117,8 +103,8 @@ class TenorClient(object):
         vnfs = json.loads(response.text)
         ids = sorted([ x['vnfd']['id'] for x in vnfs ])
         if len(ids) == 0:
-            return TenorId(1899)
-        ide = TenorId(ids[-1])
+            return TenorDummyId(1899)
+        ide = TenorDummyId(ids[-1])
         return ide
 
     def get_last_ns_id(self):
@@ -127,8 +113,8 @@ class TenorClient(object):
         nss = json.loads(response.text)
         ids = sorted([ x['nsd']['id'] for x in nss ])
         if len(ids) == 0:
-            return TenorId(1899)
-        ide = TenorId(ids[-1])
+            return TenorDummyId(1899)
+        ide = TenorDummyId(ids[-1])
         return ide
     
     def delete_ns_instance(self,ns_id):
@@ -209,14 +195,14 @@ class TenorClient(object):
 if __name__ == '__main__':
 
     tc = TenorClient('http://localhost:4000')
-    # a = TenorId(u'2193')
+    # a = TenorDummyId(u'2193')
     # print type(a+1)
     # print a+1
-    # b = TenorId(21938)
+    # b = TenorDummyId(21938)
     # print type(b+1)
     # print b+1
     # print tc.get_vnf_instances()
-    tc.delete_all_ns_instances()
-    tc.delete_all_ns()
-    tc.delete_all_vnfs()
+    # tc.delete_all_ns_instances()
+    # tc.delete_all_ns()
+    # tc.delete_all_vnfs()
     # print tc.get_ns_instance_vnfs_status_addresses('580861e7df67b5156e000000')
