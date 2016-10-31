@@ -34,13 +34,13 @@ class TenorVNF(object):
     def get_last_vnf_id(self):
         """Gets last vnf_id"""
         try:
-            response = requests.get('{0}/vnfs'.format(self._tenor_url))
+            resp = requests.get('{0}/vnfs'.format(self._tenor_url))
         except:
-            raise IOError('TeNOR {0} instance unreachable'.format(self._tenor_url))
+            raise IOError('{0} instance unreachable'.format(self._tenor_url))
         try:
-            vnfs = json.loads(response.text)
+            vnfs = json.loads(resp.text)
         except:
-            raise ValueError('Decoding last_vnf_id json response failed')
+            raise ValueError('Decoding last_vnf_id json resp failed')
         ids = sorted([x['vnfd']['id'] for x in vnfs])
         if len(ids) == 0:
             return TenorDummyId(1898)
@@ -63,18 +63,18 @@ class TenorVNF(object):
                                   storage_amount=self._vdu.storage_amount,
                                   vcpus=self._vdu.vcpus)
         try:
-            response = requests.post('{0}/vnfs'.format(self._tenor_url),
-                                     headers={'Content-Type': 'application/json'},
-                                     json=json.loads(self._vnfd))
+            resp = requests.post('{0}/vnfs'.format(self._tenor_url),
+                                 headers={'Content-Type': 'application/json'},
+                                 json=json.loads(self._vnfd))
         except IOError:
-            raise IOError('TeNOR {0} instance unreachable'.format(self._tenor_url))
+            raise IOError('{0} instance unreachable'.format(self._tenor_url))
         except ValueError:
             raise ValueError('Json encoding error registering VNF')
         try:
-            json.loads(response.text)
+            json.loads(resp.text)
         except:
-            raise ValueError('Decoding new VNF response json response failed')
-        return response
+            raise ValueError('Decoding new VNF resp json resp failed')
+        return resp
 
     def get_vdu(self):
         """Returns VNF associated VDU"""

@@ -29,13 +29,13 @@ class TenorNS(object):
     def get_last_ns_id(self):
         """Gets last ns_id"""
         try:
-            response = requests.get('{0}/network-services'.format(self._tenor_url))
+            resp = requests.get('{0}/network-services'.format(self._tenor_url))
         except:
-            raise IOError('TeNOR {0} instance unreachable'.format(self._tenor_url))
+            raise IOError('{0} instance unreachable'.format(self._tenor_url))
         try:
-            nss = json.loads(response.text)
+            nss = json.loads(resp.text)
         except:
-            raise ValueError('Decoding last_ns_id json response failed')
+            raise ValueError('Decoding last_ns_id json resp failed')
         ids = sorted([x['nsd']['id'] for x in nss])
         if len(ids) == 0:
             return TenorDummyId(1898)
@@ -57,41 +57,40 @@ class TenorNS(object):
                                  vnf_id=self._vnf.get_dummy_id(),
                                  name=name)
         try:
-            response = requests.post('{0}/network-services'.format(self._tenor_url),
+            resp = requests.post('{0}/network-services'.format(self._tenor_url),
                                  headers={'Content-Type': 'application/json'},
                                  json=json.loads(self._nsd))
-            return response.status_code
+            return resp.status_code
         except IOError:
-            raise IOError('TeNOR {0} instance unreachable'.format(self._tenor_url))
+            raise IOError('{0} instance unreachable'.format(self._tenor_url))
         except ValueError:
             raise ValueError('Json encoding error registering NSD')
         try:
-            json.loads(response.text)
+            json.loads(resp.text)
         except:
-            raise ValueError('Decoding new NS response json response failed')
-        return response
+            raise ValueError('Decoding new NS resp json resp failed')
+        return resp
 
-    def instantiate(self, 
-                    pop_id=None, 
-                    callback_url=DEFAULT_CALLBACK_URL, 
+    def instantiate(self,
+                    pop_id=None,
+                    callback_url=DEFAULT_CALLBACK_URL,
                     flavour=DEFAULT_FLAVOUR):
         """Instantiates the NS on openstack"""
-        ns_data = {'ns_id': self._dummy_id, 'pop_id': pop_id, 
+        ns_data = {'ns_id': self._dummy_id, 'pop_id': pop_id,
                    'callbackUrl': callback_url, 'flavour': flavour}
         try:
-            response = requests.post('{0}/ns-instances'.format(self._tenor_url),
-                                     headers={'Content-Type': 'application/json'},
-                                     json=ns_data)
+            resp = requests.post('{0}/ns-instances'.format(self._tenor_url),
+                                 headers={'Content-Type': 'application/json'},
+                                 json=ns_data)
         except IOError:
-            raise IOError('TeNOR {0} instance unreachable'.format(self._tenor_url))
+            raise IOError('{0} instance unreachable'.format(self._tenor_url))
         except ValueError:
             raise ValueError('Json encoding error registering NSD')
         try:
-            json.loads(response.text)
+            json.loads(resp.text)
         except:
-            raise ValueError('Decoding new NS response json response failed')
-        return response
-
+            raise ValueError('Decoding new NS resp json resp failed')
+        return resp
 
 if __name__ == "__main__":
     VDU = TenorVDU()
