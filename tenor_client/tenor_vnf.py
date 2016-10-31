@@ -8,12 +8,15 @@ from jinja2 import Template
 from tenor_dummy_id import TenorDummyId
 from tenor_vdu import TenorVDU
 
+DEFAULT_TENOR_URL = 'http://localhost:4000'
+DEFAULT_TEMPLATE = './tenor_client/templates/simple-f.json'
+
 class TenorVNF(object):
     """Represents a TeNOR VNF"""
 
     def __init__(self, vdu,
-                 tenor_url='http://localhost:4000',
-                 template='./tenor_client/templates/simple-f.json'):
+                 tenor_url=DEFAULT_TENOR_URL,
+                 template=DEFAULT_TEMPLATE):
         self._tenor_url = tenor_url
         self._template = template
         self._vdu = vdu
@@ -73,7 +76,12 @@ class TenorVNF(object):
             raise ValueError('Decoding new VNF response json response failed')
         return response
 
+    def get_vdu(self):
+        """Returns VNF associated VDU"""
+        return self._vdu
+
+
 if __name__ == "__main__":
     VDU = TenorVDU()
     VNF = TenorVNF(VDU)
-    VNF.register("Prueba2")
+    VNF.register("Prueba3")

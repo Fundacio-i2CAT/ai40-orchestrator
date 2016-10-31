@@ -9,14 +9,22 @@ from tenor_dummy_id import TenorDummyId
 from tenor_vnf import TenorVNF
 from tenor_vdu import TenorVDU
 
+DEFAULT_CALLBACK_URL = 'http://localhost:8082/orchestrator/api/v0.1/log'
+DEFAULT_TENOR_URL = 'http://localhost:4000'
+DEFAULT_TEMPLATE = './tenor_client/templates/simple-n.json'
+DEFAULT_FLAVOUR = 'basic'
+
 class TenorNS(object):
     """Represents a TeNOR NS"""
 
     def __init__(self, vnf,
-                 tenor_url='http://localhost:4000'):
+                 tenor_url=DEFAULT_TENOR_URL,
+                 template=DEFAULT_TEMPLATE):
         self._dummy_id = None
         self._vnf = vnf
         self._tenor_url = tenor_url
+        self._nsd = None
+        self._template = template
 
     def get_last_ns_id(self):
         """Gets last ns_id"""
@@ -35,13 +43,60 @@ class TenorNS(object):
 
     def register(self, name, bootstrap_script=None):
         """Registers a NS via TeNOR"""
-        self._dummy_id = self.get_last_ns_id
-        self._vnf.register('NSINside',bootstrap_script='#!/bin/bash')
+        self._dummy_id = self.get_last_ns_id()+1
+        if not bootstrap_script:
+            self._vnf.register(name, bootstrap_script=self._vnf.get_vdu().shell)
+        else:
+            self._vnf.register(name, bootstrap_script)
+        try:
+            with open(self._template, 'r') as fhandle:
+                templ = Template(fhandle.read())
+        except:
+            raise IOError('Template {0} IOError'.format(self._template))
+        self._nsd = templ.render(ns_id=self._dummy_id,
+                                 vnf_id=self._vnf.get_dummy_id(),
+                                 name=name)
+        try:
+            response = requests.post('{0}/network-services'.format(self._tenor_url),
+                                 headers={'Content-Type': 'application/json'},
+                                 json=json.loads(self._nsd))
+            return response.status_code
+        except IOError:
+            raise IOError('TeNOR {0} instance unreachable'.format(self._tenor_url))
+        except ValueError:
+            raise ValueError('Json encoding error registering NSD')
+        try:
+            json.loads(response.text)
+        except:
+            raise ValueError('Decoding new NS response json response failed')
+        return response
+
+    def instantiate(self, 
+                    pop_id=None, 
+                    callback_url=DEFAULT_CALLBACK_URL, 
+                    flavour=DEFAULT_FLAVOUR):
+        """Instantiates the NS on openstack"""
+        ns_data = {'ns_id': self._dummy_id, 'pop_id': pop_id, 
+                   'callbackUrl': callback_url, 'flavour': flavour}
+        try:
+            response = requests.post('{0}/ns-instances'.format(self._tenor_url),
+                                     headers={'Content-Type': 'application/json'},
+                                     json=ns_data)
+        except IOError:
+            raise IOError('TeNOR {0} instance unreachable'.format(self._tenor_url))
+        except ValueError:
+            raise ValueError('Json encoding error registering NSD')
+        try:
+            json.loads(response.text)
+        except:
+            raise ValueError('Decoding new NS response json response failed')
+        return response
+
 
 if __name__ == "__main__":
-
     VDU = TenorVDU()
     VNF = TenorVNF(VDU)
     NS = TenorNS(VNF)
     print NS.get_last_ns_id()
-    NS.register("lkasjd")
+    print NS.register("lkasjd")
+    NS.instantiate()
