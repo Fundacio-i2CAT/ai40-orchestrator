@@ -130,4 +130,4 @@ if __name__ == "__main__":
         url_prefix='{prefix}/v{version}'.format(
             prefix=PREFIX,
             version=API_VERSION))
-    APP.run(debug=True, host='0.0.0.0', port=PORT)
+    APP.run(debug=False, host='0.0.0.0', port=PORT)
