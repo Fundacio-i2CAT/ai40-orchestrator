@@ -42,7 +42,8 @@ class VNF(flask_restful.Resource):
             print resp.text
             data = json.loads(resp.text)
         except Exception as exc:
-            abort(500, message="Error decoding VNF reg. response: {0}".format(str(exc))) 
+            abort(500,
+                  message="Error decoding VNF reg.: {0}".format(str(exc)))
         return {'state': 'PROVISIONED', 'vnf_id': data['vnfd']['id']}
 
 class NS(flask_restful.Resource):
@@ -50,7 +51,7 @@ class NS(flask_restful.Resource):
     def __init__(self):
         pass
 
-    def post(self,ns_id=None):
+    def post(self, ns_id=None):
         """Posts a new NS"""
         if ns_id:
             try:
@@ -75,7 +76,8 @@ class NS(flask_restful.Resource):
         try:
             data = json.loads(resp.text)
         except Exception as exc:
-            abort(500, message="Error decoding NS reg. response: {0}".format(str(exc))) 
+            abort(500,
+                  message="Error decoding NS reg.: {0}".format(str(exc)))
         return {'state': 'PROVISIONED', 'ns_id': data['nsd']['id']}
 
 class ServiceInstance(flask_restful.Resource):
@@ -148,7 +150,8 @@ class ServiceInstance(flask_restful.Resource):
             else:
                 abort(404, message='{0} NS not found'.format(ns_id))
         else:
-            abort(500, message='Invalid state request: \'{0}\''.format(state['state'].upper()))
+            abort(500,
+                  message='Invalid state request: \'{0}\''.format(state['state'].upper()))
 
     def delete(self, ns_id):
         """Deletes NSIs"""
@@ -157,7 +160,7 @@ class ServiceInstance(flask_restful.Resource):
         else:
             try:
                 nsi = TenorNSI(ns_id)
-                resp = nsi.delete()
+                nsi.delete()
                 msg = '{0} request successfully sent'.format(ns_id)
                 return {'message': msg}
             except Exception as exc:
