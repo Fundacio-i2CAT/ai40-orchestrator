@@ -85,11 +85,11 @@ class TenorNS(object):
         except IOError:
             raise IOError('{0} instance unreachable'.format(self._tenor_url))
         except ValueError:
-            raise ValueError('Json encoding error registering NSD')
+            raise ValueError('Json encoding error instantiating NS')
         try:
             json.loads(resp.text)
         except:
-            raise ValueError('Decoding new NS resp json resp failed')
+            raise ValueError('Decoding new NSI resp json resp failed')
         return resp
 
 if __name__ == "__main__":
@@ -97,5 +97,5 @@ if __name__ == "__main__":
     VNF = TenorVNF(VDU)
     NS = TenorNS(VNF)
     print NS.get_last_ns_id()
-    print NS.register("lkasjd")
+    print NS.register("Test")
     NS.instantiate()

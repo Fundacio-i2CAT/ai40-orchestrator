@@ -23,37 +23,68 @@ class TenorNSI(object):
     def retrieve(self):
         """Get NSI information from tenor instance"""
         try:
-            response = requests.get('{0}/ns-instances'.format(self._tenor_url))
+            resp = requests.get('{0}/ns-instances/{1}'.format(
+                self._tenor_url, self._nsid))
         except IOError:
             raise IOError('{0} instance unreachable'.format(self._tenor_url))
         try:
-            json.loads(response.text)
+            nsi = json.loads(resp.text)
         except:
-            raise ValueError('Decoding last_vnf_id json response failed')
-        nsis = [x for x in json.loads(response.text) if x['id'] == self._nsid]
-        try:
-            nsi = nsis[0]
-        except:
-            raise ValueError('NSI {0} not found'.format(self._nsid))
+            self._state = 'UNKNOWN'
+            return {}
         if 'vnfrs' in nsi:
             if len(nsi['vnfrs']) > 0:
                 vnfr = nsi['vnfrs'][0]
                 if 'server' in vnfr:
-                    if vnfr['server']['status'].upper() == 'ACTIVE':
-                        self._state = 'RUNNING'
-                if vnfr['server']['status'].upper() == 'SHUTOFF':
-                    self._state = 'DEPLOYED'
-                self._addresses = vnfr['server']['addresses']
+                    if 'status' in vnfr['server']:
+                        if vnfr['server']['status'].upper() == 'ACTIVE':
+                            self._state = 'RUNNING'
+                        if vnfr['server']['status'].upper() == 'SHUTOFF':
+                            self._state = 'DEPLOYED'
+                    if 'addresses' in vnfr['server']:
+                        self._addresses = vnfr['server']['addresses']
         return nsi
+
+    def start(self):
+        """Sets active all the VNF instances associated"""
+        try:
+            resp = requests.put('{0}/ns-instances/{1}/start'.format(
+                self._tenor_url, self._nsid))
+            self.retrieve()
+        except:
+            raise IOError('Error starting {0}'.format(self._nsid))
+        return resp
+
+    def stop(self):
+        """Sets shutoff all the VNF instances associated"""
+        try:
+            resp = requests.put('{0}/ns-instances/{1}/stop'.format(
+                self._tenor_url, self._nsid))
+            self.retrieve()
+        except:
+            raise IOError('Error stoping {0}'.format(self._nsid))
+        return resp
+
+    def delete(self):
+        """Deletes the NSI"""
+        try:
+            resp = requests.delete('{0}/ns-instances/{1}'.format(
+                self._tenor_url, self._nsid))
+        except IOError:
+            raise IOError('Error deleting {0}'.format(self._nsid))
+        return resp
 
     def get_state_and_addresses(self):
         """Returns state and addresses associated with the NSI"""
         addresses = []
+        self.retrieve()
         for adr in self._addresses:
             for ipif in adr[1]:
                 addresses.append({'OS-EXT-IPS:type': ipif['OS-EXT-IPS:type'],
                                   'addr': ipif['addr']})
-        return {'state': self._state, 'addresses': addresses}
+        return {'service_instance_id': self._nsid,
+                'state': self._state,
+                'addresses': addresses}
 
     @staticmethod
     def get_nsi_ids():
@@ -65,7 +96,7 @@ class TenorNSI(object):
         try:
             json.loads(resp.text)
         except:
-            raise ValueError('Decoding new NS response json response failed')
+            raise ValueError('Decoding NSI response json response failed')
         ids = []
         for nsi in json.loads(resp.text):
             ids.append(nsi['id'])

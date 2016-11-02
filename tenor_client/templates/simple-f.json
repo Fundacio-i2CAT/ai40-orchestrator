@@ -60,7 +60,7 @@
 		    "maximum": 1
 		},
 		"vm_image_md5": "2d59cf7c633684bcf6b20fa8206dc252",
-		"vm_image_format": "openstack_id"
+		"vm_image_format": "{{ vm_image_format }}"
 	    }
 	],
 	"name": "{{ name }}",
