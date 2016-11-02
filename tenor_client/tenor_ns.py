@@ -16,15 +16,19 @@ DEFAULT_FLAVOUR = 'basic'
 
 class TenorNS(object):
     """Represents a TeNOR NS"""
-
     def __init__(self, vnf,
                  tenor_url=DEFAULT_TENOR_URL,
                  template=DEFAULT_TEMPLATE):
-        self._dummy_id = None
-        self._vnf = vnf
-        self._tenor_url = tenor_url
-        self._nsd = None
         self._template = template
+        self._tenor_url = tenor_url
+        self._dummy_id = None
+        self._lite = False
+        if type(vnf) is int:
+            self._vnf = TenorVNF(vnf)
+            self._lite = True
+        else:
+            self._vnf = vnf
+        self._nsd = None
 
     def get_last_ns_id(self):
         """Gets last ns_id"""
@@ -44,15 +48,17 @@ class TenorNS(object):
     def register(self, name, bootstrap_script=None):
         """Registers a NS via TeNOR"""
         self._dummy_id = self.get_last_ns_id()+1
-        if not bootstrap_script:
-            self._vnf.register(name, bootstrap_script=self._vnf.get_vdu().shell)
-        else:
-            self._vnf.register(name, bootstrap_script)
+        if self._lite == False:
+            if not bootstrap_script:
+                self._vnf.register(name, bootstrap_script=self._vnf.get_vdu().shell)
+            else:
+                self._vnf.register(name, bootstrap_script)
         try:
             with open(self._template, 'r') as fhandle:
                 templ = Template(fhandle.read())
         except:
             raise IOError('Template {0} IOError'.format(self._template))
+
         self._nsd = templ.render(ns_id=self._dummy_id,
                                  vnf_id=self._vnf.get_dummy_id(),
                                  name=name)
@@ -60,7 +66,7 @@ class TenorNS(object):
             resp = requests.post('{0}/network-services'.format(self._tenor_url),
                                  headers={'Content-Type': 'application/json'},
                                  json=json.loads(self._nsd))
-            return resp.status_code
+            return resp
         except IOError:
             raise IOError('{0} instance unreachable'.format(self._tenor_url))
         except ValueError:

@@ -19,6 +19,56 @@ API_V2_BP = Blueprint('api_v2', __name__)
 API_V2 = Api(API_V2_BP)
 DEFAULT_TENOR_URL = 'http://localhost:4000'
 
+class VNF(flask_restful.Resource):
+    """Virtual network function resources"""
+    def __init__(self):
+        pass
+
+    def post(self):
+        """Posts a new VNF"""
+        data = request.get_json()
+        vdu_data = data['vdu']
+        vdu = TenorVDU(vdu_data['vm_image'],
+                       vdu_data['vm_image_format'],
+                       vdu_data['shell'],
+                       vdu_data['storage_amount'],
+                       vdu_data['vcpus'])
+        vnf = TenorVNF(vdu)
+        try:
+            resp = vnf.register(data['name'])
+        except Exception as exc:
+            abort(500, "Error registering VNF: {0}".format(str(exc)))
+        return json.loads(resp.text)
+
+class NS(flask_restful.Resource):
+    """Network service resources"""
+    def __init__(self):
+        pass
+
+    def post(self,ns_id=None):
+        """Posts a new NS"""
+        if ns_id:
+            try:
+                vdu = TenorVDU()
+                vnf = TenorVNF(vdu)
+                tns = TenorNS(vnf)
+                tns._dummy_id = ns_id
+                resp = tns.instantiate()
+                nsdata = json.loads(resp.text)
+                return {'service_instance_id': nsdata['id'],
+                        'state': 'PROVISIONED'}
+            except:
+                abort(500, message='Error instantiating')
+
+        data = request.get_json()
+        vnf_ids = TenorVNF.get_vnf_ids()
+        if not data['vnf_id'] in vnf_ids:
+            abort(404, message='vnf_id {0} not found'.format(data['vnf_id']))
+        vnf = TenorVNF(data['vnf_id'])
+        tns = TenorNS(data['vnf_id'])
+        resp = tns.register(data['name'])
+        return json.loads(resp.text)
+
 class ServiceInstance(flask_restful.Resource):
     """Service instance resources"""
     def __init__(self):
@@ -107,10 +157,13 @@ class ServiceInstance(flask_restful.Resource):
 
 class Log(flask_restful.Resource):
     """TeNOR Logs"""
+    def __init__(self):
+        pass
+
     def post(self):
         """Log post"""
         data = request.get_json()
-        print data
+        print json.dumps(data, indent=4, sort_keys=True)
 
     def get(self):
         """Log get"""
@@ -123,6 +176,13 @@ API_V2.add_resource(ServiceInstance,
                     '/service/instance/<ns_id>',
                     '/service/instance/<ns_id>/state')
 
+API_V2.add_resource(VNF,
+                    '/vnf')
+
+API_V2.add_resource(NS,
+                    '/ns',
+                    '/ns/<ns_id>')
+
 if __name__ == "__main__":
     print "Tablecloth (instances.controller v2 via TeNOR) ..."
     APP.register_blueprint(
@@ -130,4 +190,4 @@ if __name__ == "__main__":
         url_prefix='{prefix}/v{version}'.format(
             prefix=PREFIX,
             version=API_VERSION))
-    APP.run(debug=False, host='0.0.0.0', port=PORT)
+    APP.run(debug=True, host='0.0.0.0', port=PORT)

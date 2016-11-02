@@ -112,7 +112,7 @@
 		"flavor_id_ref": "flavor0",
 		"events": {
 		    "start": {
-			"command": "\n#!/bin/bash\ndate >> hi.txt",
+			"command": "#!/bin/bash\\necho  ip  > /root/consumerIP.txt",
 			"template_file": "{\"controller\":\"get_attr[vdu0,CPfs0h,PublicIp]\"}",
 			"template_file_format": "JSON"
 		    },

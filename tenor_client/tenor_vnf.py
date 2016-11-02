@@ -19,10 +19,13 @@ class TenorVNF(object):
                  template=DEFAULT_TEMPLATE):
         self._tenor_url = tenor_url
         self._template = template
-        self._vdu = vdu
-        self._dummy_id = None
-        self._vnfd = None
-        self._name = None
+        if type(vdu) is int:
+            self.get_from_catalogue(vdu)
+        else:
+            self._vdu = vdu
+            self._dummy_id = None
+            self._vnfd = None
+            self._name = None
 
     def get_dummy_id(self):
         """Returns the TeNOR internal dummy_id"""
@@ -45,6 +48,21 @@ class TenorVNF(object):
         if len(ids) == 0:
             return TenorDummyId(1898)
         return TenorDummyId(ids[-1])
+
+    def get_from_catalogue(self,vnf_id):
+        """Gets the vnfd from TeNOR Catalogue"""
+        try:
+            resp = requests.get('{0}/vnfs'.format(self._tenor_url))
+        except:
+            raise IOError('{0} instance unreachable'.format(self._tenor_url))
+        try:
+            vnfs = json.loads(resp.text)
+        except:
+            raise ValueError('Decoding last_vnf_id json resp failed')
+        single = [x for x in json.loads(resp.text) if x['vnfd']['id'] == vnf_id]
+        self._vnfd = json.dumps(single[0])
+        self._dummy_id = single[0]['vnfd']['id']
+        return single[0]
 
     def register(self, name, bootstrap_script=None):
         """Registers a VNF in TeNOR"""
@@ -77,6 +95,22 @@ class TenorVNF(object):
             raise ValueError('Decoding new VNF resp json resp failed')
         return resp
 
+    @staticmethod
+    def get_vnf_ids():
+        """Returns the list of VNF registered in TeNOR"""
+        try:
+            resp = requests.get('{0}/vnfs'.format(DEFAULT_TENOR_URL))
+        except:
+            raise IOError('{0} instance unreachable'.format(DEFAULT_TENOR_URL))
+        try:
+            json.loads(resp.text)
+        except:
+            raise ValueError('Decoding VNF response json response failed')
+        ids = []
+        for vnf in json.loads(resp.text):
+            ids.append(vnf['vnfd']['id'])
+        return ids
+
     def get_vdu(self):
         """Returns VNF associated VDU"""
         return self._vdu
@@ -86,3 +120,4 @@ if __name__ == "__main__":
     VDU = TenorVDU()
     VNF = TenorVNF(VDU)
     VNF.register("Prueba3")
+    print VNF.get_vnf_ids()
