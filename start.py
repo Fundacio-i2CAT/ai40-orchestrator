@@ -39,7 +39,6 @@ class VNF(flask_restful.Resource):
         except Exception as exc:
             abort(500, message="Error registering VNF: {0}".format(str(exc)))
         try:
-            print resp.text
             data = json.loads(resp.text)
         except Exception as exc:
             abort(500,
@@ -140,7 +139,6 @@ class ServiceInstance(flask_restful.Resource):
                 resp = nsi.stop()
         except Exception as exc:
             abort(500, message='Internal server error: {0}'.format(str(exc)))
-        print resp
         if hasattr(resp, 'status_code'):
             if resp.status_code == 409:
                 abort(409,
@@ -174,13 +172,19 @@ class Log(flask_restful.Resource):
 
     def post(self):
         """Log post"""
+        # HANDLE CONSUMER CONFIGURATION HERE
         data = request.get_json()
+        print "###############################################3333"
+        print "###############################################3333"
+        print "###############################################3333"
         print json.dumps(data, indent=4, sort_keys=True)
+        print "###############################################3333"
+        print "###############################################3333"
+        print "###############################################3333"
 
     def get(self):
         """Log get"""
         data = request.get_json()
-        print data
 
 API_V2.add_resource(Log, '/log')
 API_V2.add_resource(ServiceInstance,
