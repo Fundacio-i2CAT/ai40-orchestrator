@@ -80,7 +80,7 @@ class ServiceInstance(flask_restful.Resource):
         except Exception as exc:
             abort(500, message='Internal server error: {0}'.format(str(exc)))
         print resp
-        if hasattr(resp,'status_code'):
+        if hasattr(resp, 'status_code'):
             if resp.status_code == 409:
                 abort(409,
                       message='Conflict: {0} stopped(running)'.format(ns_id))
@@ -89,7 +89,7 @@ class ServiceInstance(flask_restful.Resource):
             else:
                 abort(404, message='{0} NS not found'.format(ns_id))
         else:
-            abort(500,message='Invalid state request: \'{0}\''.format(state['state'].upper()))
+            abort(500, message='Invalid state request: \'{0}\''.format(state['state'].upper()))
 
     def delete(self, ns_id):
         """Deletes NSIs"""
