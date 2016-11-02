@@ -37,8 +37,13 @@ class VNF(flask_restful.Resource):
         try:
             resp = vnf.register(data['name'])
         except Exception as exc:
-            abort(500, "Error registering VNF: {0}".format(str(exc)))
-        return json.loads(resp.text)
+            abort(500, message="Error registering VNF: {0}".format(str(exc)))
+        try:
+            print resp.text
+            data = json.loads(resp.text)
+        except Exception as exc:
+            abort(500, message="Error decoding VNF reg. response: {0}".format(str(exc))) 
+        return {'state': 'PROVISIONED', 'vnf_id': data['vnfd']['id']}
 
 class NS(flask_restful.Resource):
     """Network service resources"""
@@ -55,7 +60,7 @@ class NS(flask_restful.Resource):
                 tns._dummy_id = ns_id
                 resp = tns.instantiate()
                 nsdata = json.loads(resp.text)
-                return {'service_instance_id': nsdata['id'],
+                return {'ns_id': nsdata['id'],
                         'state': 'PROVISIONED'}
             except:
                 abort(500, message='Error instantiating')
@@ -67,7 +72,11 @@ class NS(flask_restful.Resource):
         vnf = TenorVNF(data['vnf_id'])
         tns = TenorNS(data['vnf_id'])
         resp = tns.register(data['name'])
-        return json.loads(resp.text)
+        try:
+            data = json.loads(resp.text)
+        except Exception as exc:
+            abort(500, message="Error decoding NS reg. response: {0}".format(str(exc))) 
+        return {'state': 'PROVISIONED', 'ns_id': data['nsd']['id']}
 
 class ServiceInstance(flask_restful.Resource):
     """Service instance resources"""
