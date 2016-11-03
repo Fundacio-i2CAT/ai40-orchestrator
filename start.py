@@ -210,7 +210,7 @@ class Log(flask_restful.Resource):
                 command = 'echo \'{0}\' > {1}'.format(cfile['content'],cfile['target_filename'])
                 print command
                 s.sendline(command)
-                s.prompt()     
+                s.prompt()
             s.logout()
         # print "###############################################3333"
         # print "###############################################3333"

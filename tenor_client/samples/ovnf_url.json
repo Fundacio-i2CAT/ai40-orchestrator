@@ -1,0 +1,11 @@
+{
+    "name": "FromURL",
+    "vdu":
+    {
+	"vm_image": "http://10.8.0.10/debian-autostart.img",
+	"vm_image_format": "qcow2",
+	"shell": "#!/bin/bash\\n",
+        "storage_amount": 6,
+        "vcpus": 1
+    }
+}
