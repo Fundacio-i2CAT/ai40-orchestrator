@@ -50,8 +50,6 @@ class TenorNSI(object):
     def configure(self):
         """Configures the instance according to consumer needs"""
         server_ip = None
-        print self._addresses
-        print self._addresses[0]
         for addr in self._addresses[0][1]:
             if addr['OS-EXT-IPS:type'].upper() == 'FLOATING':
                 server_ip = addr['addr']
