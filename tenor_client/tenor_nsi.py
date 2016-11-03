@@ -4,6 +4,8 @@
 
 import requests
 import json
+from pymongo import MongoClient
+from pexpect import pxssh
 
 DEFAULT_TENOR_URL = 'http://localhost:4000'
 
@@ -44,6 +46,25 @@ class TenorNSI(object):
                     if 'addresses' in vnfr['server']:
                         self._addresses = vnfr['server']['addresses']
         return nsi
+
+    def configure(self):
+        """Configures the instance according to consumer needs"""
+        server_ip = None
+        for addr in self._addresses:
+            if addr['OS-EXT-IPS:type'].upper() == 'FLOATING':
+                server_ip = addr['addr']
+        client = MongoClient()
+        mdb = client.custom_conf
+        confs = mdb.confs
+        config = confs.find_one({'ns_instance_id': self._nsid})
+        session = pxssh.pxssh()
+        session.login(server_ip, config['user'], config['password'])
+        for cfile in config['config']:
+            command = 'echo \'{0}\' > {1}'.format(cfile['content'].encode('latin-1'),
+                                                  cfile['target_filename'])
+            session.sendline(command)
+            session.prompt(5)
+        session.logout()
 
     def start(self):
         """Sets active all the VNF instances associated"""

@@ -98,6 +98,11 @@ class TenorNS(object):
             raise ValueError('Decoding new NSI resp json resp failed')
         return resp
 
+    def set_dummy_id(self, dummy_id):
+        """Sets dummy_id"""
+        self._dummy_id = dummy_id
+
+
 if __name__ == "__main__":
     VDU = TenorVDU()
     VNF = TenorVNF(VDU)
