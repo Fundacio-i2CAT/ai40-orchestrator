@@ -28,7 +28,6 @@ openstacksdk==0.8.6
 os-client-config==1.18.0
 oslo.i18n==3.7.0
 oslo.utils==3.14.0
-paramiko==2.0.0
 pathlib2==2.1.0
 pbr==1.10.0
 pexpect==4.1.0

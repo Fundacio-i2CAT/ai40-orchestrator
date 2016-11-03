@@ -1,0 +1,15 @@
+{    
+    "user": "root",
+    "password": "vm1234",
+    "config":
+    [
+	{	
+	    "target_filename": "/root/customer_name.txt",
+	    "content": "Perico de Los Palotes"
+	},
+	{	
+	    "target_filename": "/root/customer_ip.txt",
+	    "content": "127.0.0.1"
+	}
+    ]
+}

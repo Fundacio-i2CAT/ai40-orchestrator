@@ -120,4 +120,7 @@ if __name__ == "__main__":
     VDU = TenorVDU()
     VNF = TenorVNF(VDU)
     VNF.register("Prueba3")
+    VNF = TenorVNF(1899)
+    print VNF._dummy_id
+    print VNF
     print VNF.get_vnf_ids()
