@@ -55,25 +55,25 @@ class NS(flask_restful.Resource):
     def post(self, ns_id=None):
         """Posts a new NS"""
         if ns_id:
-            # try:
-            data = request.get_json()
-            vdu = TenorVDU()
-            vnf = TenorVNF(vdu)
-            tns = TenorNS(vnf)
-            tns._dummy_id = ns_id
-            resp = tns.instantiate()
-            nsdata = json.loads(resp.text)
-            client = MongoClient()
-            db = client.custom_conf
-            confs = db.confs
-            confs.insert_one({'ns_instance_id': nsdata['id'],
-                              'user': data['user'],
-                              'password': data['password'],
-                              'config': data['config']})
-            return {'ns_id': nsdata['id'],
-                    'state': 'PROVISIONED'}
-            # except:
-            #     abort(500, message='Error instantiating {0}'.format(ns_id))
+            try:
+                data = request.get_json()
+                vdu = TenorVDU()
+                vnf = TenorVNF(vdu)
+                tns = TenorNS(vnf)
+                tns._dummy_id = ns_id
+                resp = tns.instantiate()
+                nsdata = json.loads(resp.text)
+                client = MongoClient()
+                db = client.custom_conf
+                confs = db.confs
+                confs.insert_one({'ns_instance_id': nsdata['id'],
+                                  'user': data['user'],
+                                  'password': data['password'],
+                                  'config': data['config']})
+                return {'service_instance_id': nsdata['id'],
+                        'state': 'PROVISIONED'}
+            except:
+                abort(500, message='Error instantiating {0}'.format(ns_id))
 
         data = request.get_json()
         vnf_ids = TenorVNF.get_vnf_ids()
@@ -207,10 +207,10 @@ class Log(flask_restful.Resource):
             s = pxssh.pxssh()
             s.login(server_ip, config['user'], config['password'])
             for cfile in config['config']:
-                command = 'echo \'{0}\' > {1}'.format(cfile['content'],cfile['target_filename'])
+                command = 'echo \'{0}\' > {1}'.format(cfile['content'].encode('latin-1'), cfile['target_filename'])
                 print command
                 s.sendline(command)
-                s.prompt()
+                s.prompt(2)
             s.logout()
         # print "###############################################3333"
         # print "###############################################3333"
