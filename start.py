@@ -72,6 +72,8 @@ class NS(flask_restful.Resource):
                 return {'service_instance_id': nsdata['id'],
                         'state': 'PROVISIONED'}
             except:
+                nsi = TenorNSI(nsdata['id'])
+                nsi.delete()
                 abort(500, message='Error instantiating {0}'.format(ns_id))
 
         data = request.get_json()
@@ -213,4 +215,4 @@ if __name__ == "__main__":
         url_prefix='{prefix}/v{version}'.format(
             prefix=PREFIX,
             version=API_VERSION))
-    APP.run(debug=True, host='0.0.0.0', port=PORT)
+    APP.run(debug=False, host='0.0.0.0', port=PORT)

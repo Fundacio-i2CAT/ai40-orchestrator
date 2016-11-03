@@ -203,6 +203,6 @@ if __name__ == '__main__':
     # print b+1
     # print tc.get_vnf_instances()
     tc.delete_all_ns_instances()
-    # tc.delete_all_ns()
-    # tc.delete_all_vnfs()
+    tc.delete_all_ns()
+    tc.delete_all_vnfs()
     # print tc.get_ns_instance_vnfs_status_addresses('580861e7df67b5156e000000')
