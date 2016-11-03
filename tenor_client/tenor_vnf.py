@@ -49,14 +49,14 @@ class TenorVNF(object):
             return TenorDummyId(1898)
         return TenorDummyId(ids[-1])
 
-    def get_from_catalogue(self,vnf_id):
+    def get_from_catalogue(self, vnf_id):
         """Gets the vnfd from TeNOR Catalogue"""
         try:
             resp = requests.get('{0}/vnfs'.format(self._tenor_url))
         except:
             raise IOError('{0} instance unreachable'.format(self._tenor_url))
         try:
-            vnfs = json.loads(resp.text)
+            json.loads(resp.text)
         except:
             raise ValueError('Decoding last_vnf_id json resp failed')
         single = [x for x in json.loads(resp.text) if x['vnfd']['id'] == vnf_id]
@@ -121,6 +121,6 @@ if __name__ == "__main__":
     VNF = TenorVNF(VDU)
     VNF.register("Prueba3")
     VNF = TenorVNF(1899)
-    print VNF._dummy_id
+    print VNF.get_dummy_id()
     print VNF
     print VNF.get_vnf_ids()
