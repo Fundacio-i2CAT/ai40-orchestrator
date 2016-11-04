@@ -3,7 +3,6 @@
 
 from flask import Flask
 
-from orchestapi import api_v2_bp
 from common.config_parser import PREFIX, API_VERSION
 
 PREFIX = "/orchestrator/api"

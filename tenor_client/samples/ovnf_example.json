@@ -1,10 +1,10 @@
 {
-    "name": "Isolated",
+    "name": "newFeatures",
     "vdu":
     {
 	"vm_image": "6b9b14cc-d106-4d07-8b43-22035a3265fe",
 	"vm_image_format": "openstack_id",
-	"shell": "#!/bin/bash\\necho ssh-rsa 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDRf2C6uwmlvGnGY36GT9yizDnIFwM0GGwwOOur2fWbMlxBNmWbWJBwbdM8KASCvSYgtNyQhYynggoPMa/xmYqBMoq3mklkuGnbnZ6+mN51aDE78D/yhmVPjYsBphblaGu37lhor8tZGmUHtXLysIZ4SfczHSKJ5dMcTLaXJ05D0nR8n2MKWV+WsoMFq6MudbsUMTtXp6gWV1vKWj7535y5nkzHr7lpdLQZhijBPo7o0/UcoDk2jprI6cjGCduhnG3Fd49S2oZLfoRivqwAXpAwbEJdnurMKWAznFZPwLS9W3KKLl7cRVJi+6d7lFfNuJDQfRCFqBQPxXW91Y9tEpcF alfonso@knightmare' > /root/.ssh/anella.pub",
+	"shell": "#!/bin/bash\\necho 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCTyrMs/iliz2PPAGACyGWwC7OqoIDgoStpiiXcJIAElaLiiAhlOdhCJP6okE2WzkuMf4XD80fVm/yikrjSRTVwph981KEEcAH+mRWThkoItaPqDLPh79AJfT1Ud48FQbG8MZu91X+E4ecnYQH/1bPRxiumWQLNrHmIhY8aIKv/xPCF8zZBYjG6BK/g2L22h4Ky6VI07uyzHyIk78OxUZTpQcb+jnFpJlVOZreRLc8RE6pDF17h4ZhrEmv0tvdWiubk46cbEUwOvGq9wWxFKReEQubC+7/2WNcQnkAylDxzbR9pF/RlomuwcBWSycQ8RVpmr8T1cydaBpi9cbBB2DOn alfonso@knightmare' > /root/.ssh/anella.pub",
         "storage_amount": 6,
         "vcpus": 1
     }
