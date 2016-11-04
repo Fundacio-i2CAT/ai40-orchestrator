@@ -9,10 +9,49 @@
 ```
 $ virtualenv venv
 $ source venv/bin/activate
-(venv) $ python orchestapi.py
+(venv) $ python start.py
 ```
 
-## Post a new service (see [example json file](tenor_client/samples/another.json))
+## Register a VNF
+
+```
+curl -XPOST http://localhost:8082/orchestrator/api/v0.1/vnf -H "Content-Type: application/json" --data-binary @tenor_client/samples/ovnf_example.json
+```
+
+```
+{
+    "state": "PROVISIONED",
+    "vnf_id": 1899
+}
+```
+
+## Register a NS related to the VNF id in ons_example.json
+
+```
+curl -XPOST http://localhost:8082/orchestrator/api/v0.1/ns -H "Content-Type: application/json" --data-binary @tenor_client/samples/ons_example.json
+```
+
+```
+{
+    "state": "PROVISIONED",
+    "ns_id": 1899
+}
+```
+
+## Instantiate the Network Service providing consumer configuration in onsi_example.json
+```
+curl -XPOST http://localhost:8082/orchestrator/api/v0.1/ns/1899 -H "Content-Type: application/json" --data-binary @tenor_client/samples/onsi_example.json
+```
+
+```
+{
+    "service_instance_id": "581c43c1df67b55665000003",
+    "state": "PROVISIONED"
+}
+```
+
+
+## Post a new service creating new VNF, NS and NSI in a single round (see [example json file](tenor_client/samples/another.json))
 
 ```
 $ curl -XPOST http://localhost:8082/orchestrator/api/v0.1/service/instance -H "Content-Type: application/json" --data-binary @tenor_client/samples/another.json
@@ -34,72 +73,52 @@ $ curl -XGET http://localhost:8082/orchestrator/api/v0.1/service/instance
 ```
 [
     {
-        "id": "580f130edf67b515c8000008",
-        "instances": [
-            {
-                "state": "PROVISIONED"
-            }
-        ]
+        "ns_instance_id": "580f130edf67b515c8000008",
+        "state": "PROVISIONED"
     },
     {
-        "id": "580f0647df67b515c8000005",
-        "instances": [
+        "ns_instance_id": "580f0647df67b515c8000005",
+        "addresses": [
             {
-                "addresses": [
-                    {
-                        "OS-EXT-IPS:type": "fixed",
-                        "addr": "192.85.141.3"
-                    },
-                    {
-                        "OS-EXT-IPS:type": "floating",
-                        "addr": "172.24.4.140"
-                    },
-                    {
-                        "OS-EXT-IPS:type": "fixed",
-                        "addr": "192.118.223.3"
-                    },
-                    {
-                        "OS-EXT-IPS:type": "floating",
-                        "addr": "172.24.4.139"
-                    }
-                ],
-                "state": "ACTIVE"
+                "OS-EXT-IPS:type": "fixed",
+                "addr": "192.85.141.3"
+            },
+            {
+                "OS-EXT-IPS:type": "floating",
+                "addr": "172.24.4.140"
+            },
+            {
+                "OS-EXT-IPS:type": "fixed",
+                "addr": "192.118.223.3"
+            },
+            {
+                "OS-EXT-IPS:type": "floating",
+                "addr": "172.24.4.139"
             }
-        ]
+        ],
+        "state": "RUNNING"
     },
     {
-        "id": "580f064bdf67b515c8000006",
-        "instances": [
+        "ns_instance_id": "580f064bdf67b515c8000006",
+        "addresses": [
             {
-                "addresses": [
-                    {
-                        "OS-EXT-IPS:type": "fixed",
-                        "addr": "192.150.153.3"
-                    },
-                    {
-                        "OS-EXT-IPS:type": "floating",
-                        "addr": "172.24.4.142"
-                    },
-                    {
-                        "OS-EXT-IPS:type": "fixed",
-                        "addr": "192.9.250.3"
-                    },
-                    {
-                        "OS-EXT-IPS:type": "floating",
-                        "addr": "172.24.4.141"
-                    }
-                ],
-                "state": "ACTIVE"
-            }
-        ]
-    },
-    {
-        "id": "580f12c7df67b515c8000007",
-        "instances": [
+                "OS-EXT-IPS:type": "fixed",
+                "addr": "192.150.153.3"
+            },
             {
-                "state": "PROVISIONED"
+                "OS-EXT-IPS:type": "floating",
+                "addr": "172.24.4.142"
+            },
+            {
+                "OS-EXT-IPS:type": "fixed",
+                "addr": "192.9.250.3"
+            },
+            {
+                "OS-EXT-IPS:type": "floating",
+                "addr": "172.24.4.141"
             }
-        ]
+        ],
+        "state": "DEPLOYED"
     }
 ]
 ```
@@ -112,49 +131,44 @@ $ curl -XGET http://localhost:8082/orchestrator/api/v0.1/service/instance/580f06
 
 ```
 {
-    "id": "580f064bdf67b515c8000006",
-    "instances": [
+    "ns_instance_id": "580f064bdf67b515c8000006",
+    "addresses": [
         {
-            "addresses": [
-                {
-                    "OS-EXT-IPS:type": "fixed",
-                    "addr": "192.150.153.3"
-                },
-                {
-                    "OS-EXT-IPS:type": "floating",
-                    "addr": "172.24.4.142"
-                },
-                {
-                    "OS-EXT-IPS:type": "fixed",
-                    "addr": "192.9.250.3"
-                },
-                {
-                    "OS-EXT-IPS:type": "floating",
-                    "addr": "172.24.4.141"
-                }
-            ],
-            "state": "ACTIVE"
+            "OS-EXT-IPS:type": "fixed",
+            "addr": "192.150.153.3"
+        },
+        {
+            "OS-EXT-IPS:type": "floating",
+            "addr": "172.24.4.142"
+        },
+        {
+            "OS-EXT-IPS:type": "fixed",
+            "addr": "192.9.250.3"
+        },
+        {
+            "OS-EXT-IPS:type": "floating",
+            "addr": "172.24.4.141"
         }
-    ]
+    ],
+    "state": "DEPLOYED"
 }
 ```
 
 ## Start/Stop a service
 
 ```
-$ curl -XPUT http://localhost:8082/orchestrator/api/v0.1/service/instance/580f064bdf67b515c8000006 -H "Content-Type: application/json" --data '{"state": "stop"}'
+$ curl -XPUT http://localhost:8082/orchestrator/api/v0.1/service/instance/580f064bdf67b515c8000006 -H "Content-Type: application/json" --data '{"state": "running"}'
+200
 {
-	"status": "200", 
-	"message": "OK"
+    "message": "Successfully sent state signal"
 }
-$ curl -XPUT http://localhost:8082/orchestrator/api/v0.1/service/instance/580f064bdf67b515c8000006 -H "Content-Type: application/json" --data '{"state": "start"}'
+$ curl -XPUT http://localhost:8082/orchestrator/api/v0.1/service/instance/580f064bdf67b515c8000006 -H "Content-Type: application/json" --data '{"state": "running"}'
+200
 {
-	"status": "200", 
-	"message": "OK"
+    "message": "Successfully sent state signal"
 }
-$ curl -XPUT http://localhost:8082/orchestrator/api/v0.1/service/instance/580f064bdf67b515c8000006 -H "Content-Type: application/json" --data '{"state": "start"}'
+$ curl -XPUT http://localhost:8082/orchestrator/api/v0.1/service/instance/580f064bdf67b515c8000006 -H "Content-Type: application/json" --data '{"state": "deployed"}'
 {
-  "message": "Conflict:  580f064bdf67b515c8000006 is stopped(running) can't stop(run) again", 
-  "status": 409
+    "message": "Conflict: 580f064bdf67b515c8000006 stopped(running)"
 }
 ```
