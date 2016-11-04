@@ -1,11 +1,9 @@
 {
-    "name": "FromURL",
+    "name": "Servei_Anella",
     "vdu":
     {
-	"vm_image": "http://10.8.0.10/debian-autostart.img",
-	"vm_image_format": "vdi",
-	"shell": "#!/bin/bash\\n",
-        "storage_amount": 6,
-        "vcpus": 1
+	"vm_image": "http://example.com/images/debian-servei.img",
+	"vm_image_format": "qcow2",
+	"flavor": "m1.medium"
     }
 }
