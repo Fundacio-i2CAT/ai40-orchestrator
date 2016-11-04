@@ -14,6 +14,8 @@ $ source venv/bin/activate
 
 ## Register a VNF
 
+See [ovnf_example.json](tenor_client/samples/ovnf_example.json)
+
 ```
 curl -XPOST http://localhost:8082/orchestrator/api/v0.1/vnf -H "Content-Type: application/json" --data-binary @tenor_client/samples/ovnf_example.json
 ```
@@ -27,6 +29,8 @@ curl -XPOST http://localhost:8082/orchestrator/api/v0.1/vnf -H "Content-Type: ap
 
 ## Register a NS related to the VNF id in ons_example.json
 
+See [ons_example.json](tenor_client/samples/ons_example.json)
+
 ```
 curl -XPOST http://localhost:8082/orchestrator/api/v0.1/ns -H "Content-Type: application/json" --data-binary @tenor_client/samples/ons_example.json
 ```
@@ -39,6 +43,9 @@ curl -XPOST http://localhost:8082/orchestrator/api/v0.1/ns -H "Content-Type: app
 ```
 
 ## Instantiate the Network Service providing consumer configuration in onsi_example.json
+
+See [onsi_example.json](tenor_client/samples/onsi_example.json)
+
 ```
 curl -XPOST http://localhost:8082/orchestrator/api/v0.1/ns/1899 -H "Content-Type: application/json" --data-binary @tenor_client/samples/onsi_example.json
 ```
