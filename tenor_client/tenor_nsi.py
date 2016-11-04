@@ -69,7 +69,10 @@ class TenorNSI(object):
             filename = cfile['target_filename']
             command = 'echo \'{0}\' > {1}'.format(content,
                                                   filename)
+            print command
             stdin, stdout, stderr = ssh.exec_command(command)
+            print stdout.readlines()
+            print stderr.readlines()
         ssh.close()
 
     def start(self):
