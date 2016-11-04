@@ -175,6 +175,7 @@ $ curl -XPUT http://localhost:8082/orchestrator/api/v0.1/service/instance/580f06
     "message": "Successfully sent state signal"
 }
 $ curl -XPUT http://localhost:8082/orchestrator/api/v0.1/service/instance/580f064bdf67b515c8000006 -H "Content-Type: application/json" --data '{"state": "deployed"}'
+409
 {
     "message": "Conflict: 580f064bdf67b515c8000006 stopped(running)"
 }
