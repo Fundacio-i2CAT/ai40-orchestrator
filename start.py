@@ -65,6 +65,9 @@ class NS(flask_restful.Resource):
                 client = MongoClient()
                 mdb = client.custom_conf
                 confs = mdb.confs
+                if not 'user' in data:
+                    data['user'] = None
+                    data['password'] = None
                 confs.insert_one({'ns_instance_id': nsdata['id'],
                                   'user': data['user'],
                                   'password': data['password'],
@@ -215,4 +218,4 @@ if __name__ == "__main__":
         url_prefix='{prefix}/v{version}'.format(
             prefix=PREFIX,
             version=API_VERSION))
-    APP.run(debug=False, host='0.0.0.0', port=PORT)
+    APP.run(debug=True, host='0.0.0.0', port=PORT)

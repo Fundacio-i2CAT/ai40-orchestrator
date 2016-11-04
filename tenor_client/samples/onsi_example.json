@@ -1,11 +1,9 @@
 {    
-    "user": "root",
-    "password": "vm1234",
     "config":
     [
 	{	
 	    "target_filename": "/var/www/html/index.html",
-	    "content": "<h1>New Features check</h1><strong>192.168.10.165</strong>"
+	    "content": "<h1>New Features check without user/password </h1><strong>lakjsdla ksdj</strong>"
 	},
 	{	
 	    "target_filename": "/root/customer_ip.txt",

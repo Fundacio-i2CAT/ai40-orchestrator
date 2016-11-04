@@ -4,6 +4,7 @@
 
 import requests
 import json
+import paramiko
 from pymongo import MongoClient
 from pexpect import pxssh
 
@@ -57,14 +58,19 @@ class TenorNSI(object):
         mdb = client.custom_conf
         confs = mdb.confs
         config = confs.find_one({'ns_instance_id': self._nsid})
-        session = pxssh.pxssh()
-        session.login(server_ip, config['user'], config['password'])
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(
+            paramiko.AutoAddPolicy())
+        ssh.connect(server_ip, username='root',
+                    key_filename='keys/anella',
+                    timeout=5)
         for cfile in config['config']:
-            command = 'echo \'{0}\' > {1}'.format(cfile['content'].encode('latin-1'),
-                                                  cfile['target_filename'])
-            session.sendline(command)
-            session.prompt(5)
-        session.logout()
+            content = cfile['content'].encode('latin-1')
+            filename = cfile['target_filename']
+            command = 'echo \'{0}\' > {1}'.format(content,
+                                                  filename)
+            stdin, stdout, stderr = ssh.exec_command(command)
+        ssh.close()
 
     def start(self):
         """Sets active all the VNF instances associated"""
