@@ -1,0 +1,24 @@
+[
+    {
+        "description": "Description",
+        "extra_info": "keystone-endpoint=http://84.88.40.75:35357/v2.0 orch-endpoint=http://84.88.40.75:8004/v1 compute-endpoint=http://84.88.40.75:8774/v2.1 neutron-endpoint=http://84.88.40.75:9696/v2.0 dns=8.8.8.8",
+        "host": "84.88.40.75",
+        "id": 1,
+        "is_admin": false,
+        "name": "infrRepository-Pop-ID",
+        "password": "iasmngr",
+        "tenant_name": "tenor_tenant",
+        "user": "tenor"
+    },
+    {
+        "description": "Description",
+        "extra_info": "keystone-endpoint=http://iaas.adam.es:35357/v3 orch-endpoint=http://iaas.adam.es:8004/v1 compute-endpoint=http://iaas.adam.es:8774/v2.1 neutron-endpoint=http://iaas.adam.es:9696/v2.0 dns=8.8.8.8",
+        "host": "iaas.adam.es",
+        "id": 2,
+        "is_admin": false,
+        "name": "adam-Pop-ID",
+        "password": "c5QWZTSv9gn0",
+        "tenant_name": "i2cat",
+        "user": "i2cat"
+    }
+]
