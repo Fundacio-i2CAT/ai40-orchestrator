@@ -4,7 +4,6 @@ appnope==0.1.0
 Babel==2.3.4
 backports.shutil-get-terminal-size==1.0.0
 click==6.6
-cryptography==1.4
 debtcollector==1.5.0
 decorator==4.0.10
 enum34==1.1.6
