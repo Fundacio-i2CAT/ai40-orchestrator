@@ -1,9 +1,10 @@
 {    
+    "pop_id": 4,
     "config":
     [
 	{	
 	    "target_filename": "/var/www/html/index.html",
-	    "content": "<h1>Second test in hosting anella.i2cat.net check without user/password </h1><strong>kaljsd laskjd laskj d</strong>"
+	    "content": "<h1>Test in Adam's openstack</h1><strong>kaljsd laskjd laskj d</strong>"
 	},
 	{	
 	    "target_filename": "/root/customer_ip.txt",

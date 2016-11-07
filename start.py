@@ -63,7 +63,7 @@ class NS(flask_restful.Resource):
                 vnf = TenorVNF(vdu)
                 tns = TenorNS(vnf)
                 tns.set_dummy_id(ns_id)
-                resp = tns.instantiate()
+                resp = tns.instantiate(data['pop_id'])
                 nsdata = json.loads(resp.text)
                 client = MongoClient()
                 mdb = client.custom_conf
@@ -78,7 +78,7 @@ class NS(flask_restful.Resource):
                 return {'service_instance_id': nsdata['id'],
                         'state': 'PROVISIONED'}
             except:
-                nsi = TenorNSI(nsdata['id'])
+                nsi = TenorNSI(ns_id)
                 nsi.delete()
                 abort(500, message='Error instantiating {0}'.format(ns_id))
 
