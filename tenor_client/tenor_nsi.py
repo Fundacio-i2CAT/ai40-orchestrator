@@ -6,7 +6,6 @@ import requests
 import json
 import paramiko
 from pymongo import MongoClient
-from pexpect import pxssh
 
 DEFAULT_TENOR_URL = 'http://localhost:4000'
 
