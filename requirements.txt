@@ -3,7 +3,9 @@ appdirs==1.4.0
 appnope==0.1.0
 Babel==2.3.4
 backports.shutil-get-terminal-size==1.0.0
+cffi==1.6.0
 click==6.6
+cryptography==1.4
 debtcollector==1.5.0
 decorator==4.0.10
 enum34==1.1.6
@@ -17,10 +19,13 @@ ipython-genutils==0.1.0
 iso8601==0.1.11
 itsdangerous==0.24
 Jinja2==2.8
+keystoneauth1==2.8.0
 MarkupSafe==0.23
 monotonic==1.1
 netaddr==0.7.18
 netifaces==0.10.4
+openstacksdk==0.8.6
+os-client-config==1.18.0
 oslo.i18n==3.7.0
 oslo.utils==3.14.0
 paramiko==2.0.2
@@ -28,6 +33,7 @@ pathlib2==2.1.0
 pbr==1.10.0
 pexpect==4.1.0
 pickleshare==0.7.2
+positional==1.1.1
 ptyprocess==0.5.1
 pyasn1==0.1.9
 pycparser==2.14
