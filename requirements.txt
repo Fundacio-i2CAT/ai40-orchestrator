@@ -19,7 +19,6 @@ ipython-genutils==0.1.0
 iso8601==0.1.11
 itsdangerous==0.24
 Jinja2==2.8
-keystoneauth1==2.8.0
 MarkupSafe==0.23
 monotonic==1.1
 netaddr==0.7.18
