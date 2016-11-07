@@ -19,6 +19,9 @@ APP = Flask(__name__)
 API_V2_BP = Blueprint('api_v2', __name__)
 API_V2 = Api(API_V2_BP)
 DEFAULT_TENOR_URL = 'http://localhost:4000'
+URL_PREFIX = '{prefix}/v{version}'.format(
+    prefix=PREFIX,
+    version=API_VERSION)
 
 class VNF(flask_restful.Resource):
     """Virtual network function resources"""
@@ -215,7 +218,6 @@ if __name__ == "__main__":
     print "Tablecloth (instances.controller v2 via TeNOR) ..."
     APP.register_blueprint(
         API_V2_BP,
-        url_prefix='{prefix}/v{version}'.format(
-            prefix=PREFIX,
-            version=API_VERSION))
+        url_prefix=URL_PREFIX
+    )
     APP.run(debug=True, host='0.0.0.0', port=PORT)
