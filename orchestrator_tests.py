@@ -6,8 +6,7 @@ from start import PORT, URL_PREFIX
 import json
 import unittest
 import requests
-import threading
-import functools
+import time
 
 BASE_URL = 'http://dev.anella.i2cat.net:{0}{1}'.format(PORT, URL_PREFIX)
 
@@ -16,9 +15,11 @@ class OrchestratorTestCase(unittest.TestCase):
 
     def setUp(self):
         """Initial setup"""
+        self._vnfs = []
+        self._nss = []
         pass
 
-    def step1(self):
+    def test_01(self):
         """Post NS instance"""
         with open('tenor_client/samples/another.json') as infile:
             rdata = infile.read()
@@ -30,58 +31,71 @@ class OrchestratorTestCase(unittest.TestCase):
         # assert 'service_instance_id' in data
         # assert data['state'].upper() == 'PROVISIONED'
 
-    def step2(self):
+    def test_02(self):
         """Gets NS instances"""
         resp = requests.get('{0}/service/instance'.format(BASE_URL))
         assert resp.status_code == 200
         instances = json.loads(resp.text)
         if len(instances) > 0:
             assert 'service_instance_id' in instances[0]
+            for ins in instances:
+                assert ins['state'].upper() in ('RUNNING', 'DEPLOYED', 'UNKNOWN')
         return instances
 
-    def step3(self):
-        """Stops all NS instances"""
-        instances = self.step2()
-        running_instances = [x for x in instances if x['state'].upper() == 'RUNNING']
-        for ins in running_instances:
+    def start_stop(self, prv, nxt, expected):
+        """Aux. method to set prv state instances to nxt asserting expected status_code"""
+        instances = self.test_02()
+        f_instances = [x for x in instances if x['state'].upper() == prv]
+        for ins in f_instances:
             url = '{0}/service/instance/{1}'.format(BASE_URL,
                                                     ins['service_instance_id'])
-            stop_resp = requests.put(url,
-                                     headers={'Content-Type': 'application/json'},
-                                     json={'state': 'deployed'})
-            assert stop_resp.status_code == 200
+            resp = requests.put(url,
+                                headers={'Content-Type': 'application/json'},
+                                json={'state': nxt})
+            assert resp.status_code == expected
 
-    def step4(self):
-        """Starts all NS stopped instances"""
-        instances = self.step2()
-        deployed_instances = [x for x in instances if x['state'].upper() == 'DEPLOYED']
-        for ins in deployed_instances:
-            url = '{0}/service/instance/{1}'.format(BASE_URL,
-                                                    ins['service_instance_id'])
-            start_resp = requests.put(url,
-                                     headers={'Content-Type': 'application/json'},
-                                     json={'state': 'start'})
-            assert start_resp.status_code == 200
+    def test_03(self):
+        self.start_stop('RUNNING', 'DEPLOYED', 200)
+        self.start_stop('DEPLOYED', 'RUNNING', 200)
 
-    def step5(self):
+    def posts_vnf(self):
         """Posts a new VNF"""
-        pass
+        with open('tenor_client/samples/ovnf_example.json') as infile:
+            rdata = infile.read()
+        url = '{0}/vnf'.format(BASE_URL)
+        resp = requests.post(url,headers={'Content-Type': 'application/json'},
+                             json=json.loads(rdata))
+        print resp.status_code
+        print resp.text
+        assert resp.status_code == 200
+        vnf_data = json.loads(resp.text)
+        self._vnfs.append(vnf_data['vnf_id'])
         
+    def test_04(self):
+        """Posts 3 VNFs"""
+        self.posts_vnf()
 
-    def _steps(self):
-        """Steps"""
-        for name in sorted(dir(self)):
-            if name.startswith("step"):
-                yield name, getattr(self, name)
+    def tearDown(self):
+        """tearDown"""
+        for vnf in self._vnfs:
+            url = '{0}/vnf/{1}'.format(BASE_URL, vnf)
+            resp = requests.delete(url)
+            assert resp.status_code == 200
 
-    def test_steps(self):
-        """Sorting steps"""
-        for name, step in self._steps():
-            print name, step.__doc__
-            try:
-                step()
-            except Exception as exc:
-                self.fail("{} {} failed ({}: {})".format(name, step.__doc__, type(exc), exc))
+    # def _tsts(self):
+    #     """Steps"""
+    #     for name in sorted(dir(self)):
+    #         if name.startswith("test_"):
+    #             yield name, getattr(self, name)
+
+    # def test_tsts(self):
+    #     """Sorting steps"""
+    #     for name, step in self._tsts():
+    #         print name, step.__doc__
+    #         try:
+    #             step()
+    #         except Exception as exc:
+    #             self.fail("{} {} failed ({}: {})".format(name, step.__doc__, type(exc), exc))
 
 if __name__ == '__main__':
     unittest.main()

@@ -28,6 +28,16 @@ class VNF(flask_restful.Resource):
     def __init__(self):
         pass
 
+    def delete(self,vnf_id):
+        """Deletes a VNF"""
+        vnf = TenorVNF(int(vnf_id))
+        print vnf._dummy_id
+        try:
+            resp = vnf.delete()
+        except Exception as exc:
+            abort(500, message="Error deleting VNF: {0}".format(str(exc)))
+        return { 'vnf_id': vnf_id }
+
     def post(self):
         """Posts a new VNF"""
         data = request.get_json()
@@ -208,7 +218,8 @@ API_V2.add_resource(ServiceInstance,
                     '/service/instance/<ns_id>/state')
 
 API_V2.add_resource(VNF,
-                    '/vnf')
+                    '/vnf',
+                    '/vnf/<vnf_id>')
 
 API_V2.add_resource(NS,
                     '/ns',

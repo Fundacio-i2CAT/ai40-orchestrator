@@ -21,6 +21,7 @@ class TenorVNF(object):
         self._template = template
         if type(vdu) is int:
             self.get_from_catalogue(vdu)
+            self._dummy_id = vdu
         else:
             self._vdu = vdu
             self._dummy_id = None
@@ -60,9 +61,25 @@ class TenorVNF(object):
         except:
             raise ValueError('Decoding last_vnf_id json resp failed')
         single = [x for x in json.loads(resp.text) if x['vnfd']['id'] == vnf_id]
-        self._vnfd = json.dumps(single[0])
-        self._dummy_id = single[0]['vnfd']['id']
-        return single[0]
+        if len(single) > 0:
+            self._vnfd = json.dumps(single[0])
+            self._dummy_id = single[0]['vnfd']['id']
+            return single[0]
+        else:
+            return None
+
+    def delete(self):
+        """Deletes the VNF from TeNOR"""
+        print self._dummy_id
+        try:
+            print '{0}/vnfs/{1}'.format(self._tenor_url,
+                                        self._dummy_id)
+            resp = requests.delete('{0}/vnfs/{1}'.format(self._tenor_url,
+                                                         self._dummy_id))
+        except:
+            raise IOError('{0} instance unreachable'.format(self._tenor_url))
+        print resp.status_code
+        print resp.text
 
     def register(self, name, bootstrap_script=None):
         """Registers a VNF in TeNOR"""
