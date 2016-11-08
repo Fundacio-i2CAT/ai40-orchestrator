@@ -66,7 +66,7 @@ class TenorVNF(object):
             self._dummy_id = single[0]['vnfd']['id']
             return single[0]
         else:
-            return None
+            return []
 
     def delete(self):
         """Deletes the VNF from TeNOR"""
@@ -75,7 +75,7 @@ class TenorVNF(object):
                                                          self._dummy_id))
         except:
             raise IOError('{0} instance unreachable'.format(self._tenor_url))
-        return
+        return resp
 
     def register(self, name, bootstrap_script=None):
         """Registers a VNF in TeNOR"""

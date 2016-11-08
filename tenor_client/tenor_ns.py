@@ -29,12 +29,13 @@ class TenorNS(object):
         else:
             self._vnf = vnf
         self._nsd = None
-        
+
     def delete(self):
         """Deletes the NS"""
+        url = '{0}/network-services/{1}'.format(self._tenor_url,
+                                                self._dummy_id)
         try:
-            resp = requests.delete('{0}/network-services/{1}'.format(self._tenor_url,
-                                                                     self._dummy_id))
+            resp = requests.delete(url)
         except:
             raise IOError('{0} instance unreachable'.format(self._tenor_url))
         return resp
@@ -59,7 +60,8 @@ class TenorNS(object):
         self._dummy_id = self.get_last_ns_id()+1
         if self._lite == False:
             if not bootstrap_script:
-                self._vnf.register(name, bootstrap_script=self._vnf.get_vdu().shell)
+                self._vnf.register(name,
+                                   bootstrap_script=self._vnf.get_vdu().shell)
             else:
                 self._vnf.register(name, bootstrap_script)
         try:
@@ -67,7 +69,6 @@ class TenorNS(object):
                 templ = Template(fhandle.read())
         except:
             raise IOError('Template {0} IOError'.format(self._template))
-
         self._nsd = templ.render(ns_id=self._dummy_id,
                                  vnf_id=self._vnf.get_dummy_id(),
                                  name=name)
@@ -110,6 +111,23 @@ class TenorNS(object):
     def set_dummy_id(self, dummy_id):
         """Sets dummy_id"""
         self._dummy_id = dummy_id
+
+    @staticmethod
+    def get_ns_ids():
+        """Returns the list of NS registered in TeNOR"""
+        url = '{0}/network-services'.format(DEFAULT_TENOR_URL)
+        try:
+            resp = requests.get(url)
+        except:
+            raise IOError('{0} instance unreachable'.format(DEFAULT_TENOR_URL))
+        try:
+            json.loads(resp.text)
+        except:
+            raise ValueError('Decoding NS response json response failed')
+        ids = []
+        for tns in json.loads(resp.text):
+            ids.append(tns['nsd']['id'])
+        return ids
 
 
 if __name__ == "__main__":

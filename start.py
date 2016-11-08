@@ -28,16 +28,16 @@ class VNF(flask_restful.Resource):
     def __init__(self):
         pass
 
-    def delete(self,vnf_id):
+    def delete(self, vnf_id):
         """Deletes a VNF"""
         vnf = TenorVNF(int(vnf_id))
         try:
             resp = vnf.delete()
         except Exception as exc:
             abort(500, message="Error deleting VNF: {0}".format(str(exc)))
-        return resp
+        return {'message': 'successfully deleted'}
 
-    def get(self,vnf_id=None):
+    def get(self, vnf_id=None):
         """Gets VNF(s)"""
         ids = TenorVNF.get_vnf_ids()
         result = []
@@ -76,20 +76,34 @@ class NS(flask_restful.Resource):
     def __init__(self):
         pass
 
-    def delete(self,ns_id):
-        """Deletes a VNF"""
+    def get(self, ns_id=None):
+        """Gets NS(s)"""
+        ids = TenorNS.get_ns_ids()
+        result = []
+        if ns_id:
+            for nid in ids:
+                if nid == ns_id:
+                    return {'ns_id': ns_id}
+            abort(404, message='{0} NS not found'.format(ns_id))
+        for ns_sid in ids:
+            result.append({'ns_id': ns_sid})
+        return result
+
+    def delete(self, ns_id):
+        """Deletes a NS"""
         vdu = TenorVDU()
         vnf = TenorVNF(vdu)
-        ns = TenorNS(vnf)
-        ns.set_dummy_id(ns_id)
+        tns = TenorNS(vnf)
+        tns.set_dummy_id(ns_id)
         try:
-            resp = ns.delete()
+            resp = tns.delete()
         except Exception as exc:
             abort(500, message="Error deleting NS: {0}".format(str(exc)))
         if resp.status_code == 200:
-            return { 'message': 'ns deleted'}
+            return {'message': 'successfully deleted'}
         else:
-            abort(resp.status_code,message='Error deleting {0} ns'.format(ns_id))
+            abort(resp.status_code,
+                  message='Error deleting {0} ns'.format(ns_id))
 
     def post(self, ns_id=None):
         """Posts a new NS"""
@@ -203,7 +217,7 @@ class ServiceInstance(flask_restful.Resource):
                 abort(404, message='{0} NS not found'.format(ns_id))
         else:
             abort(500,
-                  message='Invalid state request: \'{0}\''.format(state['state'].upper()))
+                  message='Invalid: \'{0}\''.format(state['state'].upper()))
 
     def delete(self, ns_id):
         """Deletes NSIs"""

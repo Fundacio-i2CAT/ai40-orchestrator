@@ -8,7 +8,7 @@ import unittest
 import requests
 import random
 
-BASE_URL = 'http://dev.anella.i2cat.net:{0}{1}'.format(PORT, URL_PREFIX)
+BASE_URL = 'http://localhost:{0}{1}'.format(PORT, URL_PREFIX)
 
 class OrchestratorTestCase(unittest.TestCase):
     """Full test"""
@@ -20,8 +20,9 @@ class OrchestratorTestCase(unittest.TestCase):
 
     def test_01(self):
         """Post NS instance"""
-        with open('tenor_client/samples/another.json') as infile:
-            rdata = infile.read()
+        pass
+        # with open('tenor_client/samples/another.json') as infile:
+        #     rdata = infile.read()
         # resp = requests.post('{0}/service/instance'.format(BASE_URL),
         #               headers={'Content-Type': 'application/json'},
         #               json=json.loads(rdata))
@@ -54,6 +55,7 @@ class OrchestratorTestCase(unittest.TestCase):
             assert resp.status_code == expected
 
     def test_03(self):
+        """Testing start/stop"""
         self.start_stop('RUNNING', 'DEPLOYED', 200)
         self.start_stop('DEPLOYED', 'RUNNING', 200)
 
@@ -62,20 +64,20 @@ class OrchestratorTestCase(unittest.TestCase):
         with open('tenor_client/samples/ovnf_example.json') as infile:
             rdata = infile.read()
         url = '{0}/vnf'.format(BASE_URL)
-        resp = requests.post(url,headers={'Content-Type': 'application/json'},
+        resp = requests.post(url, headers={'Content-Type': 'application/json'},
                              json=json.loads(rdata))
         assert resp.status_code == 200
         vnf_data = json.loads(resp.text)
         assert 'vnf_id' in vnf_data
         self._vnfs.append(vnf_data['vnf_id'])
-        
+
     def post_ns(self):
         """Posts a new NS"""
         vresp = requests.get('{0}/vnf'.format(BASE_URL))
         assert vresp.status_code == 200
         vnf_data = json.loads(vresp.text)
         url = '{0}/ns'.format(BASE_URL)
-        resp = requests.post(url,headers={'Content-Type': 'application/json'},
+        resp = requests.post(url, headers={'Content-Type': 'application/json'},
                              json={'vnf_id': random.choice(vnf_data)['vnf_id'],
                                    'name': 'randomTest'})
         assert resp.status_code == 200
