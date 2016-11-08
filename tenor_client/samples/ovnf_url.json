@@ -1,9 +1,11 @@
 {
-    "name": "Servei_Anella",
+    "name": "fromURL",
     "vdu":
     {
-	"vm_image": "http://example.com/images/debian-servei.img",
-	"vm_image_format": "qcow2",
-	"flavor": "m1.medium"
+	"vm_image": "http://84.88.34.41/debian-servei.img",
+	"vm_image_format": "vdi",
+	"shell": "#!/bin/bash\\necho 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCTyrMs/iliz2PPAGACyGWwC7OqoIDgoStpiiXcJIAElaLiiAhlOdhCJP6okE2WzkuMf4XD80fVm/yikrjSRTVwph981KEEcAH+mRWThkoItaPqDLPh79AJfT1Ud48FQbG8MZu91X+E4ecnYQH/1bPRxiumWQLNrHmIhY8aIKv/xPCF8zZBYjG6BK/g2L22h4Ky6VI07uyzHyIk78OxUZTpQcb+jnFpJlVOZreRLc8RE6pDF17h4ZhrEmv0tvdWiubk46cbEUwOvGq9wWxFKReEQubC+7/2WNcQnkAylDxzbR9pF/RlomuwcBWSycQ8RVpmr8T1cydaBpi9cbBB2DOn alfonso@knightmare' >> /root/.ssh/authorized_keys",
+        "storage_amount": 6,
+        "vcpus": 1
     }
 }
