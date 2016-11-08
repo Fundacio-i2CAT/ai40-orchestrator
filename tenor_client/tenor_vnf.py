@@ -70,16 +70,12 @@ class TenorVNF(object):
 
     def delete(self):
         """Deletes the VNF from TeNOR"""
-        print self._dummy_id
         try:
-            print '{0}/vnfs/{1}'.format(self._tenor_url,
-                                        self._dummy_id)
             resp = requests.delete('{0}/vnfs/{1}'.format(self._tenor_url,
                                                          self._dummy_id))
         except:
             raise IOError('{0} instance unreachable'.format(self._tenor_url))
-        print resp.status_code
-        print resp.text
+        return
 
     def register(self, name, bootstrap_script=None):
         """Registers a VNF in TeNOR"""

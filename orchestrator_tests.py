@@ -6,9 +6,9 @@ from start import PORT, URL_PREFIX
 import json
 import unittest
 import requests
-import time
+import random
 
-BASE_URL = 'http://localhost:{0}{1}'.format(PORT, URL_PREFIX)
+BASE_URL = 'http://dev.anella.i2cat.net:{0}{1}'.format(PORT, URL_PREFIX)
 
 class OrchestratorTestCase(unittest.TestCase):
     """Full test"""
@@ -17,7 +17,6 @@ class OrchestratorTestCase(unittest.TestCase):
         """Initial setup"""
         self._vnfs = []
         self._nss = []
-        pass
 
     def test_01(self):
         """Post NS instance"""
@@ -58,7 +57,7 @@ class OrchestratorTestCase(unittest.TestCase):
         self.start_stop('RUNNING', 'DEPLOYED', 200)
         self.start_stop('DEPLOYED', 'RUNNING', 200)
 
-    def posts_vnf(self):
+    def post_vnf(self):
         """Posts a new VNF"""
         with open('tenor_client/samples/ovnf_example.json') as infile:
             rdata = infile.read()
@@ -70,20 +69,44 @@ class OrchestratorTestCase(unittest.TestCase):
         assert 'vnf_id' in vnf_data
         self._vnfs.append(vnf_data['vnf_id'])
         
-    def test_04(self):
-        """Posts 3 VNFs"""
-        self.posts_vnf()
-        self.posts_vnf()
+    def post_ns(self):
+        """Posts a new NS"""
+        vresp = requests.get('{0}/vnf'.format(BASE_URL))
+        assert vresp.status_code == 200
+        vnf_data = json.loads(vresp.text)
+        url = '{0}/ns'.format(BASE_URL)
+        resp = requests.post(url,headers={'Content-Type': 'application/json'},
+                             json={'vnf_id': random.choice(vnf_data)['vnf_id'],
+                                   'name': 'randomTest'})
+        assert resp.status_code == 200
+        data = json.loads(resp.text)
+        assert 'ns_id' in data
+        self._nss.append(data['ns_id'])
 
+    def test_04(self):
+        """Posts VNFs"""
+        self.post_vnf()
+        self.post_vnf()
 
     def test_05(self):
-        """Posts 3 VNFs"""
-        self.posts_vnf()
-        self.posts_vnf()
+        """Posts NSs"""
+        self.post_vnf()
+        self.post_vnf()
+        self.post_vnf()
+        self.post_vnf()
+        self.post_ns()
+        self.post_ns()
 
     def tearDown(self):
         """tearDown"""
-        for vnf in self._vnfs:
+        while len(self._nss) > 0:
+            vnf = self._nss.pop()
+            url = '{0}/ns/{1}'.format(BASE_URL, vnf)
+            resp = requests.delete(url)
+            assert resp.status_code == 200
+
+        while len(self._vnfs) > 0:
+            vnf = self._vnfs.pop()
             url = '{0}/vnf/{1}'.format(BASE_URL, vnf)
             resp = requests.delete(url)
             assert resp.status_code == 200

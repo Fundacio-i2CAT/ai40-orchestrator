@@ -31,7 +31,6 @@ class VNF(flask_restful.Resource):
     def delete(self,vnf_id):
         """Deletes a VNF"""
         vnf = TenorVNF(int(vnf_id))
-        print vnf._dummy_id
         try:
             resp = vnf.delete()
         except Exception as exc:
@@ -79,14 +78,18 @@ class NS(flask_restful.Resource):
 
     def delete(self,ns_id):
         """Deletes a VNF"""
-        ns = TenorNS(TenorVNF())
+        vdu = TenorVDU()
+        vnf = TenorVNF(vdu)
+        ns = TenorNS(vnf)
         ns.set_dummy_id(ns_id)
-        print vnf._dummy_id
         try:
             resp = ns.delete()
         except Exception as exc:
             abort(500, message="Error deleting NS: {0}".format(str(exc)))
-        return resp
+        if resp.status_code == 200:
+            return { 'message': 'ns deleted'}
+        else:
+            abort(resp.status_code,message='Error deleting {0} ns'.format(ns_id))
 
     def post(self, ns_id=None):
         """Posts a new NS"""
