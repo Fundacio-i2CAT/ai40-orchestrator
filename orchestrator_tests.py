@@ -18,19 +18,6 @@ class OrchestratorTestCase(unittest.TestCase):
         self._vnfs = []
         self._nss = []
 
-    def test_01(self):
-        """Post NS instance"""
-        pass
-        # with open('tenor_client/samples/another.json') as infile:
-        #     rdata = infile.read()
-        # resp = requests.post('{0}/service/instance'.format(BASE_URL),
-        #               headers={'Content-Type': 'application/json'},
-        #               json=json.loads(rdata))
-        # assert resp.status_code == 200
-        # data = json.loads(resp.text)
-        # assert 'service_instance_id' in data
-        # assert data['state'].upper() == 'PROVISIONED'
-
     def test_02(self):
         """Gets NS instances"""
         resp = requests.get('{0}/service/instance'.format(BASE_URL))
@@ -98,6 +85,38 @@ class OrchestratorTestCase(unittest.TestCase):
         self.post_vnf()
         self.post_ns()
         self.post_ns()
+
+    def instantiate_ns(self):
+        """Instantates a NS"""
+        vresp = requests.get('{0}/ns'.format(BASE_URL))
+        presp = requests.get('{0}/pop'.format(BASE_URL))
+        pops = json.loads(presp.text)
+        nss = json.loads(vresp.text)
+        pop_id = pops[0]['pop_id']
+        tns = random.choice(nss)
+        ns_id = tns['ns_id']
+        body = {'pop_id': pop_id,
+                'callback_url': 'http://localhost:80',
+                'config': [
+                    {
+                        'target_filename': '/var/www/html/index.html',
+                        'content': '<h1>laksjdlaskjd</h1>'
+                    }
+                ]}
+        url = '{0}/ns/{1}'.format(BASE_URL, ns_id)
+        resp = requests.post(url,
+                             headers={'Content-Type': 'application/json'},
+                             json=body)
+        assert resp.status_code == 200
+        data = json.loads(resp.text)
+        assert 'service_instance_id' in data
+        assert data['state'].upper() == 'PROVISIONED'
+
+    def test_06(self):
+        """Posts vnf, ns and instantates it"""
+        self.post_vnf()
+        self.post_ns()
+        self.instantiate_ns()
 
     def tearDown(self):
         """tearDown"""

@@ -10,6 +10,7 @@ from tenor_client.tenor_vdu import TenorVDU
 from tenor_client.tenor_vnf import TenorVNF
 from tenor_client.tenor_ns import TenorNS
 from tenor_client.tenor_nsi import TenorNSI
+from tenor_client.tenor_pop import TenorPoP
 from pymongo import MongoClient
 
 PREFIX = "/orchestrator/api"
@@ -44,7 +45,7 @@ class VNF(flask_restful.Resource):
         if vnf_id:
             for vid in ids:
                 if vid == int(vnf_id):
-                    return {'vnf_id': vnf_id}
+                    return {'vnf_id': vid}
             abort(404, message='{0} VNF not found'.format(vnf_id))
         for vnf_sid in ids:
             result.append({'vnf_id': vnf_sid})
@@ -83,10 +84,10 @@ class NS(flask_restful.Resource):
         if ns_id:
             for nid in ids:
                 if nid == ns_id:
-                    return {'ns_id': ns_id}
+                    return {'ns_id': int(nid)}
             abort(404, message='{0} NS not found'.format(ns_id))
         for ns_sid in ids:
-            result.append({'ns_id': ns_sid})
+            result.append({'ns_id': int(ns_sid)})
         return result
 
     def delete(self, ns_id):
@@ -146,6 +147,24 @@ class NS(flask_restful.Resource):
             abort(500,
                   message="Error decoding NS reg.: {0}".format(str(exc)))
         return {'state': 'PROVISIONED', 'ns_id': data['nsd']['id']}
+
+class PoP(flask_restful.Resource):
+    """PoP related resources"""
+    def __init__(self):
+        pass
+
+    def get(self,pop_id=None):
+        ids = TenorPoP.get_pop_ids()
+        result = []
+        if pop_id:
+            for pid in ids:
+                if pid == int(pop_id):
+                    return {'pop_id': pid}
+            abort(404, message='{0} PoP not found'.format(pop_id))
+        for pop_sid in ids:
+            result.append({'pop_id': pop_sid})
+        return result
+
 
 class ServiceInstance(flask_restful.Resource):
     """Service instance resources"""
@@ -265,10 +284,14 @@ API_V2.add_resource(NS,
                     '/ns',
                     '/ns/<ns_id>')
 
+API_V2.add_resource(PoP,
+                    '/pop',
+                    '/pop/<pop_id>')
+
 if __name__ == "__main__":
     print "Tablecloth (instances.controller v2 via TeNOR) ..."
     APP.register_blueprint(
         API_V2_BP,
         url_prefix=URL_PREFIX
     )
-    APP.run(debug=False, host='0.0.0.0', port=PORT)
+    APP.run(debug=True, host='0.0.0.0', port=PORT)
