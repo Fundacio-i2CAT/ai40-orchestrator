@@ -242,7 +242,6 @@ class Log(flask_restful.Resource):
         """Log post"""
         data = request.get_json()
         if 'descriptor_reference' in data:
-            # Configure according consumer needs
             ns_instance_id = data['id']
             nsi = TenorNSI(ns_instance_id)
             nsi.configure()
