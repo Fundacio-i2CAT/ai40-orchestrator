@@ -7,6 +7,7 @@ import json
 import unittest
 import requests
 import random
+import time
 
 BASE_URL = 'http://localhost:{0}{1}'.format(PORT, URL_PREFIX)
 
@@ -89,7 +90,8 @@ class OrchestratorTestCase(unittest.TestCase):
         self.post_ns()
 
     def instantiate_ns(self):
-        """Instantates a NS"""
+        """Instantates a NS, injects a random number
+        in apache index.html and waits to stack deployment to check"""
         vresp = requests.get('{0}/ns'.format(BASE_URL))
         presp = requests.get('{0}/pop'.format(BASE_URL))
         pops = json.loads(presp.text)
@@ -97,12 +99,13 @@ class OrchestratorTestCase(unittest.TestCase):
         pop_id = pops[0]['pop_id']
         tns = random.choice(nss)
         ns_id = tns['ns_id']
+        random_number = random.randint(0, 10000)
         body = {'pop_id': pop_id,
                 'callback_url': 'http://localhost:80',
                 'config': [
                     {
                         'target_filename': '/var/www/html/index.html',
-                        'content': '<h1>laksjdlaskjd</h1>'
+                        'content': '{0}'.format(random_number)
                     }
                 ]}
         url = '{0}/ns/{1}'.format(BASE_URL, ns_id)
@@ -112,7 +115,24 @@ class OrchestratorTestCase(unittest.TestCase):
         assert resp.status_code == 200
         data = json.loads(resp.text)
         assert 'service_instance_id' in data
+        nsid = data['service_instance_id']
         assert data['state'].upper() == 'PROVISIONED'
+        url = '{0}/service/instance/{1}'.format(BASE_URL, nsid)
+        while True:
+            time.sleep(60)
+            resp = requests.get(url)
+            assert resp.status_code == 200
+            nsi = json.loads(resp.text)
+            if nsi['state'].upper() == 'RUNNING':
+                break
+        resp = requests.get(url)
+        ipaddr = None
+        nsi = json.loads(resp.text)
+        for addr in nsi['addresses']:
+            if addr['OS-EXT-IPS:type'] == 'floating':
+                ipaddr = addr['addr']
+        webresp = requests.get('http://{0}'.format(ipaddr))
+        assert random_number == int(webresp.text)
 
     def test_06(self):
         """Posts vnf, ns and instantates it"""
