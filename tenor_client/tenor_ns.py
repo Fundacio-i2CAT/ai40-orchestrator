@@ -29,6 +29,15 @@ class TenorNS(object):
         else:
             self._vnf = vnf
         self._nsd = None
+        
+    def delete(self):
+        """Deletes the NS"""
+        try:
+            resp = requests.delete('{0}/network-services/{1}'.format(self._tenor_url,
+                                                                     self._dummy_id))
+        except:
+            raise IOError('{0} instance unreachable'.format(self._tenor_url))
+        return resp
 
     def get_last_ns_id(self):
         """Gets last ns_id"""
@@ -109,4 +118,4 @@ if __name__ == "__main__":
     NS = TenorNS(VNF)
     print NS.get_last_ns_id()
     print NS.register("Test")
-    NS.instantiate()
+    NS.delete()

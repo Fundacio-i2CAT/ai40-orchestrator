@@ -36,7 +36,20 @@ class VNF(flask_restful.Resource):
             resp = vnf.delete()
         except Exception as exc:
             abort(500, message="Error deleting VNF: {0}".format(str(exc)))
-        return { 'vnf_id': vnf_id }
+        return resp
+
+    def get(self,vnf_id=None):
+        """Gets VNF(s)"""
+        ids = TenorVNF.get_vnf_ids()
+        result = []
+        if vnf_id:
+            for vid in ids:
+                if vid == int(vnf_id):
+                    return {'vnf_id': vnf_id}
+            abort(404, message='{0} VNF not found'.format(vnf_id))
+        for vnf_sid in ids:
+            result.append({'vnf_id': vnf_sid})
+        return result
 
     def post(self):
         """Posts a new VNF"""
@@ -63,6 +76,17 @@ class NS(flask_restful.Resource):
     """Network service resources"""
     def __init__(self):
         pass
+
+    def delete(self,ns_id):
+        """Deletes a VNF"""
+        ns = TenorNS(TenorVNF())
+        ns.set_dummy_id(ns_id)
+        print vnf._dummy_id
+        try:
+            resp = ns.delete()
+        except Exception as exc:
+            abort(500, message="Error deleting NS: {0}".format(str(exc)))
+        return resp
 
     def post(self, ns_id=None):
         """Posts a new NS"""

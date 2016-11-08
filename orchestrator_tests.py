@@ -8,7 +8,7 @@ import unittest
 import requests
 import time
 
-BASE_URL = 'http://dev.anella.i2cat.net:{0}{1}'.format(PORT, URL_PREFIX)
+BASE_URL = 'http://localhost:{0}{1}'.format(PORT, URL_PREFIX)
 
 class OrchestratorTestCase(unittest.TestCase):
     """Full test"""
@@ -65,14 +65,20 @@ class OrchestratorTestCase(unittest.TestCase):
         url = '{0}/vnf'.format(BASE_URL)
         resp = requests.post(url,headers={'Content-Type': 'application/json'},
                              json=json.loads(rdata))
-        print resp.status_code
-        print resp.text
         assert resp.status_code == 200
         vnf_data = json.loads(resp.text)
+        assert 'vnf_id' in vnf_data
         self._vnfs.append(vnf_data['vnf_id'])
         
     def test_04(self):
         """Posts 3 VNFs"""
+        self.posts_vnf()
+        self.posts_vnf()
+
+
+    def test_05(self):
+        """Posts 3 VNFs"""
+        self.posts_vnf()
         self.posts_vnf()
 
     def tearDown(self):
@@ -81,21 +87,6 @@ class OrchestratorTestCase(unittest.TestCase):
             url = '{0}/vnf/{1}'.format(BASE_URL, vnf)
             resp = requests.delete(url)
             assert resp.status_code == 200
-
-    # def _tsts(self):
-    #     """Steps"""
-    #     for name in sorted(dir(self)):
-    #         if name.startswith("test_"):
-    #             yield name, getattr(self, name)
-
-    # def test_tsts(self):
-    #     """Sorting steps"""
-    #     for name, step in self._tsts():
-    #         print name, step.__doc__
-    #         try:
-    #             step()
-    #         except Exception as exc:
-    #             self.fail("{} {} failed ({}: {})".format(name, step.__doc__, type(exc), exc))
 
 if __name__ == '__main__':
     unittest.main()
