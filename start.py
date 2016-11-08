@@ -33,7 +33,7 @@ class VNF(flask_restful.Resource):
         """Deletes a VNF"""
         vnf = TenorVNF(int(vnf_id))
         try:
-            resp = vnf.delete()
+            vnf.delete()
         except Exception as exc:
             abort(500, message="Error deleting VNF: {0}".format(str(exc)))
         return {'message': 'successfully deleted'}
@@ -153,7 +153,7 @@ class PoP(flask_restful.Resource):
     def __init__(self):
         pass
 
-    def get(self,pop_id=None):
+    def get(self, pop_id=None):
         ids = TenorPoP.get_pop_ids()
         result = []
         if pop_id:

@@ -46,7 +46,7 @@ class OrchestratorTestCase(unittest.TestCase):
         self.start_stop('RUNNING', 'DEPLOYED', 200)
         self.start_stop('DEPLOYED', 'RUNNING', 200)
 
-    def post_vnf(self):
+    def post_vnf(self, preserve=False):
         """Posts a new VNF"""
         with open('tenor_client/samples/ovnf_example.json') as infile:
             rdata = infile.read()
@@ -56,9 +56,10 @@ class OrchestratorTestCase(unittest.TestCase):
         assert resp.status_code == 200
         vnf_data = json.loads(resp.text)
         assert 'vnf_id' in vnf_data
-        self._vnfs.append(vnf_data['vnf_id'])
+        if not preserve:
+            self._vnfs.append(vnf_data['vnf_id'])
 
-    def post_ns(self):
+    def post_ns(self, preserve=False):
         """Posts a new NS"""
         vresp = requests.get('{0}/vnf'.format(BASE_URL))
         assert vresp.status_code == 200
@@ -70,7 +71,8 @@ class OrchestratorTestCase(unittest.TestCase):
         assert resp.status_code == 200
         data = json.loads(resp.text)
         assert 'ns_id' in data
-        self._nss.append(data['ns_id'])
+        if not preserve:
+            self._nss.append(data['ns_id'])
 
     def test_04(self):
         """Posts VNFs"""
@@ -114,8 +116,8 @@ class OrchestratorTestCase(unittest.TestCase):
 
     def test_06(self):
         """Posts vnf, ns and instantates it"""
-        self.post_vnf()
-        self.post_ns()
+        self.post_vnf(True)
+        self.post_ns(True)
         self.instantiate_ns()
 
     def tearDown(self):
