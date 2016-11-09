@@ -8,6 +8,8 @@ from jinja2 import Template
 from tenor_dummy_id import TenorDummyId
 from tenor_vnf import TenorVNF
 from tenor_vdu import TenorVDU
+import signal
+import functools
 
 import ConfigParser
 
