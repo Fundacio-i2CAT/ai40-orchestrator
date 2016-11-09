@@ -7,7 +7,14 @@ import json
 import paramiko
 from pymongo import MongoClient
 
-DEFAULT_TENOR_URL = 'http://localhost:4000'
+import ConfigParser
+
+CONFIG = ConfigParser.RawConfigParser()
+CONFIG.read('config.cfg')
+
+DEFAULT_TENOR_URL = format('{0}:{1}'.format(
+    CONFIG.get('tenor', 'url'),
+    CONFIG.get('tenor', 'port')))
 
 class TenorNSI(object):
     """Represents a TeNOR NS Instance"""

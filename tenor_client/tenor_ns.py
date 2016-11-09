@@ -9,8 +9,17 @@ from tenor_dummy_id import TenorDummyId
 from tenor_vnf import TenorVNF
 from tenor_vdu import TenorVDU
 
+import ConfigParser
+
+CONFIG = ConfigParser.RawConfigParser()
+CONFIG.read('config.cfg')
+
+DEFAULT_TENOR_URL = format('{0}:{1}'.format(
+    CONFIG.get('tenor', 'url'),
+    CONFIG.get('tenor', 'port')))
+
+DEFAULT_TEMPLATE = './tenor_client/templates/simple-f.json'
 DEFAULT_CALLBACK_URL = 'http://localhost:8082/orchestrator/api/v0.1/log'
-DEFAULT_TENOR_URL = 'http://localhost:4000'
 DEFAULT_TEMPLATE = './tenor_client/templates/simple-n.json'
 DEFAULT_FLAVOUR = 'basic'
 

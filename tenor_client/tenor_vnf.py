@@ -7,8 +7,14 @@ import json
 from jinja2 import Template
 from tenor_dummy_id import TenorDummyId
 from tenor_vdu import TenorVDU
+import ConfigParser
 
-DEFAULT_TENOR_URL = 'http://localhost:4000'
+CONFIG = ConfigParser.RawConfigParser()
+CONFIG.read('config.cfg')
+
+DEFAULT_TENOR_URL = format('{0}:{1}'.format(
+    CONFIG.get('tenor', 'url'),
+    CONFIG.get('tenor', 'port')))
 DEFAULT_TEMPLATE = './tenor_client/templates/simple-f.json'
 
 class TenorVNF(object):

@@ -135,7 +135,7 @@ class OrchestratorTestCase(unittest.TestCase):
         assert random_number == int(webresp.text)
 
     def test_06(self):
-        """Posts vnf, ns and instantates it"""
+        """Posts vnf, ns and instantiates it"""
         self.post_vnf(True)
         self.post_ns(True)
         self.instantiate_ns()

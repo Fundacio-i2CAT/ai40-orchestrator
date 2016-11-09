@@ -12,14 +12,21 @@ from tenor_client.tenor_ns import TenorNS
 from tenor_client.tenor_nsi import TenorNSI
 from tenor_client.tenor_pop import TenorPoP
 from pymongo import MongoClient
+import ConfigParser
 
-PREFIX = "/orchestrator/api"
-API_VERSION = "0.1"
-PORT = 8082
+CONFIG = ConfigParser.RawConfigParser()
+CONFIG.read('config.cfg')
+
+HOST = CONFIG.get('flask', 'host')
+PREFIX = CONFIG.get('flask', 'prefix')
+API_VERSION = CONFIG.get('flask', 'version')
+PORT = int(CONFIG.get('flask', 'port'))
 APP = Flask(__name__)
 API_V2_BP = Blueprint('api_v2', __name__)
 API_V2 = Api(API_V2_BP)
-DEFAULT_TENOR_URL = 'http://localhost:4000'
+DEFAULT_TENOR_URL = format('{0}:{1}'.format(
+    CONFIG.get('tenor', 'url'),
+    CONFIG.get('tenor', 'port')))
 URL_PREFIX = '{prefix}/v{version}'.format(
     prefix=PREFIX,
     version=API_VERSION)
@@ -289,9 +296,9 @@ API_V2.add_resource(PoP,
                     '/pop/<pop_id>')
 
 if __name__ == "__main__":
-    print "Tablecloth (instances.controller v2 via TeNOR) ..."
+    print "Industrial Platform 4.0 Orchestrator"
     APP.register_blueprint(
         API_V2_BP,
         url_prefix=URL_PREFIX
     )
-    APP.run(debug=True, host='0.0.0.0', port=PORT)
+    APP.run(debug=True, host=HOST, port=PORT)
