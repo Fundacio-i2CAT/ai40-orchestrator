@@ -9,7 +9,7 @@ import requests
 import random
 import time
 
-BASE_URL = 'http://localhost:{0}{1}'.format(PORT, URL_PREFIX)
+BASE_URL = 'http://dev.anella.i2cat.net:{0}{1}'.format(PORT, URL_PREFIX)
 
 class OrchestratorTestCase(unittest.TestCase):
     """Full test"""
