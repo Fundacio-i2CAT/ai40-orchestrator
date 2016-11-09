@@ -18,6 +18,7 @@ class OrchestratorTestCase(unittest.TestCase):
         """Initial setup"""
         self._vnfs = []
         self._nss = []
+        self._nsis = []
 
     def test_02(self):
         """Gets NS instances"""
@@ -133,15 +134,22 @@ class OrchestratorTestCase(unittest.TestCase):
                 ipaddr = addr['addr']
         webresp = requests.get('http://{0}'.format(ipaddr))
         assert random_number == int(webresp.text)
+        self._nsis.append(nsid)
 
     def test_06(self):
         """Posts vnf, ns and instantiates it"""
-        self.post_vnf(True)
-        self.post_ns(True)
+        self.post_vnf()
+        self.post_ns()
         self.instantiate_ns()
 
     def tearDown(self):
         """tearDown"""
+        while len(self._nsis) > 0:
+            nsi = self._nsis.pop()
+            url = '{0}/service/instance/{1}'.format(BASE_URL, nsi)
+            resp = requests.delete(url)
+            assert resp.status_code == 200
+
         while len(self._nss) > 0:
             vnf = self._nss.pop()
             url = '{0}/ns/{1}'.format(BASE_URL, vnf)
