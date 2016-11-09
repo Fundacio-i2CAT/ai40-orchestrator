@@ -122,11 +122,7 @@ class NS(flask_restful.Resource):
                 vnf = TenorVNF(vdu)
                 tns = TenorNS(vnf)
                 tns.set_dummy_id(ns_id)
-                try:
-                    resp = tns.instantiate(data['pop_id'])
-                except Exception as exc:
-                    print "LKJADSLKJD", exc
-                    abort(500, message=exc)
+                resp = tns.instantiate(data['pop_id'])
                 nsdata = json.loads(resp.text)
                 client = MongoClient()
                 mdb = client.custom_conf
@@ -305,4 +301,4 @@ if __name__ == "__main__":
         API_V2_BP,
         url_prefix=URL_PREFIX
     )
-    APP.run(debug=False, host=HOST, port=PORT)
+    APP.run(debug=True, host=HOST, port=PORT)
