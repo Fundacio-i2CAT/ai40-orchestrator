@@ -9,7 +9,7 @@ import requests
 import random
 import time
 
-BASE_URL = 'http://dev.anella.i2cat.net:{0}{1}'.format(PORT, URL_PREFIX)
+BASE_URL = 'http://localhost:{0}{1}'.format(PORT, URL_PREFIX)
 
 class OrchestratorTestCase(unittest.TestCase):
     """Full test"""
@@ -90,7 +90,7 @@ class OrchestratorTestCase(unittest.TestCase):
         self.post_ns()
         self.post_ns()
 
-    def instantiate_ns(self):
+    def instantiate_ns(self, preserve=False):
         """Instantates a NS, injects a random number
         in apache index.html and waits to stack deployment to check"""
         vresp = requests.get('{0}/ns'.format(BASE_URL))
@@ -134,13 +134,14 @@ class OrchestratorTestCase(unittest.TestCase):
                 ipaddr = addr['addr']
         webresp = requests.get('http://{0}'.format(ipaddr))
         assert random_number == int(webresp.text)
-        self._nsis.append(nsid)
+        if not preserve:
+            self._nsis.append(nsid)
 
     def test_06(self):
         """Posts vnf, ns and instantiates it"""
-        self.post_vnf()
-        self.post_ns()
-        self.instantiate_ns()
+        self.post_vnf(False)
+        self.post_ns(False)
+        self.instantiate_ns(False)
 
     def tearDown(self):
         """tearDown"""

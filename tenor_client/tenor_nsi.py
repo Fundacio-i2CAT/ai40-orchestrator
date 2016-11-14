@@ -6,6 +6,7 @@ import requests
 import json
 import paramiko
 from pymongo import MongoClient
+import uuid
 
 import ConfigParser
 
@@ -69,16 +70,47 @@ class TenorNSI(object):
             paramiko.AutoAddPolicy())
         ssh.connect(server_ip, username='root',
                     key_filename='keys/anella',
-                    timeout=5)
+                    timeout=15)
+        with open('./aux/shtemplating.sh') as fha:
+            shtemplating = fha.read()
+        command = 'echo \'{0}\' > {1}'.format(shtemplating,
+                                              "/usr/bin/shtemplating.sh")
+        print command
+        stdin, stdout, stderr = ssh.exec_command(command)
+        print stdout.readlines()
+        print stderr.readlines()
         for cfile in config['config']:
-            content = cfile['content'].encode('latin-1')
             filename = cfile['target_filename']
-            command = 'echo \'{0}\' > {1}'.format(content,
-                                                  filename)
-            print command
-            stdin, stdout, stderr = ssh.exec_command(command)
-            print stdout.readlines()
-            print stderr.readlines()
+            if 'content' in cfile:
+                content = cfile['content'].encode('latin-1')
+                command = 'echo \'{0}\' > {1}'.format(content,
+                                                      filename)
+                print command
+                stdin, stdout, stderr = ssh.exec_command(command)
+                print stdout.readlines()
+                print stderr.readlines()
+            if 'values' in cfile:
+                values = ""
+                for key in cfile['values']:
+                    print key, cfile['values'][key]
+                    values = values+'{0}="{1}"\n'.format(key, cfile['values'][key])
+                command = 'echo \'{0}\' > /etc/anella.cfg'.format(values)
+                print command
+                stdin, stdout, stderr = ssh.exec_command(command)
+                print stdout.readlines()
+                print stderr.readlines()
+                command = 'bash /usr/bin/shtemplating.sh {0} {1} > /tmp/tmp.txt'.format(cfile['target_filename'],
+                                                                                        '/etc/anella.cfg')
+                print command
+                stdin, stdout, stderr = ssh.exec_command(command)
+                print stdout.readlines()
+                print stderr.readlines()
+                command = 'mv /tmp/tmp.txt {0}'.format(cfile['target_filename'])
+                print command
+                stdin, stdout, stderr = ssh.exec_command(command)
+                print stdout.readlines()
+                print stderr.readlines()
+
         ssh.close()
 
     def start(self):

@@ -1,9 +1,9 @@
 {
-    "name": "shscript",
+    "name": "cirros",
     "vdu":
     {
-	"vm_image": "81f896da-7007-4111-a6ec-b087df73fe8b",
-	"vm_image_format": "openstack_id",
+	"vm_image": "http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img",
+	"vm_image_format": "qcow2",
 	"shell": "#!/bin/bash\\necho 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCTyrMs/iliz2PPAGACyGWwC7OqoIDgoStpiiXcJIAElaLiiAhlOdhCJP6okE2WzkuMf4XD80fVm/yikrjSRTVwph981KEEcAH+mRWThkoItaPqDLPh79AJfT1Ud48FQbG8MZu91X+E4ecnYQH/1bPRxiumWQLNrHmIhY8aIKv/xPCF8zZBYjG6BK/g2L22h4Ky6VI07uyzHyIk78OxUZTpQcb+jnFpJlVOZreRLc8RE6pDF17h4ZhrEmv0tvdWiubk46cbEUwOvGq9wWxFKReEQubC+7/2WNcQnkAylDxzbR9pF/RlomuwcBWSycQ8RVpmr8T1cydaBpi9cbBB2DOn alfonso@knightmare' >> /root/.ssh/authorized_keys",
         "storage_amount": 6,
         "vcpus": 1

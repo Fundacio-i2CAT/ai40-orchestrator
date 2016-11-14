@@ -267,6 +267,9 @@ class Log(flask_restful.Resource):
     def post(self):
         """Log post"""
         data = request.get_json()
+        print "#######################################################################"
+        print json.dumps(data, indent=4, sort_keys=True)
+        print "#######################################################################"
         if 'descriptor_reference' in data:
             ns_instance_id = data['id']
             nsi = TenorNSI(ns_instance_id)
