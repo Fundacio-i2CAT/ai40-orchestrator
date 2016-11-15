@@ -5,7 +5,7 @@
     [
 	{	
 	    "target_filename": "/var/www/html/index.html",
-	    "content": "<h1>Monday test!!!!!</h1>"
+	    "content": "<h1>Tuesday test!!!!!</h1>"
 	},
 	{	
 	    "target_filename": "/root/customer_ip.txt",

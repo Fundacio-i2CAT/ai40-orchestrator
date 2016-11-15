@@ -1,14 +1,14 @@
 {    
-    "pop_id": 4,
+    "pop_id": 9,
     "callback_url": "http://localhost/",
     "config":
     [
 	{	
 	    "target_filename": "/var/www/html/index.html",
 	    "values": {
-		"name": "Joan Serra Alkjasd",
+		"name": "Tuesday tuesday Alkjasd",
 		"picture": "https://cdn3.iconfinder.com/data/icons/users-6/100/2-512.png",
-		"cv": "Arquitecte"
+		"cv": "laksdj laskjd aslkjd "
 	    }
 	},
 	{

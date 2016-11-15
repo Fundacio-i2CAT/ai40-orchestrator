@@ -203,17 +203,17 @@ if __name__ == '__main__':
     # print type(b+1)
     # print b+1
     # print tc.get_vnf_instances()
-    tc.delete_all_ns_instances()
-    tc.delete_all_ns()
-    tc.delete_all_vnfs()
-    # client = MongoClient()
-    # ns_provisioning = client['ns_provisioning']
-    # ns_provisioning.nsrs.remove()
-    # vnf_provisioning = client['vnf_provisioning']
-    # vnf_provisioning.vnfrs.remove()
-    # ns_catalogue = client['ns_catalogue']
-    # ns_catalogue.ns.remove()
-    # vnf_catalogue = client['vnf_catalogue']
-    # vnf_catalogue.ns.remove()
+    # tc.delete_all_ns_instances()
+    # tc.delete_all_ns()
+    # tc.delete_all_vnfs()
+    client = MongoClient()
+    ns_provisioning = client['ns_provisioning']
+    ns_provisioning.nsrs.remove()
+    vnf_provisioning = client['vnf_provisioning']
+    vnf_provisioning.vnfrs.remove()
+    ns_catalogue = client['ns_catalogue']
+    ns_catalogue.ns.remove()
+    vnf_catalogue = client['vnf_catalogue']
+    vnf_catalogue.ns.remove()
 
     # print tc.get_ns_instance_vnfs_status_addresses('580861e7df67b5156e000000')

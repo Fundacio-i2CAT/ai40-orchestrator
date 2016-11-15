@@ -89,27 +89,27 @@ class TenorNSI(object):
                 stdin, stdout, stderr = ssh.exec_command(command)
                 print stdout.readlines()
                 print stderr.readlines()
-            if 'values' in cfile:
-                values = ""
-                for key in cfile['values']:
-                    print key, cfile['values'][key]
-                    values = values+'{0}="{1}"\n'.format(key, cfile['values'][key])
-                command = 'echo \'{0}\' > /etc/anella.cfg'.format(values)
-                print command
-                stdin, stdout, stderr = ssh.exec_command(command)
-                print stdout.readlines()
-                print stderr.readlines()
-                command = 'bash /usr/bin/shtemplating.sh {0} {1} > /tmp/tmp.txt'.format(cfile['target_filename'],
-                                                                                        '/etc/anella.cfg')
-                print command
-                stdin, stdout, stderr = ssh.exec_command(command)
-                print stdout.readlines()
-                print stderr.readlines()
-                command = 'mv /tmp/tmp.txt {0}'.format(cfile['target_filename'])
-                print command
-                stdin, stdout, stderr = ssh.exec_command(command)
-                print stdout.readlines()
-                print stderr.readlines()
+            # if 'values' in cfile:
+            #     values = ""
+            #     for key in cfile['values']:
+            #         print key, cfile['values'][key]
+            #         values = values+'{0}="{1}"\n'.format(key, cfile['values'][key])
+            #     command = 'echo \'{0}\' > /etc/anella.cfg'.format(values)
+            #     print command
+            #     stdin, stdout, stderr = ssh.exec_command(command)
+            #     print stdout.readlines()
+            #     print stderr.readlines()
+            #     command = 'bash /usr/bin/shtemplating.sh {0} {1} > /tmp/tmp.txt'.format(cfile['target_filename'],
+            #                                                                             '/etc/anella.cfg')
+            #     print command
+            #     stdin, stdout, stderr = ssh.exec_command(command)
+            #     print stdout.readlines()
+            #     print stderr.readlines()
+            #     command = 'mv /tmp/tmp.txt {0}'.format(cfile['target_filename'])
+            #     print command
+            #     stdin, stdout, stderr = ssh.exec_command(command)
+            #     print stdout.readlines()
+            #     print stderr.readlines()
 
         ssh.close()
 
