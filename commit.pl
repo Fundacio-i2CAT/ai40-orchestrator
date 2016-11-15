@@ -6,7 +6,8 @@ my $name = shift @ARGV || die "\nLack of commit name\n\n";
 
 map { $name .= " $_"; } @ARGV;
 
-my @files = ( "config.cfg",
+my @files = ( "aux/shtemplating.sh",
+	      "config.cfg",
 	      ".gitignore",
 	      "orchestrator_tests.py",
 	      "commit.pl",

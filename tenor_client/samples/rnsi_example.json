@@ -6,8 +6,8 @@
 	{	
 	    "target_filename": "/var/www/html/index.html",
 	    "values": {
-		"name": "Joan Serra",
-		"picture": "\"https://cdn3.iconfinder.com/data/icons/users-6/100/2-512.png\"",
+		"name": "Joan Serra Alkjasd",
+		"picture": "https://cdn3.iconfinder.com/data/icons/users-6/100/2-512.png",
 		"cv": "Arquitecte"
 	    }
 	},
