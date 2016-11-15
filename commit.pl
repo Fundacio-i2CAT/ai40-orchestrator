@@ -6,20 +6,20 @@ my $name = shift @ARGV || die "\nLack of commit name\n\n";
 
 map { $name .= " $_"; } @ARGV;
 
-my @files = ( "aux/shtemplating.sh",
-	      "config.cfg",
-	      ".gitignore",
-	      "orchestrator_tests.py",
-	      "commit.pl",
-	      "tenor_client/README.md",
-	      "tenor_client/*.py",
-	      "start.py",
-	      "requirements.txt",
-	      "tenor_client/samples/*.json",
-	      "tenor_client/samples/*.md",
-	      "tenor_client/templates/*.json",
-	      "tenor_client/templates/*.md",
-	      "README.md"
+my @files = ("aux/shtemplating.sh",
+	     "config.cfg",
+	     ".gitignore",
+	     "orchestrator_tests.py",
+	     "commit.pl",
+	     "tenor_client/README.md",
+	     "tenor_client/*.py",
+	     "start.py",
+	     "requirements.txt",
+	     "tenor_client/samples/*.json",
+	     "tenor_client/samples/*.md",
+	     "tenor_client/templates/*.json",
+	     "tenor_client/templates/*.md",
+	     "README.md"
 	    );
 
 map { system("git add $_\n"); } @files;
