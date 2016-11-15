@@ -199,6 +199,8 @@ class ServiceInstance(flask_restful.Resource):
     def post(self):
         """Post a new NSI"""
         data = request.get_json()
+        print "LOG********************************"
+        print data
         context = data['context']['tenor']
         name = context['name']
         vdu = TenorVDU(context['vm_image'], context['vm_image_format'])
