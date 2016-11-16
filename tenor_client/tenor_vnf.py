@@ -118,6 +118,7 @@ class TenorVNF(object):
     def get_vnf_ids():
         """Returns the list of VNF registered in TeNOR"""
         try:
+            print DEFAULT_TENOR_URL
             resp = requests.get('{0}/vnfs'.format(DEFAULT_TENOR_URL))
         except:
             raise IOError('{0} instance unreachable'.format(DEFAULT_TENOR_URL))

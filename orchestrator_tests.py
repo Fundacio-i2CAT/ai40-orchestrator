@@ -97,7 +97,7 @@ class OrchestratorTestCase(unittest.TestCase):
         presp = requests.get('{0}/pop'.format(BASE_URL))
         pops = json.loads(presp.text)
         nss = json.loads(vresp.text)
-        pop_id = pops[0]['pop_id']
+        pop_id = pops[-1]['pop_id']
         tns = random.choice(nss)
         ns_id = tns['ns_id']
         random_number = random.randint(0, 10000)

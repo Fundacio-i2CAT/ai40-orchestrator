@@ -13,6 +13,7 @@ from tenor_client.tenor_nsi import TenorNSI
 from tenor_client.tenor_pop import TenorPoP
 from pymongo import MongoClient
 import ConfigParser
+import requests
 
 CONFIG = ConfigParser.RawConfigParser()
 CONFIG.read('config.cfg')
@@ -30,6 +31,7 @@ DEFAULT_TENOR_URL = format('{0}:{1}'.format(
 URL_PREFIX = '{prefix}/v{version}'.format(
     prefix=PREFIX,
     version=API_VERSION)
+BASE_URL = 'http://localhost:{0}{1}'.format(PORT, URL_PREFIX)
 
 class VNF(flask_restful.Resource):
     """Virtual network function resources"""
@@ -272,6 +274,17 @@ class Log(flask_restful.Resource):
         print "#######################################################################"
         print json.dumps(data, indent=4, sort_keys=True)
         print "#######################################################################"
+        if 'id' in data:
+            nsi = TenorNSI(data['id'])
+            print data['id']
+            state_and_addresses = nsi.get_state_and_addresses()
+            print json.dumps(state_and_addresses, indent=4, sort_keys=True)
+            print "CALLING CALLBACK AT"
+            print 'http://192.168.10.70:9999/api/sprojects/{0}/instance'.format(data['id'])
+            callback = requests.put('http://192.168.10.70:9999/api/sprojects/{0}/instance'.format(data['id']),
+                                    headers={'Content-Type': 'application/json'},
+                                    json=state_and_addresses)
+
         if 'descriptor_reference' in data:
             ns_instance_id = data['id']
             nsi = TenorNSI(ns_instance_id)

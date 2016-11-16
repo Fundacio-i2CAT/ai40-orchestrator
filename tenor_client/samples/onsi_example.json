@@ -1,11 +1,11 @@
 {    
-    "pop_id": 4,
+    "pop_id": 9,
     "callback_url": "http://localhost/",
     "config":
     [
 	{	
 	    "target_filename": "/var/www/html/index.html",
-	    "content": "<h1>Tuesday test!!!!!</h1>"
+	    "content": "<h1>Wednesday test!!!!!</h1>"
 	},
 	{	
 	    "target_filename": "/root/customer_ip.txt",

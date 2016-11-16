@@ -203,9 +203,9 @@ if __name__ == '__main__':
     # print type(b+1)
     # print b+1
     # print tc.get_vnf_instances()
-    # tc.delete_all_ns_instances()
-    # tc.delete_all_ns()
-    # tc.delete_all_vnfs()
+    tc.delete_all_ns_instances()
+    tc.delete_all_ns()
+    tc.delete_all_vnfs()
     client = MongoClient()
     ns_provisioning = client['ns_provisioning']
     ns_provisioning.nsrs.remove()
