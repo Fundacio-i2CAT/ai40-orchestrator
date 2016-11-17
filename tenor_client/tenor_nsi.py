@@ -60,16 +60,17 @@ class TenorNSI(object):
                         self._addresses = vnfr['server']['addresses']
         return nsi
 
-    def configure(self):
+    def configure(self, server_ip=None, config=None):
         """Configures the instance according to consumer needs"""
-        server_ip = None
-        for addr in self._addresses[0][1]:
-            if addr['OS-EXT-IPS:type'].upper() == 'FLOATING':
-                server_ip = addr['addr']
-        client = MongoClient()
-        mdb = client.custom_conf
-        confs = mdb.confs
-        config = confs.find_one({'ns_instance_id': self._nsi_id})
+        if not server_ip:
+            for addr in self._addresses[0][1]:
+                if addr['OS-EXT-IPS:type'].upper() == 'FLOATING':
+                    server_ip = addr['addr']
+        if not config:
+            client = MongoClient()
+            mdb = client.custom_conf
+            confs = mdb.confs
+            config = confs.find_one({'ns_instance_id': self._nsi_id})
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(
             paramiko.AutoAddPolicy())
@@ -94,27 +95,27 @@ class TenorNSI(object):
                 stdin, stdout, stderr = ssh.exec_command(command)
                 print stdout.readlines()
                 print stderr.readlines()
-            # if 'values' in cfile:
-            #     values = ""
-            #     for key in cfile['values']:
-            #         print key, cfile['values'][key]
-            #         values = values+'{0}="{1}"\n'.format(key, cfile['values'][key])
-            #     command = 'echo \'{0}\' > /etc/anella.cfg'.format(values)
-            #     print command
-            #     stdin, stdout, stderr = ssh.exec_command(command)
-            #     print stdout.readlines()
-            #     print stderr.readlines()
-            #     command = 'bash /usr/bin/shtemplating.sh {0} {1} > /tmp/tmp.txt'.format(cfile['target_filename'],
-            #                                                                             '/etc/anella.cfg')
-            #     print command
-            #     stdin, stdout, stderr = ssh.exec_command(command)
-            #     print stdout.readlines()
-            #     print stderr.readlines()
-            #     command = 'mv /tmp/tmp.txt {0}'.format(cfile['target_filename'])
-            #     print command
-            #     stdin, stdout, stderr = ssh.exec_command(command)
-            #     print stdout.readlines()
-            #     print stderr.readlines()
+            if 'values' in cfile:
+                values = ""
+                for key in cfile['values']:
+                    print key, cfile['values'][key]
+                    values = values+'{0}="{1}"\n'.format(key, cfile['values'][key])
+                command = 'echo \'{0}\' > /etc/anella.cfg'.format(values)
+                print command
+                stdin, stdout, stderr = ssh.exec_command(command)
+                print stdout.readlines()
+                print stderr.readlines()
+                command = 'bash /usr/bin/shtemplating.sh {0} {1} > /tmp/tmp.txt'.format(cfile['target_filename'],
+                                                                                        '/etc/anella.cfg')
+                print command
+                stdin, stdout, stderr = ssh.exec_command(command)
+                print stdout.readlines()
+                print stderr.readlines()
+                command = 'mv /tmp/tmp.txt {0}'.format(cfile['target_filename'])
+                print command
+                stdin, stdout, stderr = ssh.exec_command(command)
+                print stdout.readlines()
+                print stderr.readlines()
 
         ssh.close()
 
