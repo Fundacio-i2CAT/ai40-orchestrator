@@ -20,21 +20,21 @@ DEFAULT_TENOR_URL = format('{0}:{1}'.format(
 class TenorNSI(object):
     """Represents a TeNOR NS Instance"""
 
-    def __init__(self, nsid, tenor_url=DEFAULT_TENOR_URL):
-        self._nsid = nsid
+    def __init__(self, ns_id, tenor_url=DEFAULT_TENOR_URL):
+        self._ns_id = ns_id
         self._tenor_url = tenor_url
         self._state = "UNKNOWN"
         self._addresses = []
         self.retrieve()
 
     def __repr__(self):
-        return "{0} {1} {2}".format(self._nsid, self._state, self._addresses)
+        return "{0} {1} {2}".format(self._ns_id, self._state, self._addresses)
 
     def retrieve(self):
         """Get NSI information from tenor instance"""
         try:
             resp = requests.get('{0}/ns-instances/{1}'.format(
-                self._tenor_url, self._nsid))
+                self._tenor_url, self._ns_id))
         except IOError:
             raise IOError('{0} instance unreachable'.format(self._tenor_url))
         try:
@@ -64,7 +64,7 @@ class TenorNSI(object):
         client = MongoClient()
         mdb = client.custom_conf
         confs = mdb.confs
-        config = confs.find_one({'ns_instance_id': self._nsid})
+        config = confs.find_one({'ns_instance_id': self._ns_id})
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(
             paramiko.AutoAddPolicy())
@@ -117,29 +117,29 @@ class TenorNSI(object):
         """Sets active all the VNF instances associated"""
         try:
             resp = requests.put('{0}/ns-instances/{1}/start'.format(
-                self._tenor_url, self._nsid))
+                self._tenor_url, self._ns_id))
             self.retrieve()
         except:
-            raise IOError('Error starting {0}'.format(self._nsid))
+            raise IOError('Error starting {0}'.format(self._ns_id))
         return resp
 
     def stop(self):
         """Sets shutoff all the VNF instances associated"""
         try:
             resp = requests.put('{0}/ns-instances/{1}/stop'.format(
-                self._tenor_url, self._nsid))
+                self._tenor_url, self._ns_id))
             self.retrieve()
         except:
-            raise IOError('Error stoping {0}'.format(self._nsid))
+            raise IOError('Error stoping {0}'.format(self._ns_id))
         return resp
 
     def delete(self):
         """Deletes the NSI"""
         try:
             resp = requests.delete('{0}/ns-instances/{1}'.format(
-                self._tenor_url, self._nsid))
+                self._tenor_url, self._ns_id))
         except IOError:
-            raise IOError('Error deleting {0}'.format(self._nsid))
+            raise IOError('Error deleting {0}'.format(self._ns_id))
         return resp
 
     def get_state_and_addresses(self):
@@ -150,7 +150,7 @@ class TenorNSI(object):
             for ipif in adr[1]:
                 addresses.append({'OS-EXT-IPS:type': ipif['OS-EXT-IPS:type'],
                                   'addr': ipif['addr']})
-        return {'service_instance_id': self._nsid,
+        return {'service_instance_id': self._ns_id,
                 'state': self._state,
                 'addresses': addresses}
 
