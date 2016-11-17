@@ -11,6 +11,7 @@ from tenor_client.tenor_vnf import TenorVNF
 from tenor_client.tenor_ns import TenorNS
 from tenor_client.tenor_nsi import TenorNSI
 from tenor_client.tenor_pop import TenorPoP
+from tenor_client.tenor_vnfi import TenorVNFI
 from pymongo import MongoClient
 import ConfigParser
 import requests
@@ -201,8 +202,6 @@ class ServiceInstance(flask_restful.Resource):
     def post(self):
         """Post a new NSI"""
         data = request.get_json()
-        print "LOG********************************"
-        print data
         context = data['context']['tenor']
         name = context['name']
         vdu = TenorVDU(context['vm_image'], context['vm_image_format'])
