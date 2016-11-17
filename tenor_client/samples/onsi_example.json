@@ -5,11 +5,11 @@
     [
 	{	
 	    "target_filename": "/var/www/html/index.html",
-	    "content": "<h1>Wednesday test!!!!!</h1>"
+	    "content": "<h1>Thursday test!!!!!</h1>"
 	},
 	{	
 	    "target_filename": "/root/customer_ip.txt",
-	    "content": "192.168.10.99"
+	    "content": "192.168.1.1"
 	}
     ]
 }
