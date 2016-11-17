@@ -7,6 +7,7 @@ import json
 import paramiko
 from pymongo import MongoClient
 import uuid
+from tenor_vnfi import TenorVNFI
 
 import ConfigParser
 
@@ -46,6 +47,9 @@ class TenorNSI(object):
         if 'vnfrs' in nsi:
             if len(nsi['vnfrs']) > 0:
                 vnfr = nsi['vnfrs'][0]
+                if 'vnfr_id' in vnfr:
+                    vnfi = TenorVNFI(vnfr['vnfr_id'])
+                    self._image_id = vnfi.get_image_id()
                 if 'server' in vnfr:
                     if 'status' in vnfr['server']:
                         if vnfr['server']['status'].upper() == 'ACTIVE':
@@ -151,6 +155,11 @@ class TenorNSI(object):
             for ipif in adr[1]:
                 addresses.append({'OS-EXT-IPS:type': ipif['OS-EXT-IPS:type'],
                                   'addr': ipif['addr']})
+        if self._image_id:
+            return {'service_instance_id': self._nsi_id,
+                    'state': self._state,
+                    'addresses': addresses,
+                    'image_id': self._image_id}
         return {'service_instance_id': self._nsi_id,
                 'state': self._state,
                 'addresses': addresses}

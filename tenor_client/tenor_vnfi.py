@@ -24,6 +24,7 @@ class TenorVNFI(object):
         self._tenor_url = tenor_url
         self._image_id = None
         self._vnfi_id = vnfi_id
+        self._all = None
         if self._vnfi_id:
             self.retrieve()
 
@@ -39,8 +40,8 @@ class TenorVNFI(object):
             vnfi = json.loads(resp.text)
         except:
             raise ValueError('Decoding VNFI response json response failed')
+        self._all = resp.text
         vms = vnfi['vms']
-        print vms
         if len(vms) > 0:
             if 'image_id' in vms[0]:
                 self._image_id = vms[0]['image_id']
@@ -53,14 +54,13 @@ class TenorVNFI(object):
     def get_vnfi_ids():
         """Returns the list of VNFIs registered in TeNOR"""
         try:
-            print DEFAULT_TENOR_URL
             resp = requests.get('{0}/vnf-provisioning/vnf-instances'.format(DEFAULT_TENOR_URL))
         except:
             raise IOError('{0} instance unreachable'.format(DEFAULT_TENOR_URL))
         try:
             json.loads(resp.text)
         except:
-            raise ValueError('Decoding VNF response json response failed')
+            raise ValueError('Decoding VNFI response json response failed')
         ids = []
         for vnfi in json.loads(resp.text):
             ids.append(vnfi['_id'])
@@ -70,4 +70,6 @@ if __name__ == "__main__":
     ids = TenorVNFI.get_vnfi_ids()
     if len(ids) > 0:
         VNFI = TenorVNFI(ids[0])
+        hola = json.loads(VNFI._all)
+        print json.dumps(hola, indent=4, sort_keys=True)
         print VNFI.get_image_id()
