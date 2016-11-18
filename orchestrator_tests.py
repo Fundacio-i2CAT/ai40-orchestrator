@@ -80,7 +80,7 @@ class OrchestratorTestCase(unittest.TestCase):
         vnf_data = json.loads(vresp.text)
         url = '{0}/ns'.format(BASE_URL)
         resp = requests.post(url, headers={'Content-Type': 'application/json'},
-                             json={'vnf_id': random.choice(vnf_data)['vnf_id'],
+                             json={'vnf_id': random.choice(self._vnfs),
                                    'name': 'randomTest'})
         assert resp.status_code == 200
         data = json.loads(resp.text)
@@ -110,8 +110,8 @@ class OrchestratorTestCase(unittest.TestCase):
         pops = json.loads(presp.text)
         nss = json.loads(vresp.text)
         pop_id = POP_ID
-        tns = random.choice(nss)
-        ns_id = tns['ns_id']
+        tns = random.choice(self._nss)
+        ns_id = tns
         random_number = random.randint(0, 10000)
         body = {'pop_id': pop_id,
                 'callback_url': 'http://localhost:80',
