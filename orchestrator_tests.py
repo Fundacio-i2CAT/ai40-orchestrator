@@ -11,6 +11,20 @@ import time
 
 BASE_URL = 'http://localhost:{0}{1}'.format(PORT, URL_PREFIX)
 
+OVNFD_EXAMPLE = {
+    "name": "friday",
+    "vdu":
+    {
+        "vm_image": "fef0a5bc-bba1-4267-8a7f-896fa4e02bc8",
+        "vm_image_format": "openstack_id",
+	"shell": "#!/bin/bash\\necho 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCTyrMs/iliz2PPAGACyGWwC7OqoIDgoStpiiXcJIAElaLiiAhlOdhCJP6okE2WzkuMf4XD80fVm/yikrjSRTVwph981KEEcAH+mRWThkoItaPqDLPh79AJfT1Ud48FQbG8MZu91X+E4ecnYQH/1bPRxiumWQLNrHmIhY8aIKv/xPCF8zZBYjG6BK/g2L22h4Ky6VI07uyzHyIk78OxUZTpQcb+jnFpJlVOZreRLc8RE6pDF17h4ZhrEmv0tvdWiubk46cbEUwOvGq9wWxFKReEQubC+7/2WNcQnkAylDxzbR9pF/RlomuwcBWSycQ8RVpmr8T1cydaBpi9cbBB2DOn alfonso@knightmare' >> /root/.ssh/authorized_keys",
+        "storage_amount": 6,
+        "vcpus": 1
+    }
+}
+
+POP_ID = 9
+
 class OrchestratorTestCase(unittest.TestCase):
     """Full test"""
 
@@ -50,11 +64,9 @@ class OrchestratorTestCase(unittest.TestCase):
 
     def post_vnf(self, preserve=False):
         """Posts a new VNF"""
-        with open('tenor_client/samples/ovnf_example.json') as infile:
-            rdata = infile.read()
         url = '{0}/vnf'.format(BASE_URL)
         resp = requests.post(url, headers={'Content-Type': 'application/json'},
-                             json=json.loads(rdata))
+                             json=OVNFD_EXAMPLE)
         assert resp.status_code == 200
         vnf_data = json.loads(resp.text)
         assert 'vnf_id' in vnf_data
@@ -97,7 +109,7 @@ class OrchestratorTestCase(unittest.TestCase):
         presp = requests.get('{0}/pop'.format(BASE_URL))
         pops = json.loads(presp.text)
         nss = json.loads(vresp.text)
-        pop_id = pops[0]['pop_id']
+        pop_id = POP_ID
         tns = random.choice(nss)
         ns_id = tns['ns_id']
         random_number = random.randint(0, 10000)
