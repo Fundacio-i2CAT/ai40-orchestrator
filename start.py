@@ -206,7 +206,8 @@ class ServiceInstance(flask_restful.Resource):
         data = request.get_json()
         context = data['context']['tenor']
         name = context['name']
-        vdu = TenorVDU(context['vm_image'], context['vm_image_format'])
+        vdu = TenorVDU(context['vm_image'], context['vm_image_format'],
+                       context['flavor'])
         if not 'bootstrap_script' in context:
             shell = None
             with open('keys/anella.json') as data_file:    
