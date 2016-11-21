@@ -67,6 +67,7 @@ class VNF(flask_restful.Resource):
         vdu_data = data['vdu']
         vdu = TenorVDU(vdu_data['vm_image'],
                        vdu_data['vm_image_format'],
+                       vdu_data['flavor'],
                        vdu_data['shell'],
                        vdu_data['storage_amount'],
                        vdu_data['vcpus'])
@@ -137,6 +138,7 @@ class NS(flask_restful.Resource):
                                   'user': data['user'],
                                   'password': data['password'],
                                   'config': data['config']})
+                client.close()
                 return {'service_instance_id': nsdata['id'],
                         'state': 'PROVISIONED'}
             except:
@@ -219,6 +221,18 @@ class ServiceInstance(flask_restful.Resource):
         except Exception as exc:
             abort(500,
                   message="Error posting NS instance: {0}".format(str(exc)))
+        client = MongoClient()
+        mdb = client.custom_conf
+        confs = mdb.confs
+        if not 'user' in data:
+            data['user'] = None
+            data['password'] = None
+        if 'config' in data:
+            confs.insert_one({'ns_instance_id': nsdata['id'],
+                              'user': data['user'],
+                              'password': data['password'],
+                              'config': data['config']})
+        client.close()
         return {'service_instance_id': nsdata['id'], 'state': 'PROVISIONED'}
 
     def put(self, ns_id=None):

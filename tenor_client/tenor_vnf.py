@@ -70,6 +70,9 @@ class TenorVNF(object):
         if len(single) > 0:
             self._vnfd = json.dumps(single[0])
             self._dummy_id = single[0]['vnfd']['id']
+            self._vdu = TenorVDU(single[0]['vnfd']['vdu'][0]['vm_image'],
+                                 single[0]['vnfd']['vdu'][0]['vm_image_format'],
+                                 single[0]['vnfd']['deployment_flavours'][0]['flavour_key'])
             return single[0]
         else:
             return []
@@ -99,7 +102,8 @@ class TenorVNF(object):
                                   name=name,
                                   bootstrap_script=bootstrap_script,
                                   storage_amount=self._vdu.storage_amount,
-                                  vcpus=self._vdu.vcpus)
+                                  vcpus=self._vdu.vcpus,
+                                  flavor=self._vdu.flavor)
         try:
             resp = requests.post('{0}/vnfs'.format(self._tenor_url),
                                  headers={'Content-Type': 'application/json'},

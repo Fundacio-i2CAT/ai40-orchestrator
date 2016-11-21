@@ -29,7 +29,7 @@
 			    "constituent_vnfs": [
 				{
 				    "vnf_ref_id": "{{ vnf_id }}",
-				    "vnf_flavor_key_ref": "gold"
+				    "vnf_flavor_key_ref": "{{ flavor }}"
 				}
 			    ]
 			}

@@ -77,6 +77,8 @@ class TenorNSI(object):
             client.close()
         ssh = create_ssh_client(server_ip, 'root', 'keys/anella')
         scp = SCPClient(ssh.get_transport())
+        if not config:
+            return
         if not 'config' in config:
             return
         for cfile in config['config']:

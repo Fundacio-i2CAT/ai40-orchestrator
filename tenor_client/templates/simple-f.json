@@ -73,11 +73,11 @@
 		    "vdu0"
 		],
 		"constraint": "",
-		"flavour_key": "gold",
+		"flavour_key": "{{ flavor }}",
 		"vlink_reference": [
 		    "vl0"
 		],
-		"id": "flavor0",
+		"id": "{{ flavor }}",
 		"assurance_parameters": [
 		    {
 			"violation": [
@@ -109,7 +109,7 @@
 		"authentication_type": "PubKeyAuthentication",
 		"authentication": "-----BEGIN RSA PRIVATE KEY-----MIIEpQIBAAKCAQEAk8qzLP4pYs9jzwBgAshlsAuzqqCA4KEraYol3CSABJWi4ogIZTnYQiT+qJBNls5LjH+Fw/NH1Zv8opK40kU1cKYffNShBHAB/pkVk4ZKCLWj6gyz4e/QCX09VHePBUGxvDGbvdV/hOHnJ2EB/9Wz0cYrplkCzax5iIWPGiCr/8TwhfM2QWIxugSv4Ni9toeCsulSNO7ssx8iJO/DsVGU6UHG/o5xaSZVTma3kS3PEROqQxde4eGYaxJr9Lb3Vorm5OOnGxFMDrxqvcFsRSkXhELmwvu/9ljXEJ5AMpQ8c20faRf0ZaJrsHAVksnEPEVaZq/E9XMnWgaYvXGwQdgzpwIDAQABAoIBAQCAOXFTLACENiMGSfEC+RMgtkZfV3n5alvb6XwHj7NyRtFXcWa3TISQfsBjRy/KE5oAf/NymvRMJFYARwQLivhekALpryE0VGmmlvLdV7mL7OwV+IdpE0OPuBUp38E6clDeUrwo678Db2u6ArRVXvfwnNrqLHf+MhIPnLEXnhkcglQS2nO9/KcRTrjBvus2wOThxtP1r/gdiH8gIGbn+UfU4jjSBrOlZs+UkWFWI62J4vFPJMFDu5IH0HSMpKiDVcl56cYx//bU28+PHiJq1OuerMQupuzIRgWPwvGPSt3c9au3AUI12QXFtdqaOe4zjShaXi8gJooSxqwB+UfYOdVhAoGBAMRPLG5P/fNjw+BFWqX+G/IMTFyIjpAQlPn/s4VaSvUI6JqI4r7Rfr4s3E/VFt2ElhRA5Gj8AEZzhqT796QkU8sJSC4RGXSToSoD22m574mOitMCUkYdqQqMBNu4wYLx38TwH/vUi4GX4q+Jd2k9pDAZUsZU6x7ecnjpCXr8wF87AoGBAMC65fFzuNPk4Kad0TNWwY9zQJnXpxf6L/tobfibWgszfMCHnCXwxVZIawZTTs8yxE++2oQKvbnmiMAD47v5MB4cPtnt3ThwPCvyzLx3Rg9SRCzp+qCyHdOWaHALsf8vKZRnqE+ggkAq1VNg6nDVQ/NJUVqgEtsKK/JoYeWN/I6FAoGBAKZeBuSSLEE52oXVoQYuPZa7b3e4T0Gum+LnHkg0hnP1kdNtkORwfP5E3I1XpOIk/F+7wxdqAf2y6HgoBe54zv6yJhbMbQtMFfiafjey2Vt1jxdWz00W0+zZT0C66lzECYVIj4KH1ZcFlpp3YNiy4dPVkj39N6nYkaEAtgUh8RKDAoGAZtJPYuWuMb3l7H494fnjAjkmuezHhI9BkgtAwGWBQICTidPPhp5RaZrxHkrLvNcEzNaxlch1N/y58Fci5GIpPacsEPBKGZYnQ/shJ1sq0Xm+TYf24kykhQG1bjGPIOl0cWxr6y9izgEMFpOZ/+CHhAAVmxfTd3CRyZ3OvL1nhFECgYEAo2lM/+pJxQnOy5pm66NHxG+WgQxScCB7CtUxoolXSKDnGbpvJSrO/AJN4byoCiLsaiAQ9uncjpoTuGwpp1VtMHqqGDDtnXUNgax0isQG7H1I0cCY7G1NtzquF2k0IIXoUm3ClXcbkBtuDWqI53go5jJwsZtWlsy09tux50xYINo=-----END RSA PRIVATE KEY-----",
 		"authentication_port": 22,
-		"flavor_id_ref": "flavor0",
+		"flavor_id_ref": "{{ flavor }}",
 		"events": {
 		    "start": {
 			"command": "#!/bin/bash\\necho  ip  > /root/consumerIP.txt",

@@ -29,7 +29,7 @@
 			    "constituent_vnfs": [
 				{
 				    "vnf_ref_id": "{{ vnf_id }}",
-				    "vnf_flavor_key_ref": "gold"
+				    "vnf_flavor_key_ref": "{{ flavor }}"
 				}
 			    ]
 			}
@@ -118,7 +118,7 @@
 		    {
 			"number_of_instances": 1,
 			"redundancy_model": "Active",
-			"vnf_flavour_id_reference": "gold",
+			"vnf_flavour_id_reference": "{{ flavor }}",
 			"vnf_reference": "{{ vnf_id }}"
 		    }
 		],
