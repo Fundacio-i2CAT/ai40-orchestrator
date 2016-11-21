@@ -8,6 +8,9 @@ import paramiko
 from pymongo import MongoClient
 import uuid
 from tenor_vnfi import TenorVNFI
+from template_management import create_ssh_client
+from template_management import render_template
+from scp import SCPClient
 
 import ConfigParser
 
@@ -71,53 +74,32 @@ class TenorNSI(object):
             mdb = client.custom_conf
             confs = mdb.confs
             config = confs.find_one({'ns_instance_id': self._nsi_id})
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(
-            paramiko.AutoAddPolicy())
-        ssh.connect(server_ip, username='root',
-                    key_filename='keys/anella',
-                    timeout=15)
-        with open('./aux/shtemplating.sh') as fha:
-            shtemplating = fha.read()
-        command = 'echo \'{0}\' > {1}'.format(shtemplating,
-                                              "/usr/bin/shtemplating.sh")
-        print command
-        stdin, stdout, stderr = ssh.exec_command(command)
-        print stdout.readlines()
-        print stderr.readlines()
+        client = create_ssh_client(server_ip, 'root', 'keys/anella')
+        scp = SCPClient(client.get_transport())
         for cfile in config['config']:
             filename = cfile['target_filename']
             if 'content' in cfile:
-                content = cfile['content'].encode('latin-1')
+                content = cfile['content'].encode('utf-8')
                 command = 'echo \'{0}\' > {1}'.format(content,
                                                       filename)
                 print command
-                stdin, stdout, stderr = ssh.exec_command(command)
+                stdin, stdout, stderr = client.exec_command(command)
                 print stdout.readlines()
                 print stderr.readlines()
-            if 'values' in cfile:
-                values = ""
-                for key in cfile['values']:
-                    print key, cfile['values'][key]
-                    values = values+'{0}="{1}"\n'.format(key, cfile['values'][key])
-                command = 'echo \'{0}\' > /etc/anella.cfg'.format(values)
-                print command
-                stdin, stdout, stderr = ssh.exec_command(command)
-                print stdout.readlines()
-                print stderr.readlines()
-                command = 'bash /usr/bin/shtemplating.sh {0} {1} > /tmp/tmp.txt'.format(cfile['target_filename'],
-                                                                                        '/etc/anella.cfg')
-                print command
-                stdin, stdout, stderr = ssh.exec_command(command)
-                print stdout.readlines()
-                print stderr.readlines()
-                command = 'mv /tmp/tmp.txt {0}'.format(cfile['target_filename'])
-                print command
-                stdin, stdout, stderr = ssh.exec_command(command)
-                print stdout.readlines()
-                print stderr.readlines()
-
-        ssh.close()
+            if 'context' in cfile:
+                print 'Getting {0}'.format(filename)
+                template_id = str(uuid.uuid4())
+                template_filename = '/tmp/{0}'.format(template_id)
+                scp.get(filename, template_filename)
+                print 'Templating with {0}'.format(cfile['context'])
+                result = render_template(template_id, cfile['context'])
+                render_filename = '/tmp/{0}'.format(uuid.uuid4())
+                with open(render_filename, 'w') as fhandle:
+                    fhandle.write(result)
+                print 'Sending {0}'.format(filename)
+                scp.put(render_filename, filename)
+        print 'Closing ssh client'
+        client.close()
 
     def start(self):
         """Sets active all the VNF instances associated"""
@@ -183,7 +165,23 @@ class TenorNSI(object):
 
 if __name__ == "__main__":
     NSS = TenorNSI.get_nsi_ids()
+    CONFIG = {'config': [
+        {
+            "target_filename": "/var/www/html/index.html",
+            "context": {
+                "name": "MONDAY",
+                "picture": "https://cdn3.iconfinder.com/data/icons/users-6/100/2-512.png",
+                "cv": "laksdj laskjd aslkjd "
+            }
+        },
+        {
+            "target_filename": "/root/customer_ip.txt",
+            "content": "192.168.1.1"
+        }
+    ]
+           }
     for n in NSS:
         NS = TenorNSI(n)
         print n
         print NS.get_state_and_addresses()
+        NS.configure('172.24.4.207', CONFIG)

@@ -1,8 +1,8 @@
 {
-    "name": "thursdayEnd",
+    "name": "templateTest",
     "vdu":
     {
-	"vm_image": "fef0a5bc-bba1-4267-8a7f-896fa4e02bc8",
+	"vm_image": "6478c4b7-bb85-4721-b499-3be57fd3d6a6",
 	"vm_image_format": "openstack_id",
 	"shell": "#!/bin/bash\\necho 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCTyrMs/iliz2PPAGACyGWwC7OqoIDgoStpiiXcJIAElaLiiAhlOdhCJP6okE2WzkuMf4XD80fVm/yikrjSRTVwph981KEEcAH+mRWThkoItaPqDLPh79AJfT1Ud48FQbG8MZu91X+E4ecnYQH/1bPRxiumWQLNrHmIhY8aIKv/xPCF8zZBYjG6BK/g2L22h4Ky6VI07uyzHyIk78OxUZTpQcb+jnFpJlVOZreRLc8RE6pDF17h4ZhrEmv0tvdWiubk46cbEUwOvGq9wWxFKReEQubC+7/2WNcQnkAylDxzbR9pF/RlomuwcBWSycQ8RVpmr8T1cydaBpi9cbBB2DOn alfonso@knightmare' >> /root/.ssh/authorized_keys",
         "storage_amount": 6,

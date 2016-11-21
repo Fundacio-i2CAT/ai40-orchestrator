@@ -5,17 +5,15 @@
     [
 	{	
 	    "target_filename": "/var/www/html/index.html",
-	    "values": {
-		"name": "FRIDAY",
+	    "context": {
+		"name": "MONDAY",
 		"picture": "https://cdn3.iconfinder.com/data/icons/users-6/100/2-512.png",
 		"cv": "laksdj laskjd aslkjd "
 	    }
 	},
 	{
-	    "target_filename": "/root/custom_ip.txt",
-	    "values": {
-		"ip": "192.168.1.13"
-	    }
+	    "target_filename": "/root/customer_ip.txt",
+	    "content": "192.168.1.1"
 	}
     ]
 }
