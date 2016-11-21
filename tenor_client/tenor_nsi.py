@@ -74,8 +74,11 @@ class TenorNSI(object):
             mdb = client.custom_conf
             confs = mdb.confs
             config = confs.find_one({'ns_instance_id': self._nsi_id})
-        client = create_ssh_client(server_ip, 'root', 'keys/anella')
-        scp = SCPClient(client.get_transport())
+            client.close()
+        ssh = create_ssh_client(server_ip, 'root', 'keys/anella')
+        scp = SCPClient(ssh.get_transport())
+        if not 'config' in config:
+            return
         for cfile in config['config']:
             filename = cfile['target_filename']
             if 'content' in cfile:
@@ -83,7 +86,7 @@ class TenorNSI(object):
                 command = 'echo \'{0}\' > {1}'.format(content,
                                                       filename)
                 print command
-                stdin, stdout, stderr = client.exec_command(command)
+                stdin, stdout, stderr = ssh.exec_command(command)
                 print stdout.readlines()
                 print stderr.readlines()
             if 'context' in cfile:
@@ -99,7 +102,7 @@ class TenorNSI(object):
                 print 'Sending {0}'.format(filename)
                 scp.put(render_filename, filename)
         print 'Closing ssh client'
-        client.close()
+        ssh.close()
 
     def start(self):
         """Sets active all the VNF instances associated"""

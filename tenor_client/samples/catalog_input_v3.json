@@ -1,0 +1,33 @@
+{
+    "service": {
+	"_id": "5790c80b79374a205a3bdf53", 
+	"name": "Test demo 1"
+    }, 
+    "context_type": "tenor", 
+    "project": {
+	"_id": "5805f632d31e5c34c56308f6", 
+	"name": "Monitoritzaci\u00f3 Motlle Ref.547311117_9"
+    }, 
+    "client": {
+	"_id": "5790c80b79374a205a3bdf4e", 
+	"name": "Pl\u00e0stics Grau"
+    }, 
+    "context": {
+	"service_name": "apache2.service", 
+	"host": "87.236.219.21", 
+	"tenor": {
+	    "base_url": "http://localhost:4000", 
+	    "vm_image": "6478c4b7-bb85-4721-b499-3be57fd3d6a6",
+	    "vm_image_format": "openstack_id",
+	    "name": "Check", 
+	    "flavor": "flavor0"
+	}, 
+	"password": "test", 
+	"user_name": "test", 
+	"port": 22
+    }, 
+    "provider": {
+	"_id": "5790c80b79374a205a3bdf4a", 
+	"name": "Adam"
+    }
+}

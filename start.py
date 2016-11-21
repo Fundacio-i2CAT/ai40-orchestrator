@@ -206,7 +206,10 @@ class ServiceInstance(flask_restful.Resource):
         name = context['name']
         vdu = TenorVDU(context['vm_image'], context['vm_image_format'])
         if not 'bootstrap_script' in context:
-            context['bootstrap_script'] = "#!/bin/bash"
+            shell = None
+            with open('keys/anella.json') as data_file:    
+                 shell = json.load(data_file)
+            context['bootstrap_script'] = shell['shell']
         try:
             vnf = TenorVNF(vdu)
             tns = TenorNS(vnf)
