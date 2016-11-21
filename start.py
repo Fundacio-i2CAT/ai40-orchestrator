@@ -228,11 +228,11 @@ class ServiceInstance(flask_restful.Resource):
         if not 'user' in data:
             data['user'] = None
             data['password'] = None
-        if 'config' in data:
+        if 'config' in data['context']['tenor']:
             confs.insert_one({'ns_instance_id': nsdata['id'],
                               'user': data['user'],
                               'password': data['password'],
-                              'config': data['config']})
+                              'config': data['context']['tenor']['config']})
         client.close()
         return {'service_instance_id': nsdata['id'], 'state': 'PROVISIONED'}
 

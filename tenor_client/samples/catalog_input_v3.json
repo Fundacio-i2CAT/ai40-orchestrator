@@ -20,7 +20,13 @@
 	    "vm_image": "6478c4b7-bb85-4721-b499-3be57fd3d6a6",
 	    "vm_image_format": "openstack_id",
 	    "name": "Check", 
-	    "flavor": "m1.large"
+	    "flavor": "m1.large",
+	    "config": [
+                {
+                    "target_filename": "/var/www/html/index.html",
+                    "content": "lsakdj laskdj laskdj laskj d"
+                }
+	    ]
 	}, 
 	"password": "test", 
 	"user_name": "test", 
