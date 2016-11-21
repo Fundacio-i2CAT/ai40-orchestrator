@@ -23,9 +23,17 @@
 	    "flavor": "m1.large",
 	    "config": [
                 {
-                    "target_filename": "/var/www/html/index.html",
+                    "target_filename": "/root/prueba.txt",
                     "content": "lsakdj laskdj laskdj laskj d"
-                }
+                },
+		{
+		    "target_filename": "/var/www/html/index.html",
+		    "context": {
+			"name": "Gatito dormilón",
+			"picture": "https://c24e867c169a525707e0-bfbd62e61283d807ee2359a795242ecb.ssl.cf3.rackcdn.com/imagenes/gato/etapas-clave-de-su-vida/gatitos/nuevo-gatito-en-casa/gatito-durmiendo-en-cama.jpg",
+			"cv": "El gato duerme"
+		    }
+		}
 	    ]
 	}, 
 	"password": "test", 
