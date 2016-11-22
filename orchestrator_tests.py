@@ -17,10 +17,58 @@ OVNFD_EXAMPLE = {
     {
         "vm_image": "fef0a5bc-bba1-4267-8a7f-896fa4e02bc8",
         "vm_image_format": "openstack_id",
-	"shell": "#!/bin/bash\\necho 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCTyrMs/iliz2PPAGACyGWwC7OqoIDgoStpiiXcJIAElaLiiAhlOdhCJP6okE2WzkuMf4XD80fVm/yikrjSRTVwph981KEEcAH+mRWThkoItaPqDLPh79AJfT1Ud48FQbG8MZu91X+E4ecnYQH/1bPRxiumWQLNrHmIhY8aIKv/xPCF8zZBYjG6BK/g2L22h4Ky6VI07uyzHyIk78OxUZTpQcb+jnFpJlVOZreRLc8RE6pDF17h4ZhrEmv0tvdWiubk46cbEUwOvGq9wWxFKReEQubC+7/2WNcQnkAylDxzbR9pF/RlomuwcBWSycQ8RVpmr8T1cydaBpi9cbBB2DOn alfonso@knightmare' >> /root/.ssh/authorized_keys",
+        "shell": "#!/bin/bash\\necho 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCTyrMs/iliz2PPAGACyGWwC7OqoIDgoStpiiXcJIAElaLiiAhlOdhCJP6okE2WzkuMf4XD80fVm/yikrjSRTVwph981KEEcAH+mRWThkoItaPqDLPh79AJfT1Ud48FQbG8MZu91X+E4ecnYQH/1bPRxiumWQLNrHmIhY8aIKv/xPCF8zZBYjG6BK/g2L22h4Ky6VI07uyzHyIk78OxUZTpQcb+jnFpJlVOZreRLc8RE6pDF17h4ZhrEmv0tvdWiubk46cbEUwOvGq9wWxFKReEQubC+7/2WNcQnkAylDxzbR9pF/RlomuwcBWSycQ8RVpmr8T1cydaBpi9cbBB2DOn alfonso@knightmare' >> /root/.ssh/authorized_keys",
         "storage_amount": 6,
         "flavor": "m1.medium",
         "vcpus": 1
+    }
+}
+
+CATALOG_EXAMPLE = {
+    "service": {
+        "_id": "5790c80b79374a205a3bdf53",
+        "name": "Test demo 1"
+    },
+    "context_type": "tenor",
+    "project": {
+        "_id": "5805f632d31e5c34c56308f6",
+        "name": "Monitoritzaci\u00f3 Motlle Ref.547311117_9"
+    },
+    "client": {
+        "_id": "5790c80b79374a205a3bdf4e",
+        "name": "Pl\u00e0stics Grau"
+    },
+    "context": {
+        "service_name": "apache2.service",
+        "host": "87.236.219.21",
+        "tenor": {
+            "base_url": "http://localhost:4000",
+            "vm_image": "6478c4b7-bb85-4721-b499-3be57fd3d6a6",
+            "vm_image_format": "openstack_id",
+            "name": "Test",
+            "flavor": "m1.medium",
+            "config": [
+                {
+                    "target_filename": "/root/prueba.txt",
+                    "content": "lsakdj laskdj laskdj laskj d"
+                },
+		{
+		    "target_filename": "/var/www/html/index.html",
+                    "context": {
+                        "name": "Gatito dormilón",
+                        "picture": "https://c24e867c169a525707e0-bfbd62e61283d807ee2359a795242ecb.ssl.cf3.rackcdn.com/imagenes/gato/etapas-clave-de-su-vida/gatitos/nuevo-gatito-en-casa/gatito-durmiendo-en-cama.jpg",
+                        "cv": "El gato duerme"
+                    }
+		}
+	    ]
+	},
+	"password": "test",
+        "user_name": "test",
+        "port": 22
+    },
+    "provider": {
+        "_id": "5790c80b79374a205a3bdf4a",
+        "name": "Adam"
     }
 }
 
@@ -155,6 +203,13 @@ class OrchestratorTestCase(unittest.TestCase):
         self.post_vnf(False)
         self.post_ns(False)
         self.instantiate_ns(False)
+
+    def test_07(self):
+        """Posts service/instance one round mode"""
+        url = '{0}/service/instance'.format(BASE_URL)
+        resp = requests.post(url, headers={'Content-Type': 'application/json'},
+                             json=CATALOG_EXAMPLE)
+        assert resp.status_code == 200
 
     def tearDown(self):
         """tearDown"""
