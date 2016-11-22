@@ -1,4 +1,3 @@
-
 {
     "service": {
 	"_id": "5790c80b79374a205a3bdf53", 
@@ -18,14 +17,14 @@
 	"host": "87.236.219.21", 
 	"tenor": {
 	    "base_url": "http://localhost:4000", 
-	    "vm_image": "6478c4b7-bb85-4721-b499-3be57fd3d6a6",
-	    "vm_image_format": "openstack_id",
-	    "name": "Check", 
-	    "flavor": "m1.large",
+	    "vm_image": "https://cloud-images.ubuntu.com/zesty/current/zesty-server-cloudimg-amd64.img",
+	    "vm_image_format": "qcow2",
+	    "name": "alkjsd", 
+	    "flavor": "m1.medium",
 	    "config": [
                 {
-                    "target_filename": "/root/prueba.txt",
-                    "content": "lsakdj laskdj laskdj laskj d"
+                    "target_filename": "/root/laksjd.txt",
+                    "content": "lakjsd laskjd "
                 },
 		{
 		    "target_filename": "/var/www/html/index.html",

@@ -77,9 +77,7 @@ class TenorNSI(object):
             client.close()
         ssh = create_ssh_client(server_ip, 'root', 'keys/anella')
         scp = SCPClient(ssh.get_transport())
-        if not config:
-            return
-        if not 'config' in config:
+        if (not config) or (not 'config' in config):
             return
         for cfile in config['config']:
             filename = cfile['target_filename']
@@ -103,6 +101,9 @@ class TenorNSI(object):
                     fhandle.write(result)
                 print 'Sending {0}'.format(filename)
                 scp.put(render_filename, filename)
+                print 'Removing temporary files'
+                os.remove(template_filename)
+                os.remove(render_filename)
         print 'Closing ssh client'
         ssh.close()
 
