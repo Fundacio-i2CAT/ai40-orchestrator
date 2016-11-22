@@ -20,21 +20,7 @@
 	    "vm_image": "https://cloud-images.ubuntu.com/zesty/current/zesty-server-cloudimg-amd64.img",
 	    "vm_image_format": "qcow2",
 	    "name": "alkjsd", 
-	    "flavor": "m1.medium",
-	    "config": [
-                {
-                    "target_filename": "/root/laksjd.txt",
-                    "content": "lakjsd laskjd "
-                },
-		{
-		    "target_filename": "/var/www/html/index.html",
-		    "context": {
-			"name": "Gatito dormilón",
-			"picture": "https://c24e867c169a525707e0-bfbd62e61283d807ee2359a795242ecb.ssl.cf3.rackcdn.com/imagenes/gato/etapas-clave-de-su-vida/gatitos/nuevo-gatito-en-casa/gatito-durmiendo-en-cama.jpg",
-			"cv": "El gato duerme"
-		    }
-		}
-	    ]
+	    "flavor": "m1.medium"
 	}, 
 	"password": "test", 
 	"user_name": "test", 
