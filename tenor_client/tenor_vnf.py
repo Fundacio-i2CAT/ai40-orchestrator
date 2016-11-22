@@ -33,6 +33,7 @@ class TenorVNF(object):
             self._dummy_id = None
             self._vnfd = None
             self._name = None
+            self._cached = "true"
 
     def get_dummy_id(self):
         """Returns the TeNOR internal dummy_id"""
@@ -103,7 +104,8 @@ class TenorVNF(object):
                                   bootstrap_script=bootstrap_script,
                                   storage_amount=self._vdu.storage_amount,
                                   vcpus=self._vdu.vcpus,
-                                  flavor=self._vdu.flavor)
+                                  flavor=self._vdu.flavor,
+                                  cached=self._cached)
         try:
             resp = requests.post('{0}/vnfs'.format(self._tenor_url),
                                  headers={'Content-Type': 'application/json'},

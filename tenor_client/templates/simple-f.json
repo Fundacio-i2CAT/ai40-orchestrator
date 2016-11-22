@@ -46,6 +46,7 @@
 		],
 		"wc_notify": false,
 		"vm_image": "{{ vm_image }}",
+		"cached": {{ cached }},
 		"controller": true,
 		"connection_points": [
 		    {
