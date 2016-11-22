@@ -11,7 +11,7 @@ from tenor_vnfi import TenorVNFI
 from template_management import create_ssh_client
 from template_management import render_template
 from scp import SCPClient
-
+import os
 import ConfigParser
 
 CONFIG = ConfigParser.RawConfigParser()
