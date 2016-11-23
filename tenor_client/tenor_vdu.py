@@ -9,7 +9,7 @@ class TenorVDU(object):
                  vm_image='6b9b14cc-d106-4d07-8b43-22035a3265fe',
                  vm_image_format='openstack_id',
                  flavor='m1.medium',
-                 cached="false",
+                 cached="true",
                  shell='#!/bin/bash\\n',
                  storage_amount=6,
                  vcpus=1):
