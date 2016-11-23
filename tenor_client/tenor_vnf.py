@@ -33,7 +33,7 @@ class TenorVNF(object):
             self._dummy_id = None
             self._vnfd = None
             self._name = None
-            self._cached = "true"
+            self._cached = None
 
     def get_dummy_id(self):
         """Returns the TeNOR internal dummy_id"""
@@ -71,9 +71,13 @@ class TenorVNF(object):
         if len(single) > 0:
             self._vnfd = json.dumps(single[0])
             self._dummy_id = single[0]['vnfd']['id']
+            cached = None
+            if 'cached' in single[0]['vnfd']['vdu'][0]:
+                cached = single[0]['vnfd']['vdu'][0]
             self._vdu = TenorVDU(single[0]['vnfd']['vdu'][0]['vm_image'],
                                  single[0]['vnfd']['vdu'][0]['vm_image_format'],
-                                 single[0]['vnfd']['deployment_flavours'][0]['flavour_key'])
+                                 single[0]['vnfd']['deployment_flavours'][0]['flavour_key'],
+                                 cached)
             return single[0]
         else:
             return []
@@ -105,7 +109,7 @@ class TenorVNF(object):
                                   storage_amount=self._vdu.storage_amount,
                                   vcpus=self._vdu.vcpus,
                                   flavor=self._vdu.flavor,
-                                  cached=self._cached)
+                                  cached=self._vdu.cached)
         try:
             resp = requests.post('{0}/vnfs'.format(self._tenor_url),
                                  headers={'Content-Type': 'application/json'},

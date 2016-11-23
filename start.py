@@ -65,9 +65,15 @@ class VNF(flask_restful.Resource):
         """Posts a new VNF"""
         data = request.get_json()
         vdu_data = data['vdu']
+        cached = "false"
+        if 'cached' in vdu_data:
+            cached = vdu_data['cached']
+        if cached:
+            cached = "true"
         vdu = TenorVDU(vdu_data['vm_image'],
                        vdu_data['vm_image_format'],
                        vdu_data['flavor'],
+                       cached,
                        vdu_data['shell'],
                        vdu_data['storage_amount'],
                        vdu_data['vcpus'])
@@ -206,8 +212,13 @@ class ServiceInstance(flask_restful.Resource):
         data = request.get_json()
         context = data['context']['tenor']
         name = context['name']
+        cached = "false"
+        if 'cached' in context:
+            cached = context['cached']
+        if cached:
+            cached = "true"
         vdu = TenorVDU(context['vm_image'], context['vm_image_format'],
-                       context['flavor'])
+                       context['flavor'],cached)
         if not 'bootstrap_script' in context:
             shell = None
             with open('keys/anella.json') as data_file:    

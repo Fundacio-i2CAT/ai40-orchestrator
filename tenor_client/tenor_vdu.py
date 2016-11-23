@@ -9,6 +9,7 @@ class TenorVDU(object):
                  vm_image='6b9b14cc-d106-4d07-8b43-22035a3265fe',
                  vm_image_format='openstack_id',
                  flavor='m1.medium',
+                 cached="false",
                  shell='#!/bin/bash\\n',
                  storage_amount=6,
                  vcpus=1):
@@ -18,6 +19,10 @@ class TenorVDU(object):
         self.storage_amount = storage_amount
         self.vcpus = vcpus
         self.flavor = flavor
+        if not cached:
+            self.cached = "false"
+        else:
+            self.cached = cached
 
     def __repr__(self):
         return '{0} ({1}) {2}'.format(self.vm_image,
