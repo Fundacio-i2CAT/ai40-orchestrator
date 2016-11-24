@@ -8,8 +8,6 @@ from jinja2 import Template
 from tenor_dummy_id import TenorDummyId
 from tenor_vnf import TenorVNF
 from tenor_vdu import TenorVDU
-import signal
-import functools
 
 import ConfigParser
 
@@ -82,7 +80,7 @@ class TenorNS(object):
             raise IOError('Template {0} IOError'.format(self._template))
         self._nsd = templ.render(ns_id=self._dummy_id,
                                  vnf_id=self._vnf.get_dummy_id(),
-                                 flavor=self._vnf._vdu.flavor,
+                                 flavor=self._vnf.get_vdu().flavor,
                                  name=name)
         try:
             resp = requests.post('{0}/network-services'.format(self._tenor_url),

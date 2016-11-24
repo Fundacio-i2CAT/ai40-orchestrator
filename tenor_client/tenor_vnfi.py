@@ -4,9 +4,6 @@
 
 import requests
 import json
-from jinja2 import Template
-from tenor_dummy_id import TenorDummyId
-from tenor_vnf import TenorVNF
 import ConfigParser
 
 CONFIG = ConfigParser.RawConfigParser()
@@ -35,7 +32,7 @@ class TenorVNFI(object):
                 '{0}/vnf-provisioning/vnf-instances/{1}'.format(
                 self._tenor_url, self._vnfi_id))
         except IOError:
-            raise IOError('{0} VNF instance unreachable'.format(self._tenor_url))
+            raise IOError('{0} VNFI unreachable'.format(self._tenor_url))
         try:
             vnfi = json.loads(resp.text)
         except:
@@ -48,13 +45,15 @@ class TenorVNFI(object):
         return self._image_id
 
     def get_image_id(self):
+        """Getter"""
         return self._image_id
 
     @staticmethod
     def get_vnfi_ids():
         """Returns the list of VNFIs registered in TeNOR"""
         try:
-            resp = requests.get('{0}/vnf-provisioning/vnf-instances'.format(DEFAULT_TENOR_URL))
+            url = '{0}/vnf-provisioning/vnf-instances'.format(DEFAULT_TENOR_URL)
+            resp = requests.get(url)
         except:
             raise IOError('{0} instance unreachable'.format(DEFAULT_TENOR_URL))
         try:
@@ -67,9 +66,9 @@ class TenorVNFI(object):
         return ids
 
 if __name__ == "__main__":
-    ids = TenorVNFI.get_vnfi_ids()
-    if len(ids) > 0:
-        VNFI = TenorVNFI(ids[0])
-        hola = json.loads(VNFI._all)
-        print json.dumps(hola, indent=4, sort_keys=True)
+    IDS = TenorVNFI.get_vnfi_ids()
+    if len(IDS) > 0:
+        VNFI = TenorVNFI(IDS[0])
+        HOLA = json.loads(VNFI._all)
+        print json.dumps(HOLA, indent=4, sort_keys=True)
         print VNFI.get_image_id()

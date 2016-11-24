@@ -11,10 +11,8 @@ from tenor_client.tenor_vnf import TenorVNF
 from tenor_client.tenor_ns import TenorNS
 from tenor_client.tenor_nsi import TenorNSI
 from tenor_client.tenor_pop import TenorPoP
-from tenor_client.tenor_vnfi import TenorVNFI
 from pymongo import MongoClient
 import ConfigParser
-import requests
 
 CONFIG = ConfigParser.RawConfigParser()
 CONFIG.read('config.cfg')
@@ -132,6 +130,11 @@ class NS(flask_restful.Resource):
                 vnf = TenorVNF(vdu)
                 tns = TenorNS(vnf)
                 tns.set_dummy_id(ns_id)
+                if not 'pop_id' in data:
+                    abort(400, message='Lack of PoP id')
+                available_pops = TenorPoP().get_pop_ids()
+                if not data['pop_id'] in available_pops:
+                    abort(404, message='PoP {0} not found'.format(data['pop_id']))
                 resp = tns.instantiate(data['pop_id'])
                 nsdata = json.loads(resp.text)
                 client = MongoClient()
@@ -221,8 +224,8 @@ class ServiceInstance(flask_restful.Resource):
                        context['flavor'],cached)
         if not 'bootstrap_script' in context:
             shell = None
-            with open('keys/anella.json') as data_file:    
-                 shell = json.load(data_file)
+            with open('keys/anella.json') as data_file:
+                shell = json.load(data_file)
             context['bootstrap_script'] = shell['shell']
         try:
             vnf = TenorVNF(vdu)

@@ -33,3 +33,4 @@ class TenorPoP(object):
 if __name__ == "__main__":
     POP = TenorPoP()
     print TenorPoP.get_pop_ids()
+    print TenorPoP().get_pop_ids()

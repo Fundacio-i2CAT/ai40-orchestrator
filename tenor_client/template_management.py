@@ -15,11 +15,11 @@ def create_ssh_client(server, user, key):
                     timeout=15)
     return client
 
-def render_template(template_filename, context):
+def render_template(templ_fn, context):
     """Process the template"""
     path = '/tmp/'
-    template_environment = Environment(
+    templ_env = Environment(
         autoescape=False,
         loader=FileSystemLoader(path),
-        trim_blocks=False)
-    return template_environment.get_template(template_filename).render(context).encode('utf8')
+    trim_blocks=False)
+    return templ_env.get_template(templ_fn).render(context).encode('utf8')
