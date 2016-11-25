@@ -39,7 +39,7 @@ CATALOG_EXAMPLE = {
 	"flavor" : "id.large",
 	"consumer_params" : [
             {
-		"path" : "/root/chequeo.txt",
+		"path" : "/var/www/html/index.html",
 		"fields" : [
                     {
 			"required" : True,
@@ -162,12 +162,15 @@ class OrchestratorTestCase(unittest.TestCase):
         random_number = random.randint(0, 10000)
         body = {'pop_id': pop_id,
                 'callback_url': 'http://localhost:80',
-                'context': [
-                    {
-                        'path': '/var/www/html/index.html',
-                        'content': '{0}'.format(random_number)
-                    }
-                ]}
+                'context': {
+                    'consumer_params': [
+                        {
+                            'path': '/var/www/html/index.html',
+                            'content': '{0}'.format(random_number)
+                        }
+                    ]}
+            }
+
         url = '{0}/ns/{1}'.format(BASE_URL, ns_id)
         resp = requests.post(url,
                              headers={'Content-Type': 'application/json'},

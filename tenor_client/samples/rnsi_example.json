@@ -1,19 +1,21 @@
 {    
     "pop_id": 9,
     "callback_url": "http://localhost/",
-    "config":
-    [
-	{	
-	    "target_filename": "/var/www/html/index.html",
-	    "context": {
-		"name": "Wednesday",
-		"picture": "https://cdn3.iconfinder.com/data/icons/users-6/100/2-512.png",
-		"cv": "laksdj laskjd aslkjd "
+    "context": {
+	"consumer_params":
+	[
+	    {	
+		"target_filename": "/var/www/html/index.html",
+		"context": {
+		    "name": "Wednesday",
+		    "picture": "https://cdn3.iconfinder.com/data/icons/users-6/100/2-512.png",
+		    "cv": "laksdj laskjd aslkjd "
+		}
+	    },
+	    {
+		"target_filename": "/root/customer_ip.txt",
+		"content": "192.168.1.1"
 	    }
-	},
-	{
-	    "target_filename": "/root/customer_ip.txt",
-	    "content": "192.168.1.1"
-	}
-    ]
+	]
+    }
 }

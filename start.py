@@ -146,7 +146,7 @@ class NS(flask_restful.Resource):
                 confs.insert_one({'ns_instance_id': nsdata['id'],
                                   'user': data['user'],
                                   'password': data['password'],
-                                  'config': data['config']})
+                                  'consumer_params': data['context']['consumer_params']})
                 client.close()
                 return {'service_instance_id': nsdata['id'],
                         'state': 'PROVISIONED'}

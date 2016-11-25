@@ -1,15 +1,17 @@
 {    
     "pop_id": 9,
     "callback_url": "http://localhost/",
-    "config":
-    [
-	{	
-	    "target_filename": "/var/www/html/index.html",
-	    "content": "<h1>Adam's test!!!!!</h1>"
-	},
-	{	
-	    "target_filename": "/root/customer_ip.txt",
-	    "content": "192.168.1.1"
-	}
-    ]
+    "context": {
+	"consumer_params":
+	[
+	    {	
+		"target_filename": "/var/www/html/index.html",
+		"content": "<h1>Adam's test!!!!!</h1>"
+	    },
+	    {	
+		"target_filename": "/root/customer_ip.txt",
+		"content": "192.168.1.1"
+	    }
+	]
+    }
 }

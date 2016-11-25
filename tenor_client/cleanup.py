@@ -217,3 +217,6 @@ if __name__ == '__main__':
     # vnf_catalogue.ns.remove()
 
     # print tc.get_ns_instance_vnfs_status_addresses('580861e7df67b5156e000000')
+    client = MongoClient()
+    custom_conf = client['custom_conf']
+    custom_conf.confs.remove()
