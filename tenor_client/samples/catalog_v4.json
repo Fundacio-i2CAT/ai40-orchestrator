@@ -1,56 +1,44 @@
 {
     "context" : {
-	"runtime_params" : [ 
+	"runtime_params" : [
             {
 		"name" : "wwwwww",
 		"desc" : "sssssss"
             }
 	],
-	"name_image" : "photo-1464013778555-8e723c2f01f8.jpg",
-	"vm_image_format" : "jpg",
+	"name_image" : "catv4",
+	"vm_image_format" : "openstack_id",
 	"tenor_url" : "http://localhost:4000",
-	"vm_image" : "5835b9b455fccd77d8cdef9c",
-	"flavor" : "id.small",
-	"consumer_params" : [ 
+	"vm_image" : "6478c4b7-bb85-4721-b499-3be57fd3d6a6",
+	"flavor" : "id.large",
+	"consumer_params" : [
             {
-		"path" : "vvvvvvv",
-		"fields" : [ 
-                    {
-			"name" : "wwwwww",
-			"desc" : "sssssss",
-			"value" : "lkasjdlaskjdlkasjd"
-                    }, 
+		"path" : "/var/www/html/index.html",
+		"fields" : [
                     {
 			"required" : true,
-			"name" : "rrrrrr",
-			"desc" : "ttttttt"
-                    }, 
+			"name" : "name",
+			"desc" : "Name of the consumer",
+			"value" : "John Doe"
+                    },
                     {
 			"required" : true,
-			"name" : "uuuuuuu",
-			"desc" : "nnnnnn"
+			"name" : "picture",
+			"desc" : "Foto del consumer",
+			"value" : "https://c24e867c169a525707e0-bfbd62e61283d807ee2359a795242ecb.ssl.cf3.rackcdn.com/imagenes/gato/etapas-clave-de-su-vida/gatitos/nuevo-gatito-en-casa/gatito-durmiendo-en-cama.jpg"
+                    },
+                    {
+			"required" : true,
+			"name" : "cv",
+			"desc" : "CV del consumer",
+			"value" : "Arquitecto"
                     }
 		]
-            }, 
+            },
             {
-		"path" : "222222222",
-		"fields" : [ 
-                    {
-			"name" : "22222",
-			"desc" : "2222222"
-                    }, 
-                    {
-			"required" : true,
-			"name" : "222222",
-			"desc" : "222222"
-                    }, 
-                    {
-			"required" : true,
-			"name" : "22222",
-			"desc" : "222222"
-                    }
-		]
-            }
+		"path" : "/root/chequeo.txt",
+		"content" : "YO ESTUVE AQUI"
+	    }
 	]
     }
 }

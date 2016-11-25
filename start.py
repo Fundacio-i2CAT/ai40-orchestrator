@@ -213,9 +213,9 @@ class ServiceInstance(flask_restful.Resource):
     def post(self):
         """Post a new NSI"""
         data = request.get_json()
-        context = data['context']['tenor']
-        name = context['name']
-        cached = "false"
+        context = data['context']
+        name = context['name_image']
+        cached = "true"
         if 'cached' in context:
             cached = context['cached']
         if cached:
@@ -242,11 +242,11 @@ class ServiceInstance(flask_restful.Resource):
         if not 'user' in data:
             data['user'] = None
             data['password'] = None
-        if 'config' in data['context']['tenor']:
+        if 'consumer_params' in data['context']:
             confs.insert_one({'ns_instance_id': nsdata['id'],
                               'user': data['user'],
                               'password': data['password'],
-                              'config': data['context']['tenor']['config']})
+                              'consumer_params': data['context']['consumer_params']})
         client.close()
         return {'service_instance_id': nsdata['id'], 'state': 'PROVISIONED'}
 
@@ -303,9 +303,9 @@ class Log(flask_restful.Resource):
     def post(self):
         """Log post"""
         data = request.get_json()
-        print "#############################"
-        print json.dumps(data, indent=4, sort_keys=True)
-        print "#############################"
+        # print "#############################"
+        # print json.dumps(data, indent=4, sort_keys=True)
+        # print "#############################"
         if 'descriptor_reference' in data:
             ns_instance_id = data['id']
             nsi = TenorNSI(ns_instance_id)

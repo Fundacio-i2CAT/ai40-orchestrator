@@ -25,50 +25,47 @@ OVNFD_EXAMPLE = {
 }
 
 CATALOG_EXAMPLE = {
-    "service": {
-        "_id": "5790c80b79374a205a3bdf53",
-        "name": "Test demo 1"
-    },
-    "context_type": "tenor",
-    "project": {
-        "_id": "5805f632d31e5c34c56308f6",
-        "name": "Monitoritzaci\u00f3 Motlle Ref.547311117_9"
-    },
-    "client": {
-        "_id": "5790c80b79374a205a3bdf4e",
-        "name": "Pl\u00e0stics Grau"
-    },
-    "context": {
-        "service_name": "apache2.service",
-        "host": "87.236.219.21",
-        "tenor": {
-            "base_url": "http://localhost:4000",
-            "vm_image": "6478c4b7-bb85-4721-b499-3be57fd3d6a6",
-            "vm_image_format": "openstack_id",
-            "name": "Test",
-            "flavor": "m1.medium",
-            "config": [
-                {
-                    "target_filename": "/root/prueba.txt",
-                    "content": "lsakdj laskdj laskdj laskj d"
-                },
-		{
-		    "target_filename": "/var/www/html/index.html",
-                    "context": {
-                        "name": "Gatito dormilón",
-                        "picture": "https://c24e867c169a525707e0-bfbd62e61283d807ee2359a795242ecb.ssl.cf3.rackcdn.com/imagenes/gato/etapas-clave-de-su-vida/gatitos/nuevo-gatito-en-casa/gatito-durmiendo-en-cama.jpg",
-                        "cv": "El gato duerme"
+    "context" : {
+        "runtime_params" : [
+            {
+		"name" : "wwwwww",
+		"desc" : "sssssss"
+            }
+	],
+	"name_image" : "jpalkajsd",
+	"tenor_url" : "http://localhost:4000",
+        "vm_image": "6478c4b7-bb85-4721-b499-3be57fd3d6a6",
+        "vm_image_format": "openstack_id",
+	"flavor" : "id.large",
+	"consumer_params" : [
+            {
+		"path" : "/root/chequeo.txt",
+		"fields" : [
+                    {
+			"required" : True,
+			"name" : "name",
+			"desc" : "Name of the consumer",
+			"value" : "John Doe"
+                    },
+                    {
+			"required" : True,
+			"name" : "picture",
+			"desc" : "Foto del consumer",
+			"value" : "https://c24e867c169a525707e0-bfbd62e61283d807ee2359a795242ecb.ssl.cf3.rackcdn.com/imagenes/gato/etapas-clave-de-su-vida/gatitos/nuevo-gatito-en-casa/gatito-durmiendo-en-cama.jpg"
+                    },
+                    {
+			"required" : True,
+			"name" : "cv",
+			"desc" : "CV del consumer",
+			"value" : "Arquitecto"
                     }
-		}
-	    ]
-	},
-	"password": "test",
-        "user_name": "test",
-        "port": 22
-    },
-    "provider": {
-        "_id": "5790c80b79374a205a3bdf4a",
-        "name": "Adam"
+		]
+            },
+            {
+		"path" : "/root/chequeo.txt",
+		"content" : "YO ESTUVE AQUI"
+	    }
+	]
     }
 }
 
@@ -165,9 +162,9 @@ class OrchestratorTestCase(unittest.TestCase):
         random_number = random.randint(0, 10000)
         body = {'pop_id': pop_id,
                 'callback_url': 'http://localhost:80',
-                'config': [
+                'context': [
                     {
-                        'target_filename': '/var/www/html/index.html',
+                        'path': '/var/www/html/index.html',
                         'content': '{0}'.format(random_number)
                     }
                 ]}

@@ -77,10 +77,10 @@ class TenorNSI(object):
             client.close()
         ssh = create_ssh_client(server_ip, 'root', 'keys/anella')
         scp = SCPClient(ssh.get_transport())
-        if (not config) or (not 'config' in config):
+        if (not config) or (not 'consumer_params' in config):
             return
-        for cfile in config['config']:
-            filename = cfile['target_filename']
+        for cfile in config['consumer_params']:
+            filename = cfile['path']
             if 'content' in cfile:
                 content = cfile['content'].encode('utf-8')
                 command = 'echo \'{0}\' > {1}'.format(content,
@@ -89,13 +89,16 @@ class TenorNSI(object):
                 stdin, stdout, stderr = ssh.exec_command(command)
                 print stdout.readlines()
                 print stderr.readlines()
-            if 'context' in cfile:
+            if 'fields' in cfile:
                 print 'Getting {0}'.format(filename)
                 template_id = str(uuid.uuid4())
                 template_filename = '/tmp/{0}'.format(template_id)
                 scp.get(filename, template_filename)
-                print 'Templating with {0}'.format(cfile['context'])
-                result = render_template(template_id, cfile['context'])
+                keyvalues = {}
+                for item in cfile['fields']:
+                    keyvalues[item['name']] = item['value']
+                print 'Templating with {0}'.format(cfile['fields'])
+                result = render_template(template_id, keyvalues)
                 render_filename = '/tmp/{0}'.format(uuid.uuid4())
                 with open(render_filename, 'w') as fhandle:
                     fhandle.write(result)
