@@ -275,6 +275,7 @@ class ServiceInstance(flask_restful.Resource):
             if resp.status_code in (200, 201):
                 return {'message': 'Successfully sent state signal'}
             else:
+                print resp.text
                 abort(404, message='{0} NS not found'.format(ns_id))
         else:
             abort(500,

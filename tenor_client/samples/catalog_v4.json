@@ -1,0 +1,56 @@
+{
+    "context" : {
+	"runtime_params" : [ 
+            {
+		"name" : "wwwwww",
+		"desc" : "sssssss"
+            }
+	],
+	"name_image" : "photo-1464013778555-8e723c2f01f8.jpg",
+	"vm_image_format" : "jpg",
+	"tenor_url" : "http://localhost:4000",
+	"vm_image" : "5835b9b455fccd77d8cdef9c",
+	"flavor" : "id.small",
+	"consumer_params" : [ 
+            {
+		"path" : "vvvvvvv",
+		"fields" : [ 
+                    {
+			"name" : "wwwwww",
+			"desc" : "sssssss",
+			"value" : "lkasjdlaskjdlkasjd"
+                    }, 
+                    {
+			"required" : true,
+			"name" : "rrrrrr",
+			"desc" : "ttttttt"
+                    }, 
+                    {
+			"required" : true,
+			"name" : "uuuuuuu",
+			"desc" : "nnnnnn"
+                    }
+		]
+            }, 
+            {
+		"path" : "222222222",
+		"fields" : [ 
+                    {
+			"name" : "22222",
+			"desc" : "2222222"
+                    }, 
+                    {
+			"required" : true,
+			"name" : "222222",
+			"desc" : "222222"
+                    }, 
+                    {
+			"required" : true,
+			"name" : "22222",
+			"desc" : "222222"
+                    }
+		]
+            }
+	]
+    }
+}
