@@ -143,8 +143,13 @@ class TenorNSI(object):
         """Returns state and addresses associated with the NSI"""
         addresses = []
         self.retrieve()
+        runtime_params = []
         for adr in self._addresses:
             for ipif in adr[1]:
+                if ipif['OS-EXT-IPS:type'] == "floating":
+                    runtime_params.append({'name': 'instance_ip',
+                                           'desc': 'Service instance IP address',
+                                           'value': ipif['addr']})
                 addresses.append({'OS-EXT-IPS:type': ipif['OS-EXT-IPS:type'],
                                   'addr': ipif['addr']})
         if self._image_id:
@@ -154,7 +159,8 @@ class TenorNSI(object):
                     'image_id': self._image_id}
         return {'service_instance_id': self._nsi_id,
                 'state': self._state,
-                'addresses': addresses}
+                'addresses': addresses,
+                'runtime_params': runtime_params}
 
     @staticmethod
     def get_nsi_ids():
