@@ -9,7 +9,7 @@ from pymongo import MongoClient
 
 class TenorClient(object):
 
-    def __init__(self,base_url='http://localhost:4000',
+    def __init__(self,base_url='http://dev.anella.i2cat.net:4000',
                  vnfd_template='./tenor_client/templates/min-f.json',
                  nsd_template='./tenor_client/templates/min-n.json',
                  existing_vnfd_template='./tenor_client/templates/singleip-f.json',
@@ -195,7 +195,7 @@ class TenorClient(object):
 
 if __name__ == '__main__':
 
-    tc = TenorClient('http://localhost:4000')
+    tc = TenorClient('http://dev.anella.i2cat.net:4000')
     # a = TenorDummyId(u'2193')
     # print type(a+1)
     # print a+1

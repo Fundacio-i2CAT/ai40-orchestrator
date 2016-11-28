@@ -9,7 +9,7 @@ import requests
 import random
 import time
 
-BASE_URL = 'http://localhost:{0}{1}'.format(PORT, URL_PREFIX)
+BASE_URL = 'http://dev.anella.i2cat.net:{0}{1}'.format(PORT, URL_PREFIX)
 
 OVNFD_EXAMPLE = {
     "name": "friday",
@@ -63,13 +63,13 @@ CATALOG_EXAMPLE = {
             },
             {
 		"path" : "/root/chequeo.txt",
-		"content" : "YO ESTUVE AQUI"
+		"content" : "YO ESTUVE AQUI!!!!!!!!!!!!!!!!!!!!!!!!!"
 	    }
 	]
     }
 }
 
-POP_ID = 9
+POP_ID = 1
 
 class OrchestratorTestCase(unittest.TestCase):
     """Full test"""
@@ -198,7 +198,7 @@ class OrchestratorTestCase(unittest.TestCase):
         if not preserve:
             self._nsis.append(nsid)
 
-    def test_06(self):
+    def atest_06(self):
         """Posts vnf, ns and instantiates it"""
         self.post_vnf(False)
         self.post_ns(False)
