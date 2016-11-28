@@ -146,7 +146,7 @@ class TenorNSI(object):
         runtime_params = []
         for adr in self._addresses:
             for ipif in adr[1]:
-                if ipif['OS-EXT-IPS:type'] == "floating":
+                if ipif['OS-EXT-IPS:type'] == 'floating':
                     runtime_params.append({'name': 'instance_ip',
                                            'desc': 'Service instance IP address',
                                            'value': ipif['addr']})
@@ -156,7 +156,8 @@ class TenorNSI(object):
             return {'service_instance_id': self._nsi_id,
                     'state': self._state,
                     'addresses': addresses,
-                    'image_id': self._image_id}
+                    'image_id': self._image_id,
+                    'runtime_params': runtime_params}
         return {'service_instance_id': self._nsi_id,
                 'state': self._state,
                 'addresses': addresses,

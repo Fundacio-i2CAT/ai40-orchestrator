@@ -32,11 +32,11 @@ CATALOG_EXAMPLE = {
 		"desc" : "sssssss"
             }
 	],
-	"name_image" : "jpalkajsd",
+	"name_image" : "Prueba",
 	"tenor_url" : "http://localhost:4000",
-        "vm_image": "6478c4b7-bb85-4721-b499-3be57fd3d6a6",
-        "vm_image_format": "openstack_id",
-	"flavor" : "id.large",
+        "vm_image": "http://10.8.0.10/anellaTemplateTest.img",
+        "vm_image_format": "qcow2",
+	"flavor" : "m1.medium",
 	"consumer_params" : [
             {
 		"path" : "/var/www/html/index.html",
