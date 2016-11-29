@@ -9,7 +9,7 @@ import requests
 import random
 import time
 
-BASE_URL = 'http://dev.anella.i2cat.net:{0}{1}'.format(PORT, URL_PREFIX)
+BASE_URL = 'http://localhost:{0}{1}'.format(PORT, URL_PREFIX)
 
 OVNFD_EXAMPLE = {
     "name": "friday",
@@ -32,11 +32,11 @@ CATALOG_EXAMPLE = {
 		"desc" : "sssssss"
             }
 	],
-	"name_image" : "Prueba",
+	"name_image" : "rEpO",
 	"tenor_url" : "http://localhost:4000",
-        "vm_image": "http://10.8.0.10/anellaTemplateTest.img",
+        "vm_image": "http://10.8.0.6/anellaTemplateTest.img",
         "vm_image_format": "qcow2",
-	"flavor" : "m1.medium",
+	"flavor" : "m1.large",
 	"consumer_params" : [
             {
 		"path" : "/var/www/html/index.html",
@@ -45,19 +45,19 @@ CATALOG_EXAMPLE = {
 			"required" : True,
 			"name" : "name",
 			"desc" : "Name of the consumer",
-			"value" : "John Doe"
+			"value" : "rEpO"
                     },
                     {
 			"required" : True,
 			"name" : "picture",
 			"desc" : "Foto del consumer",
-			"value" : "https://c24e867c169a525707e0-bfbd62e61283d807ee2359a795242ecb.ssl.cf3.rackcdn.com/imagenes/gato/etapas-clave-de-su-vida/gatitos/nuevo-gatito-en-casa/gatito-durmiendo-en-cama.jpg"
+			"value" : "https://upload.wikimedia.org/wikipedia/commons/c/ce/Documents_stacks_in_a_repository_at_The_National_Archives.jpg"
                     },
                     {
 			"required" : True,
 			"name" : "cv",
 			"desc" : "CV del consumer",
-			"value" : "Arquitecto"
+			"value" : "Para guardar imágenes en /var/www/html/"
                     }
 		]
             },
@@ -198,7 +198,7 @@ class OrchestratorTestCase(unittest.TestCase):
         if not preserve:
             self._nsis.append(nsid)
 
-    def atest_06(self):
+    def test_06(self):
         """Posts vnf, ns and instantiates it"""
         self.post_vnf(False)
         self.post_ns(False)
