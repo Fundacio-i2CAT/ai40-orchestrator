@@ -13,6 +13,7 @@ from tenor_client.tenor_nsi import TenorNSI
 from tenor_client.tenor_pop import TenorPoP
 from pymongo import MongoClient
 import ConfigParser
+import datetime
 
 CONFIG = ConfigParser.RawConfigParser()
 CONFIG.read('config.cfg')
@@ -213,6 +214,13 @@ class ServiceInstance(flask_restful.Resource):
     def post(self):
         """Post a new NSI"""
         data = request.get_json()
+        log_db_client = MongoClient()
+        log_db = log_db_client.orchestrator_logs
+        logs = log_db.logs
+        logs.insert_one({'method': 'POST',
+                         'request': data,
+                         'date': datetime.datetime.utcnow()})
+        log_db_client.close()
         context = data['context']
         name = context['name_image']
         cached = "true"
@@ -255,6 +263,13 @@ class ServiceInstance(flask_restful.Resource):
         if not ns_id:
             abort(500, message="You should provide a NS id")
         state = request.get_json()
+        log_db_client = MongoClient()
+        log_db = log_db_client.orchestrator_logs
+        logs = log_db.logs
+        logs.insert_one({'method': 'PUT',
+                         'request': state,
+                         'date': datetime.datetime.utcnow()})
+        log_db_client.close()
         nsi = TenorNSI(ns_id)
         resp = None
         try:
