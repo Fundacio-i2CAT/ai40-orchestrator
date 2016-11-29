@@ -195,7 +195,7 @@ class TenorClient(object):
 
 if __name__ == '__main__':
 
-    tc = TenorClient('http://dev.anella.i2cat.net:4000')
+    tc = TenorClient('http://localhost:4000')
     # a = TenorDummyId(u'2193')
     # print type(a+1)
     # print a+1
