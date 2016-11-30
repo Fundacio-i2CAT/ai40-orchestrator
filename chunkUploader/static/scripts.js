@@ -1,10 +1,10 @@
 $(document).ready(function() {
-    
+
     var total_steps = 0;
     var chunk_size = 100000000;
     var final_filename = "";
     var spark = new SparkMD5.ArrayBuffer();
-    
+
     function pad(num, size) {
 	var s = num+"";
 	while (s.length < size) s = "0" + s;
@@ -21,6 +21,7 @@ $(document).ready(function() {
 		file2send = new File([evt.target.result], uuid+'_'+pad(step,6));
 		spark.append(evt.target.result);
 		formData.append('file', file2send);
+		// Subimos el trozo que toque segun step
 		$.ajax({
 		    url: "http://192.168.10.70:9999/api/services/vmimage/chunked",
 		    type: "post",
@@ -32,14 +33,17 @@ $(document).ready(function() {
 			if ( step < total_steps ) {
 			    var start = step*chunk_size;
 			    var stop = (step+1)*chunk_size-1;
+			    // Subimos el siguiente trozo
 			    readBlob(file,uuid,step,start,stop);
 			}
 			$("#progress").html('Uploaded file parts: '+step+' / '+total_steps+' completed');
 			$("#file_upload_result").html('submitted successfully');
 			if ( step === total_steps ) {
+			    // Si step === total_steps hemos acabado y lanzamos el post final
+			    //       con los datos para que el backend recomponga y verifique
 			    $("#end").html('Successfully uploaded <strong>'+
-						final_filename+'</strong> with id=<i>'+
-						uuid+'</i> in <strong>'+total_steps+'</strong> steps');
+					   final_filename+'</strong> with id=<i>'+
+					   uuid+'</i> in <strong>'+total_steps+'</strong> steps');
 			    var md5sum = spark.end();
 			    $("#md5").html('<strong style="color:olive">md5sum</strong>: '+md5sum);
 			    $.ajax({
@@ -56,14 +60,14 @@ $(document).ready(function() {
 		    },
 		    error:function(){
 			$("#progress").html('There was an error while uploading');
-		    }   
-		}); 
+		    }
+		});
 	    }
 	};
 	var blob = file.slice(start, stop + 1);
 	reader.readAsArrayBuffer(blob);
     }
-    
+
     function guid() {
 	function s4() {
 	    return Math.floor((1 + Math.random()) * 0x10000)
@@ -86,6 +90,8 @@ $(document).ready(function() {
 	var start = j*chunk_size;
 	var stop = (j+1)*chunk_size-1;
 	$("#init").html('Starting the upload in '+total_steps+' parts');
+	// Llamada para subir la primera parte (el resto sube recursivamente
+	//    en el on_success del post de jquery para que vaya secuencial)
 	readBlob(files[i], uuid, j, start, stop);
     }
 
