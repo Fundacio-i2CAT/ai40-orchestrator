@@ -3,6 +3,7 @@ $(document).ready(function() {
     var total_steps = 0;
     var chunk_size = 100000000;
     var final_filename = "";
+    var spark = new SparkMD5.ArrayBuffer();
     
     function pad(num, size) {
 	var s = num+"";
@@ -18,6 +19,7 @@ $(document).ready(function() {
 	    if (evt.target.readyState == FileReader.DONE) {
 		var formData = new FormData();
 		file2send = new File([evt.target.result], uuid+'_'+pad(step,6));
+		spark.append(evt.target.result);
 		formData.append('file', file2send);
 		$.ajax({
 		    url: "upload",
@@ -39,6 +41,7 @@ $(document).ready(function() {
 			    $("#progress").html('Successfully uploaded '+
 						final_filename+' with id='+
 						uuid+' in '+total_steps+' steps');
+			    $("#md5").html('<strong>md5sum</strong>: '+spark.end());
 			}
 		    },
 		    error:function(){
