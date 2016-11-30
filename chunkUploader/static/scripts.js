@@ -38,7 +38,7 @@ $(document).ready(function() {
 			$("#progress").html('Uploaded file parts: '+step+' / '+total_steps+' completed');
 			$("#file_upload_result").html('submitted successfully');
 			if ( step === total_steps ) {
-			    $("#progress").html('Successfully uploaded '+
+			    $("#end").html('Successfully uploaded '+
 						final_filename+' with id='+
 						uuid+' in '+total_steps+' steps');
 			    $("#md5").html('<strong>md5sum</strong>: '+spark.end());
@@ -75,7 +75,7 @@ $(document).ready(function() {
 	j = 0;
 	var start = j*chunk_size;
 	var stop = (j+1)*chunk_size-1;
-	$("#progress").html('Starting the upload in '+total_steps+' parts');
+	$("#init").html('Starting the upload in '+total_steps+' parts');
 	readBlob(files[i], uuid, j, start, stop);
     }
 
