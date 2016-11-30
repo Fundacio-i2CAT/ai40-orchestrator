@@ -72,6 +72,7 @@ $(document).ready(function() {
 	j = 0;
 	var start = j*chunk_size;
 	var stop = (j+1)*chunk_size-1;
+	$("#progress").html('Starting the upload ...');
 	readBlob(files[i], uuid, j, start, stop);
     }
 
