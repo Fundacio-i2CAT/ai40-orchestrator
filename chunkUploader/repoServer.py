@@ -8,7 +8,7 @@ from flask_restful import Api, abort
 from flask_cors import CORS, cross_origin
 
 URL_PREFIX = ''
-HOST = 'localhost'
+HOST = '0.0.0.0'
 PORT = 6062
 APP = Flask(__name__, static_folder='static')
 cors = CORS(APP, resources={r"/upload": {"origins": "*"}})
@@ -42,4 +42,4 @@ if __name__ == "__main__":
         API_V2_BP,
         url_prefix=URL_PREFIX
     )
-    APP.run(debug=True, host=HOST, port=PORT)
+    APP.run(debug=False, host=HOST, port=PORT)

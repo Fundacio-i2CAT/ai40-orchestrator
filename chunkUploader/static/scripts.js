@@ -22,8 +22,8 @@ $(document).ready(function() {
 		spark.append(evt.target.result);
 		formData.append('file', file2send);
 		$.ajax({
-		    url: "upload",
-		    // url: "http://192.168.10.70:9999/api/services/vmimage/local",
+		    // url: "upload",
+		    url: "http://192.168.10.70:9999/api/services/vmimage/local",
 		    type: "post",
 		    data: formData,
 		    processData: false,
