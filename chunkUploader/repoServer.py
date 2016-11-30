@@ -6,6 +6,7 @@ import flask_restful
 from flask import Flask, Blueprint, request, send_from_directory
 from flask_restful import Api, abort
 from flask_cors import CORS, cross_origin
+import os
 
 URL_PREFIX = ''
 HOST = '0.0.0.0'
@@ -20,7 +21,7 @@ class Main(flask_restful.Resource):
     def get(self,path):
         return send_from_directory('static', path)
 
-class Upload(flask_restful.Resource):
+class Chunked(flask_restful.Resource):
 
     def post(self):
         print "#############################################"
@@ -32,6 +33,22 @@ class Upload(flask_restful.Resource):
             print request.get_json()
         return 200
 
+class Upload(flask_restful.Resource):
+
+    def post(self):
+        data = request.get_json()
+        os.system("cat chunks/{0}* > {1}".format(data['uuid'],data['filename']))
+        os.system("rm -rf chunks/*")
+        os.system("md5sum {0} > md5.txt".format(data['filename']))
+        md5 = None
+        with open("md5.txt") as fh:
+            md5 = fh.read()
+        print md5
+        print data['md5sum']
+        return 200
+
+
+API_V2.add_resource(Chunked,'/chunked')
 API_V2.add_resource(Upload,'/upload')
 API_V2.add_resource(Main,'/<path>')
 
@@ -42,4 +59,4 @@ if __name__ == "__main__":
         API_V2_BP,
         url_prefix=URL_PREFIX
     )
-    APP.run(debug=False, host=HOST, port=PORT)
+    APP.run(debug=True, host=HOST, port=PORT)

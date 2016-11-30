@@ -23,7 +23,8 @@ $(document).ready(function() {
 		formData.append('file', file2send);
 		// Subimos el trozo que toque segun step
 		$.ajax({
-		    url: "http://192.168.10.70:9999/api/services/vmimage/chunked",
+		    url: "/chunked",
+		    // url: "http://192.168.10.70:9999/api/services/vmimage/chunked",
 		    type: "post",
 		    data: formData,
 		    processData: false,
@@ -47,7 +48,8 @@ $(document).ready(function() {
 			    var md5sum = spark.end();
 			    $("#md5").html('<strong style="color:olive">md5sum</strong>: '+md5sum);
 			    $.ajax({
-				url: "http://192.168.10.70:9999/api/services/vmimage/upload",
+				url: "/upload",
+				// url: "http://192.168.10.70:9999/api/services/vmimage/upload",
 				type: "post",
 				contentType: "application/json",
 				data: JSON.stringify({ "filename": final_filename,
@@ -81,6 +83,10 @@ $(document).ready(function() {
     function onFileSelected(e) {
         var files = e.target.files;
 	var i = 0;
+	$("#progress").html('');
+	$("#end").html('');
+	$("#md5").html('');
+	
         file = files[i].name;
 	final_filename = file;
 	var steps = files[i].size/chunk_size;
