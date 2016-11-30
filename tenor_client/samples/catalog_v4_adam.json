@@ -1,0 +1,44 @@
+{
+    "context" : {
+	"runtime_params" : [
+            {
+		"name" : "wwwwww",
+		"desc" : "sssssss"
+            }
+	],
+	"name_image" : "catAdam",
+	"vm_image_format" : "qcow2",
+	"tenor_url" : "http://localhost:4000",
+	"vm_image" : "https://dev.anella.i2cat.net/smallTest.img",
+	"flavor" : "VM.M1",
+	"consumer_params" : [
+            {
+		"path" : "/var/www/html/index.html",
+		"fields" : [
+                    {
+			"required" : true,
+			"name" : "name",
+			"desc" : "Name of the consumer",
+			"value" : "Gatito dormilón"
+                    },
+                    {
+			"required" : true,
+			"name" : "picture",
+			"desc" : "Foto del consumer",
+			"value" : "https://c24e867c169a525707e0-bfbd62e61283d807ee2359a795242ecb.ssl.cf3.rackcdn.com/imagenes/gato/etapas-clave-de-su-vida/gatitos/nuevo-gatito-en-casa/gatito-durmiendo-en-cama.jpg"
+                    },
+                    {
+			"required" : true,
+			"name" : "cv",
+			"desc" : "CV del consumer",
+			"value" : "Arquitecto"
+                    }
+		]
+            },
+            {
+		"path" : "/root/chequeo.txt",
+		"content" : "YO ESTUVE AQUI"
+	    }
+	]
+    }
+}

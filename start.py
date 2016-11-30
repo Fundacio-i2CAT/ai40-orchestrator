@@ -240,7 +240,7 @@ class ServiceInstance(flask_restful.Resource):
             vnf = TenorVNF(vdu)
             tns = TenorNS(vnf)
             tns.register(name, context['bootstrap_script'])
-            resp = tns.instantiate()
+            resp = tns.instantiate(1)
             nsdata = json.loads(resp.text)
         except Exception as exc:
             abort(500,
