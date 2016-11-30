@@ -38,10 +38,10 @@ $(document).ready(function() {
 			$("#progress").html('Uploaded file parts: '+step+' / '+total_steps+' completed');
 			$("#file_upload_result").html('submitted successfully');
 			if ( step === total_steps ) {
-			    $("#end").html('Successfully uploaded '+
-						final_filename+' with id='+
-						uuid+' in '+total_steps+' steps');
-			    $("#md5").html('<strong>md5sum</strong>: '+spark.end());
+			    $("#end").html('Successfully uploaded <strong>'+
+						final_filename+'</strong> with id=<i>'+
+						uuid+'</i> in <strong>'+total_steps+'</strong> steps');
+			    $("#md5").html('<strong style="color:olive">md5sum</strong>: '+spark.end());
 			}
 		    },
 		    error:function(){
