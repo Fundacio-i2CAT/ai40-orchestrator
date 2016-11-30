@@ -23,13 +23,13 @@ class Main(flask_restful.Resource):
 class Upload(flask_restful.Resource):
 
     def post(self):
-#        print request.headers
         print "#############################################"
-        my_file = request.files['file']
-        print my_file.filename
-        my_file.save('chunks/{0}'.format(my_file.filename))
-        # for item in request.files.keys():
-        #     print item
+        if 'file' in request.files:
+            my_file = request.files['file']
+            print my_file.filename
+            my_file.save('chunks/{0}'.format(my_file.filename))
+        else:
+            print request.get_json()
         return 200
 
 API_V2.add_resource(Upload,'/upload')

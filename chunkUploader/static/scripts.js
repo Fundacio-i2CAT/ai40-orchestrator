@@ -22,8 +22,7 @@ $(document).ready(function() {
 		spark.append(evt.target.result);
 		formData.append('file', file2send);
 		$.ajax({
-		    // url: "upload",
-		    url: "http://192.168.10.70:9999/api/services/vmimage/local",
+		    url: "http://192.168.10.70:9999/api/services/vmimage/chunked",
 		    type: "post",
 		    data: formData,
 		    processData: false,
@@ -41,7 +40,18 @@ $(document).ready(function() {
 			    $("#end").html('Successfully uploaded <strong>'+
 						final_filename+'</strong> with id=<i>'+
 						uuid+'</i> in <strong>'+total_steps+'</strong> steps');
-			    $("#md5").html('<strong style="color:olive">md5sum</strong>: '+spark.end());
+			    var md5sum = spark.end();
+			    $("#md5").html('<strong style="color:olive">md5sum</strong>: '+md5sum);
+			    $.ajax({
+				url: "http://192.168.10.70:9999/api/services/vmimage/upload",
+				type: "post",
+				contentType: "application/json",
+				data: JSON.stringify({ "filename": final_filename,
+						       "uuid": uuid,
+						       "md5sum": md5sum
+						     }),
+				dataType: "json",
+				success: function() {}});
 			}
 		    },
 		    error:function(){
