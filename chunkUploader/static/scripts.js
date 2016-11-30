@@ -75,7 +75,7 @@ $(document).ready(function() {
 	j = 0;
 	var start = j*chunk_size;
 	var stop = (j+1)*chunk_size-1;
-	$("#progress").html('Starting the upload, file divided in '+total_steps+' parts');
+	$("#progress").html('Starting the upload in '+total_steps+' parts');
 	readBlob(files[i], uuid, j, start, stop);
     }
 
