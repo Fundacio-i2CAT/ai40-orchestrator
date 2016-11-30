@@ -35,7 +35,7 @@ $(document).ready(function() {
 			    var stop = (step+1)*chunk_size-1;
 			    readBlob(file,uuid,step,start,stop);
 			}
-			$("#progress").html(' '+step+' / '+total_steps+' completed');
+			$("#progress").html('Uploaded file parts: '+step+' / '+total_steps+' completed');
 			$("#file_upload_result").html('submitted successfully');
 			if ( step === total_steps ) {
 			    $("#progress").html('Successfully uploaded '+
@@ -75,7 +75,7 @@ $(document).ready(function() {
 	j = 0;
 	var start = j*chunk_size;
 	var stop = (j+1)*chunk_size-1;
-	$("#progress").html('Starting the upload ...');
+	$("#progress").html('Starting the upload, file divided in '+total_steps+' parts');
 	readBlob(files[i], uuid, j, start, stop);
     }
 
