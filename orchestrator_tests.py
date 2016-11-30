@@ -147,6 +147,10 @@ class OrchestratorTestCase(unittest.TestCase):
         self.post_vnf()
         self.post_ns()
         self.post_ns()
+        self.post_ns()
+        self.post_ns()
+        self.post_ns()
+        self.post_ns()
 
     def instantiate_ns(self, preserve=False):
         """Instantates a NS, injects a random number
@@ -202,7 +206,6 @@ class OrchestratorTestCase(unittest.TestCase):
         """Posts vnf, ns and instantiates it"""
         self.post_vnf(False)
         self.post_ns(False)
-        self.instantiate_ns(False)
 
     def test_07(self):
         """Posts service/instance one round mode"""

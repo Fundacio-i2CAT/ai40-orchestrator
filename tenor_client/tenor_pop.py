@@ -10,8 +10,26 @@ DEFAULT_TENOR_URL = 'http://localhost:4000'
 class TenorPoP(object):
     """Represents a TeNOR PoP"""
 
-    def __init__(self, tenor_url=DEFAULT_TENOR_URL):
-        pass
+    def __init__(self, pop_id=None, tenor_url=DEFAULT_TENOR_URL):
+        self._pop_id = pop_id
+
+    def get_flavor_details(self):
+        url = '{0}/pops/flavours/{1}'.format(DEFAULT_TENOR_URL,self._pop_id)
+        try:
+            resp = requests.get(url)
+        except:
+            raise IOError('{0} PoP unreachable'.format(self._pop_id))
+        try:
+            flavors = json.loads(resp.text)
+        except:
+            raise ValueError('Decoding PoP response json response failed')
+        flavor_details = []
+        for flavor in flavors["flavors"]:
+            flavor_details.append({'name': flavor['name'],
+                                   'ram': flavor['ram'],
+                                   'disk': flavor['disk'],
+                                   'vcpus': flavor['vcpus']})
+        return flavor_details
 
     @staticmethod
     def get_pop_ids():
@@ -32,5 +50,6 @@ class TenorPoP(object):
 
 if __name__ == "__main__":
     POP = TenorPoP()
-    print TenorPoP.get_pop_ids()
-    print TenorPoP().get_pop_ids()
+    IDS = TenorPoP().get_pop_ids()
+    POPI = TenorPoP(1)
+    print POPI.get_flavor_details()
