@@ -16,10 +16,13 @@ Vagrant.configure(2) do |config|
     $script = <<-SCRIPT
     sudo apt-get update
     sudo apt-get install -y git
-    sudo apt-get install libjpeg-dev
-    sudo apt-get install python-dev
-
+    sudo apt-get install -y libjpeg-dev
+    sudo apt-get install -y python-pip python-dev
+    sudo apt-get install -y libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev
+    cd orchestrator
+    sudo pip install pytz
     sudo pip install -r requirements.txt
+    sudo pip install scp
   SCRIPT
 
     config.vm.provision 'shell', inline: $script, privileged: false
