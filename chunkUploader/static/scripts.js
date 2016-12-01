@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     var total_steps = 0;
-    var chunk_size = 10000000;
+    var chunk_size = 100000000;
     var final_filename = "";
     var spark = new SparkMD5.ArrayBuffer();
     var backend_url = "";
