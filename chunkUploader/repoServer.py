@@ -17,14 +17,11 @@ API_V2_BP = Blueprint('api_v1', __name__)
 API_V2 = Api(API_V2_BP)
 
 class Main(flask_restful.Resource):
-    
     def get(self,path):
         return send_from_directory('static', path)
 
 class Chunked(flask_restful.Resource):
-
     def post(self):
-        print "#############################################"
         if 'file' in request.files:
             my_file = request.files['file']
             print my_file.filename
@@ -33,22 +30,31 @@ class Chunked(flask_restful.Resource):
             print request.get_json()
         return 200
 
-class Upload(flask_restful.Resource):
-
+class Unchunked(flask_restful.Resource):
     def post(self):
         data = request.get_json()
-        os.system("cat chunks/{0}* > {1}".format(data['uuid'],data['filename']))
+        os.system("cat chunks/{0}* > files/{1}".format(data['uuid'],data['filename']))
         os.system("rm -rf chunks/*")
-        os.system("md5sum {0} > md5.txt".format(data['filename']))
+        os.system("md5sum files/{0} > md5sums/{1}-md5.txt".format(data['filename'], data['uuid']))
         md5 = None
-        with open("md5.txt") as fh:
+        with open("md5sums/{0}-md5.txt".format(data['uuid'])) as fh:
             md5 = fh.read()
-        print md5
+        real_md5 = md5.split().pop(0)
+        print real_md5
         print data['md5sum']
+        if real_md5 == data['md5sum']:
+            return 200
+        else:
+            abort(409, message="{0} != {1}".format(real_md5, data['md5sum']))
         return 200
 
+class Upload(flask_restful.Resource):
+    def post(self):
+        data = request.get_json()
+        return "{0} uploaded fine".format(data['filename'])
 
 API_V2.add_resource(Chunked,'/chunked')
+API_V2.add_resource(Unchunked,'/unchunked')
 API_V2.add_resource(Upload,'/upload')
 API_V2.add_resource(Main,'/<path>')
 
@@ -59,4 +65,4 @@ if __name__ == "__main__":
         API_V2_BP,
         url_prefix=URL_PREFIX
     )
-    APP.run(debug=True, host=HOST, port=PORT)
+    APP.run(debug=False, host=HOST, port=PORT)

@@ -1,9 +1,11 @@
 $(document).ready(function() {
 
     var total_steps = 0;
-    var chunk_size = 100000000;
+    var chunk_size = 10000000;
     var final_filename = "";
     var spark = new SparkMD5.ArrayBuffer();
+    var backend_url = "";
+    backend_url = "http://192.168.10.70:9999/api/services/vmimage";
 
     function pad(num, size) {
 	var s = num+"";
@@ -23,8 +25,7 @@ $(document).ready(function() {
 		formData.append('file', file2send);
 		// Subimos el trozo que toque segun step
 		$.ajax({
-		    url: "/chunked",
-		    // url: "http://192.168.10.70:9999/api/services/vmimage/chunked",
+		    url: backend_url+"/chunked",
 		    type: "post",
 		    data: formData,
 		    processData: false,
@@ -48,8 +49,7 @@ $(document).ready(function() {
 			    var md5sum = spark.end();
 			    $("#md5").html('<strong style="color:olive">md5sum</strong>: '+md5sum);
 			    $.ajax({
-				url: "/upload",
-				// url: "http://192.168.10.70:9999/api/services/vmimage/upload",
+				url: backend_url+"/unchunked",
 				type: "post",
 				contentType: "application/json",
 				data: JSON.stringify({ "filename": final_filename,
@@ -57,7 +57,22 @@ $(document).ready(function() {
 						       "md5sum": md5sum
 						     }),
 				dataType: "json",
-				success: function() {}});
+				success: function() {
+				    $.ajax({
+					url: backend_url+"/upload",
+					type: "post",
+					contentType: "application/json",
+					data: JSON.stringify({ "filename": final_filename }),
+					dataType: "json",
+					success: function() {
+					    $("#upload").html("<h3 style=\"color:olive\">"+final_filename+" database upload performed</h3>");
+					}
+				    });
+				},
+			    	error: function() {
+				    $("#upload").html("<h3 style=\"color:red\">md5sums don't match!!!</h3>");
+				}
+			    })
 			}
 		    },
 		    error:function(){
@@ -86,6 +101,7 @@ $(document).ready(function() {
 	$("#progress").html('');
 	$("#end").html('');
 	$("#md5").html('');
+	$("#upload").html('');
 	
         file = files[i].name;
 	final_filename = file;
