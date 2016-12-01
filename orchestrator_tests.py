@@ -206,6 +206,7 @@ class OrchestratorTestCase(unittest.TestCase):
         """Posts vnf, ns and instantiates it"""
         self.post_vnf(False)
         self.post_ns(False)
+        self.instantiate_ns()
 
     def test_07(self):
         """Posts service/instance one round mode"""
