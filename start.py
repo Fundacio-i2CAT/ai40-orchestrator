@@ -17,6 +17,7 @@ import datetime
 
 CONFIG = ConfigParser.RawConfigParser()
 CONFIG.read('config.cfg')
+POP_ID = 21
 
 HOST = CONFIG.get('flask', 'host')
 PREFIX = CONFIG.get('flask', 'prefix')
@@ -240,7 +241,7 @@ class ServiceInstance(flask_restful.Resource):
             vnf = TenorVNF(vdu)
             tns = TenorNS(vnf)
             tns.register(name, context['bootstrap_script'])
-            resp = tns.instantiate(1)
+            resp = tns.instantiate(POP_ID)
             nsdata = json.loads(resp.text)
         except Exception as exc:
             abort(500,

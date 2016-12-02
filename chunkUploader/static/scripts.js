@@ -1,11 +1,12 @@
 $(document).ready(function() {
 
     var total_steps = 0;
-    var chunk_size = 100000000;
+    var chunk_size = 10000000;
     var final_filename = "";
     var spark = new SparkMD5.ArrayBuffer();
     var backend_url = "";
-    backend_url = "http://192.168.10.70:9999/api/services/vmimage";
+    // backend_url = "http://192.168.10.70:9999/api/services/vmimage";
+    backend_url = "http://dev.anella.i2cat.net:9999/api/services/vmimage";
 
     function pad(num, size) {
 	var s = num+"";
@@ -50,6 +51,7 @@ $(document).ready(function() {
 			    $("#md5").html('<strong style="color:olive">md5sum</strong>: '+md5sum);
 			    $.ajax({
 				url: backend_url+"/unchunked",
+				timeout: 10*60*1000,
 				type: "post",
 				contentType: "application/json",
 				data: JSON.stringify({ "filename": final_filename,
@@ -61,6 +63,7 @@ $(document).ready(function() {
 				    $.ajax({
 					url: backend_url+"/upload",
 					type: "post",
+					timeout: 10*60*1000,
 					contentType: "application/json",
 					data: JSON.stringify({ "filename": final_filename }),
 					dataType: "json",

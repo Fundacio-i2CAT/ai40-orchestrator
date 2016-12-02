@@ -69,7 +69,7 @@ CATALOG_EXAMPLE = {
     }
 }
 
-POP_ID = 1
+POP_ID = 21
 
 class OrchestratorTestCase(unittest.TestCase):
     """Full test"""
@@ -80,7 +80,7 @@ class OrchestratorTestCase(unittest.TestCase):
         self._nss = []
         self._nsis = []
 
-    def test_02(self):
+    def atest_02(self):
         """Gets NS instances"""
         resp = requests.get('{0}/service/instance'.format(BASE_URL))
         assert resp.status_code == 200
@@ -103,7 +103,7 @@ class OrchestratorTestCase(unittest.TestCase):
                                 json={'state': nxt})
             assert resp.status_code == expected
 
-    def test_03(self):
+    def atest_03(self):
         """Testing start/stop"""
         self.start_stop('RUNNING', 'DEPLOYED', 200)
         self.start_stop('DEPLOYED', 'RUNNING', 200)
@@ -134,12 +134,12 @@ class OrchestratorTestCase(unittest.TestCase):
         if not preserve:
             self._nss.append(data['ns_id'])
 
-    def test_04(self):
+    def atest_04(self):
         """Posts VNFs"""
         self.post_vnf()
         self.post_vnf()
 
-    def test_05(self):
+    def atest_05(self):
         """Posts NSs"""
         self.post_vnf()
         self.post_vnf()
@@ -202,7 +202,7 @@ class OrchestratorTestCase(unittest.TestCase):
         if not preserve:
             self._nsis.append(nsid)
 
-    def test_06(self):
+    def atest_06(self):
         """Posts vnf, ns and instantiates it"""
         self.post_vnf(False)
         self.post_ns(False)
