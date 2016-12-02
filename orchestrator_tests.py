@@ -32,11 +32,11 @@ CATALOG_EXAMPLE = {
 		"desc" : "sssssss"
             }
 	],
-	"name_image" : "rEpO",
+	"name_image" : "Uploaded",
 	"tenor_url" : "http://localhost:4000",
-        "vm_image": "http://10.8.0.6/anellaTemplateTest.img",
-        "vm_image_format": "qcow2",
-	"flavor" : "m1.large",
+        "vm_image": "c2fb0e76-df9a-4040-8154-780213e1a01a",
+        "vm_image_format": "openstack_id",
+	"flavor" : "VM.M1",
 	"consumer_params" : [
             {
 		"path" : "/var/www/html/index.html",
@@ -80,7 +80,7 @@ class OrchestratorTestCase(unittest.TestCase):
         self._nss = []
         self._nsis = []
 
-    def atest_02(self):
+    def test_02(self):
         """Gets NS instances"""
         resp = requests.get('{0}/service/instance'.format(BASE_URL))
         assert resp.status_code == 200
@@ -103,7 +103,7 @@ class OrchestratorTestCase(unittest.TestCase):
                                 json={'state': nxt})
             assert resp.status_code == expected
 
-    def atest_03(self):
+    def test_03(self):
         """Testing start/stop"""
         self.start_stop('RUNNING', 'DEPLOYED', 200)
         self.start_stop('DEPLOYED', 'RUNNING', 200)
@@ -134,12 +134,12 @@ class OrchestratorTestCase(unittest.TestCase):
         if not preserve:
             self._nss.append(data['ns_id'])
 
-    def atest_04(self):
+    def test_04(self):
         """Posts VNFs"""
         self.post_vnf()
         self.post_vnf()
 
-    def atest_05(self):
+    def test_05(self):
         """Posts NSs"""
         self.post_vnf()
         self.post_vnf()

@@ -5,8 +5,8 @@ $(document).ready(function() {
     var final_filename = "";
     var spark = new SparkMD5.ArrayBuffer();
     var backend_url = "";
-    // backend_url = "http://192.168.10.70:9999/api/services/vmimage";
-    backend_url = "http://dev.anella.i2cat.net:9999/api/services/vmimage";
+    backend_url = "http://192.168.10.70:9999/api/services/vmimage";
+    // backend_url = "http://dev.anella.i2cat.net:9999/api/services/vmimage";
 
     function pad(num, size) {
 	var s = num+"";
