@@ -73,7 +73,7 @@ $(document).ready(function() {
 				    });
 				},
 			    	error: function() {
-				    $("#upload").html("<h3 style=\"color:red\">md5sums don't match!!!</h3>");
+				    $("#upload").html("<h3 style=\"color:red\">md5sums don't match or there was an error computing the md5sum!!!</h3>");
 				}
 			    })
 			}
