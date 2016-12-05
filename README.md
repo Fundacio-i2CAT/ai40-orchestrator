@@ -164,12 +164,15 @@ $ curl -XGET http://localhost:8082/orchestrator/api/v0.1/pop
 200
 [
     {
+        "name": "infrRepository-Pop-ID", 
         "pop_id": 9
     }, 
     {
+        "name": "infrRepository-Pop-ID", 
         "pop_id": 1
     }, 
     {
+        "name": "Adam", 
         "pop_id": 21
     }
 ]

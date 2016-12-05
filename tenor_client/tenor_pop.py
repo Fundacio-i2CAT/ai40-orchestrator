@@ -13,6 +13,20 @@ class TenorPoP(object):
     def __init__(self, pop_id=None, tenor_url=DEFAULT_TENOR_URL):
         self._pop_id = pop_id
 
+    def get_name(self):
+        url = '{0}/pops/dc/{1}'.format(DEFAULT_TENOR_URL,self._pop_id)
+        try:
+            resp = requests.get(url)
+        except:
+            raise IOError('{0} instance unreachable'.format(DEFAULT_TENOR_URL))
+        try:
+            json.loads(resp.text)
+        except:
+            raise ValueError('Decoding PoP response json response failed')
+        ids = []
+        pop = json.loads(resp.text)
+        return pop['name']
+
     def get_flavor_details(self):
         url = '{0}/pops/flavours/{1}'.format(DEFAULT_TENOR_URL,self._pop_id)
         try:
