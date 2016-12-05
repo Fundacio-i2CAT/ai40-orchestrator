@@ -61,7 +61,7 @@ curl -XPOST http://localhost:8082/orchestrator/api/v0.1/ns/1899 -H "Content-Type
 ## Post a new service creating new VNF, NS and NSI in a single round (see [example json file](tenor_client/samples/another.json))
 
 ```
-$ curl -XPOST http://localhost:8082/orchestrator/api/v0.1/service/instance -H "Content-Type: application/json" --data-binary @tenor_client/samples/another.json
+$ curl -XPOST http://localhost:8082/orchestrator/api/v0.1/service/instance -H "Content-Type: application/json" --data-binary @tenor_client/samples/catalog_v4.json
 ```
 
 
@@ -85,6 +85,13 @@ $ curl -XGET http://localhost:8082/orchestrator/api/v0.1/service/instance
     },
     {
         "ns_instance_id": "580f0647df67b515c8000005",
+	 "runtime_params": [
+            {
+                "desc": "Service instance IP address", 
+                "name": "instance_ip", 
+                "value": "172.24.4.168"
+            }
+        ], 
         "addresses": [
             {
                 "OS-EXT-IPS:type": "fixed",
@@ -92,40 +99,10 @@ $ curl -XGET http://localhost:8082/orchestrator/api/v0.1/service/instance
             },
             {
                 "OS-EXT-IPS:type": "floating",
-                "addr": "172.24.4.140"
+                "addr": "172.24.4.168"
             },
-            {
-                "OS-EXT-IPS:type": "fixed",
-                "addr": "192.118.223.3"
-            },
-            {
-                "OS-EXT-IPS:type": "floating",
-                "addr": "172.24.4.139"
-            }
         ],
         "state": "RUNNING"
-    },
-    {
-        "ns_instance_id": "580f064bdf67b515c8000006",
-        "addresses": [
-            {
-                "OS-EXT-IPS:type": "fixed",
-                "addr": "192.150.153.3"
-            },
-            {
-                "OS-EXT-IPS:type": "floating",
-                "addr": "172.24.4.142"
-            },
-            {
-                "OS-EXT-IPS:type": "fixed",
-                "addr": "192.9.250.3"
-            },
-            {
-                "OS-EXT-IPS:type": "floating",
-                "addr": "172.24.4.141"
-            }
-        ],
-        "state": "DEPLOYED"
     }
 ]
 ```
@@ -139,6 +116,13 @@ $ curl -XGET http://localhost:8082/orchestrator/api/v0.1/service/instance/580f06
 ```
 {
     "ns_instance_id": "580f064bdf67b515c8000006",
+    "runtime_params": [
+        {
+            "desc": "Service instance IP address", 
+            "name": "instance_ip", 
+            "value": "172.24.4.168"
+        }
+    ], 
     "addresses": [
         {
             "OS-EXT-IPS:type": "fixed",
@@ -146,15 +130,7 @@ $ curl -XGET http://localhost:8082/orchestrator/api/v0.1/service/instance/580f06
         },
         {
             "OS-EXT-IPS:type": "floating",
-            "addr": "172.24.4.142"
-        },
-        {
-            "OS-EXT-IPS:type": "fixed",
-            "addr": "192.9.250.3"
-        },
-        {
-            "OS-EXT-IPS:type": "floating",
-            "addr": "172.24.4.141"
+            "addr": "172.24.4.168"
         }
     ],
     "state": "DEPLOYED"
@@ -178,5 +154,59 @@ $ curl -XPUT http://localhost:8082/orchestrator/api/v0.1/service/instance/580f06
 409
 {
     "message": "Conflict: 580f064bdf67b515c8000006 stopped(running)"
+}
+```
+
+## Get PoPs available
+
+```
+$ curl -XGET http://localhost:8082/orchestrator/api/v0.1/pop
+200
+[
+    {
+        "pop_id": 9
+    }, 
+    {
+        "pop_id": 1
+    }, 
+    {
+        "pop_id": 21
+    }
+]
+```
+
+## Get Flavors available on a PoP
+
+
+```
+$ curl -XGET http://localhost:8082/orchestrator/api/v0.1/pop/21
+200
+{
+    "flavors": [
+        {
+            "disk": 50, 
+            "name": "VM.M1", 
+            "ram": 2048, 
+            "vcpus": 2
+        }, 
+        {
+            "disk": 20, 
+            "name": "VM.L4", 
+            "ram": 12288, 
+            "vcpus": 4
+        }, 
+        {
+            "disk": 85, 
+            "name": "VM.M6", 
+            "ram": 4096, 
+            "vcpus": 2
+        }, 
+        {
+            "disk": 25, 
+            "name": "VM.S", 
+            "ram": 1024, 
+            "vcpus": 1
+        }
+    ]
 }
 ```

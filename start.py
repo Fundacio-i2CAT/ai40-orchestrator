@@ -183,7 +183,7 @@ class PoP(flask_restful.Resource):
             for pid in ids:
                 if pid == int(pop_id):
                     tpop = TenorPoP(pid)
-                    return {'pop_id': tpop.get_flavor_details()}
+                    return {'flavors': tpop.get_flavor_details()}
             abort(404, message='{0} PoP not found'.format(pop_id))
         for pop_sid in ids:
             result.append({'pop_id': pop_sid})
