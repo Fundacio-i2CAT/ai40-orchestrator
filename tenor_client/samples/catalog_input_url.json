@@ -19,8 +19,9 @@
 	    "base_url": "http://localhost:4000", 
 	    "vm_image": "https://cloud-images.ubuntu.com/zesty/current/zesty-server-cloudimg-amd64.img",
 	    "vm_image_format": "qcow2",
-	    "name": "Thursday", 
-	    "flavor": "m1.large"
+	    "name": "Monday", 
+	    "flavor": "m1.large",
+	    "name_image": "lkjasdlaksjd"
 	}, 
 	"password": "test", 
 	"user_name": "test", 

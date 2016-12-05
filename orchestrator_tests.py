@@ -8,6 +8,11 @@ import unittest
 import requests
 import random
 import time
+import ConfigParser
+
+CONFIG = ConfigParser.RawConfigParser()
+CONFIG.read('config.cfg')
+POP_ID = int(CONFIG.get('tenor','default_pop'))
 
 BASE_URL = 'http://localhost:{0}{1}'.format(PORT, URL_PREFIX)
 
@@ -68,8 +73,6 @@ CATALOG_EXAMPLE = {
 	]
     }
 }
-
-POP_ID = 21
 
 class OrchestratorTestCase(unittest.TestCase):
     """Full test"""
@@ -202,7 +205,7 @@ class OrchestratorTestCase(unittest.TestCase):
         if not preserve:
             self._nsis.append(nsid)
 
-    def atest_06(self):
+    def test_06(self):
         """Posts vnf, ns and instantiates it"""
         self.post_vnf(False)
         self.post_ns(False)
