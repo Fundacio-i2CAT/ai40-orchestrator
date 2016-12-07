@@ -7,10 +7,10 @@
             }
 	],
 	"name_image" : "catv4",
-	"vm_image_format" : "qcow2",
+	"vm_image_format" : "openstack_id",
 	"tenor_url" : "http://localhost:4000",
-	"vm_image" : "https://cloud-images.ubuntu.com/zesty/current/zesty-server-cloudimg-amd64.img",
-	"flavor" : "m1.medium",
+	"vm_image" : "5d4fdb85-3e7a-4e92-be67-72214a61275d",
+	"flavor" : "VM.M1",
 	"consumer_params" : [
             {
 		"path" : "/var/www/html/index.html",
@@ -19,7 +19,7 @@
 			"required" : true,
 			"name" : "name",
 			"desc" : "Name of the consumer",
-			"value" : "Gatito dormilón"
+			"value" : "Gatito dormilón IV"
                     },
                     {
 			"required" : true,
@@ -31,7 +31,7 @@
 			"required" : true,
 			"name" : "cv",
 			"desc" : "CV del consumer",
-			"value" : "Arquitecto"
+			"value" : "Arquitecto alskdj aslkdj "
                     }
 		]
             },

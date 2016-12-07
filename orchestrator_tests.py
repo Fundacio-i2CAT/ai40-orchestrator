@@ -20,7 +20,7 @@ OVNFD_EXAMPLE = {
     "name": "friday",
     "vdu":
     {
-        "vm_image": "fef0a5bc-bba1-4267-8a7f-896fa4e02bc8",
+        "vm_image": "ea2e3551-fc46-44d4-891a-c09a10bfa39e",
         "vm_image_format": "openstack_id",
         "shell": "#!/bin/bash\\necho 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCTyrMs/iliz2PPAGACyGWwC7OqoIDgoStpiiXcJIAElaLiiAhlOdhCJP6okE2WzkuMf4XD80fVm/yikrjSRTVwph981KEEcAH+mRWThkoItaPqDLPh79AJfT1Ud48FQbG8MZu91X+E4ecnYQH/1bPRxiumWQLNrHmIhY8aIKv/xPCF8zZBYjG6BK/g2L22h4Ky6VI07uyzHyIk78OxUZTpQcb+jnFpJlVOZreRLc8RE6pDF17h4ZhrEmv0tvdWiubk46cbEUwOvGq9wWxFKReEQubC+7/2WNcQnkAylDxzbR9pF/RlomuwcBWSycQ8RVpmr8T1cydaBpi9cbBB2DOn alfonso@knightmare' >> /root/.ssh/authorized_keys",
         "storage_amount": 6,
@@ -37,11 +37,11 @@ CATALOG_EXAMPLE = {
 		"desc" : "sssssss"
             }
 	],
-	"name_image" : "Uploaded",
+	"name_image" : "OMPUPI40",
 	"tenor_url" : "http://localhost:4000",
-        "vm_image": "c2fb0e76-df9a-4040-8154-780213e1a01a",
+        "vm_image": "ea2e3551-fc46-44d4-891a-c09a10bfa39e",
         "vm_image_format": "openstack_id",
-	"flavor" : "VM.M1",
+	"flavor" : "m1.medium",
 	"consumer_params" : [
             {
 		"path" : "/var/www/html/index.html",
