@@ -12,7 +12,7 @@ import ConfigParser
 
 CONFIG = ConfigParser.RawConfigParser()
 CONFIG.read('config.cfg')
-POP_ID = int(CONFIG.get('tenor','default_pop'))
+POP_ID = int(CONFIG.get('tenor','i2cat_pop'))
 
 BASE_URL = 'http://localhost:{0}{1}'.format(PORT, URL_PREFIX)
 
@@ -211,7 +211,7 @@ class OrchestratorTestCase(unittest.TestCase):
         self.post_ns(False)
         self.instantiate_ns()
 
-    def test_07(self):
+    def atest_07(self):
         """Posts service/instance one round mode"""
         url = '{0}/service/instance'.format(BASE_URL)
         resp = requests.post(url, headers={'Content-Type': 'application/json'},
