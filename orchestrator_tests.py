@@ -74,6 +74,54 @@ CATALOG_EXAMPLE = {
     }
 }
 
+ADAM_EXAMPLE = {
+    "context" : {
+	"runtime_params" : [
+            {
+		"name" : "wwwwww",
+		"desc" : "sssssss"
+            }
+	],
+	"public_network_id" : "71257860-3085-40bb-b009-5f12c688cdfb",
+	"name_image" : "LuNESs",
+	"pop_id": 21,
+        "vm_image_format" : "openstack_id",
+	"tenor_url" : "http://localhost:4000",
+	"vm_image" : "5d4fdb85-3e7a-4e92-be67-72214a61275d",
+	"flavor" : "VM.M1",
+	"consumer_params" : [
+            {
+		"path" : "/var/www/html/index.html",
+		"fields" : [
+                    {
+			"required" : True,
+			"name" : "name",
+			"desc" : "Name of the consumer",
+			"value" : "Example deployment"
+                    },
+                    {
+			"required" : True,
+			"name" : "picture",
+			"desc" : "Consumer server Picture",
+			"value" : "http://vignette2.wikia.nocookie.net/creepypasta/images/2/27/Finn-El-Humano-Cuerpo-Entero-psd84986.png/revision/latest?cb=20130822044826&path-prefix=es"
+                    },
+                    {
+			"required" : True,
+			"name" : "cv",
+			"desc" : "CV del consumer",
+			"value" : "laksjd laksdj laksjd laks jdlkas jdlkas jd"
+                    }
+		]
+            },
+            {
+		"path" : "/root/chequeo.txt",
+		"content" : "YO ESTUVE AQUI"
+	    }
+	]
+    }
+}
+
+
 class OrchestratorTestCase(unittest.TestCase):
     """Full test"""
 
@@ -216,6 +264,13 @@ class OrchestratorTestCase(unittest.TestCase):
         url = '{0}/service/instance'.format(BASE_URL)
         resp = requests.post(url, headers={'Content-Type': 'application/json'},
                              json=CATALOG_EXAMPLE)
+        assert resp.status_code == 200
+
+    def test_08(self):
+        """Posts service/instance one round mode at Adam with fixed network/pop"""
+        url = '{0}/service/instance'.format(BASE_URL)
+        resp = requests.post(url, headers={'Content-Type': 'application/json'},
+                             json=ADAM_EXAMPLE)
         assert resp.status_code == 200
 
     def tearDown(self):
