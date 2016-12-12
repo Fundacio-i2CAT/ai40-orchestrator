@@ -6,6 +6,7 @@
 		"desc" : "sssssss"
             }
 	],
+	"public_network_id" : "71257860-3085-40bb-b009-5f12c688cdfb",
 	"name_image" : "LuNESs",
 	"vm_image_format" : "openstack_id",
 	"tenor_url" : "http://localhost:4000",

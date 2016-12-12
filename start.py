@@ -243,7 +243,12 @@ class ServiceInstance(flask_restful.Resource):
             vnf = TenorVNF(vdu)
             tns = TenorNS(vnf)
             tns.register(name, context['bootstrap_script'])
-            resp = tns.instantiate(POP_ID)
+            resp = None
+            if not 'public_network_id' in context:
+                resp = tns.instantiate(POP_ID)
+            else:
+                print context['public_network_id']
+                resp = tns.instantiate(POP_ID, context['public_network_id'])
             nsdata = json.loads(resp.text)
         except Exception as exc:
             abort(500,

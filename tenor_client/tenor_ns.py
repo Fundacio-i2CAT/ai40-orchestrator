@@ -99,11 +99,14 @@ class TenorNS(object):
 
     def instantiate(self,
                     pop_id=None,
+                    public_network_id=None,
                     callback_url=DEFAULT_CALLBACK_URL,
                     flavour=DEFAULT_FLAVOUR):
         """Instantiates the NS on openstack"""
         ns_data = {'ns_id': self._dummy_id, 'pop_id': pop_id,
-                   'callbackUrl': callback_url, 'flavour': flavour}
+                   'callbackUrl': callback_url, 'flavour': flavour, 
+                   'public_network_id': public_network_id}
+        print ns_data
         try:
             resp = requests.post('{0}/ns-instances'.format(self._tenor_url),
                                  headers={'Content-Type': 'application/json'},
