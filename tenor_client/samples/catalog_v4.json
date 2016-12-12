@@ -8,6 +8,7 @@
 	],
 	"public_network_id" : "71257860-3085-40bb-b009-5f12c688cdfb",
 	"name_image" : "LuNESs",
+	"pop_id": 21,
 	"vm_image_format" : "openstack_id",
 	"tenor_url" : "http://localhost:4000",
 	"vm_image" : "5d4fdb85-3e7a-4e92-be67-72214a61275d",
