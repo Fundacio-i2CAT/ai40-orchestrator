@@ -103,7 +103,7 @@ class TenorVNF(object):
             raise IOError('Template {0} IOError'.format(self._template))
         self._vnfd = templ.render(vnf_id=self._dummy_id,
                                   vm_image=self._vdu.vm_image,
-                                  vm_image_format=self._vdu.vm_image_format,
+                                  vm_image_format=self._vdu.vm_image_format.lower(),
                                   name=name,
                                   bootstrap_script=bootstrap_script,
                                   storage_amount=self._vdu.storage_amount,

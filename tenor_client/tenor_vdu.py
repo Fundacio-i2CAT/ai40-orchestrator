@@ -14,7 +14,7 @@ class TenorVDU(object):
                  storage_amount=6,
                  vcpus=1):
         self.vm_image = vm_image
-        self.vm_image_format = vm_image_format
+        self.vm_image_format = vm_image_format.lower()
         self.shell = shell
         self.storage_amount = storage_amount
         self.vcpus = vcpus
