@@ -6,7 +6,7 @@
 		"desc" : "sssssss"
             }
 	],
-	"name_image" : "catv4",
+	"name_image" : "LuNESs",
 	"vm_image_format" : "openstack_id",
 	"tenor_url" : "http://localhost:4000",
 	"vm_image" : "5d4fdb85-3e7a-4e92-be67-72214a61275d",
@@ -19,19 +19,19 @@
 			"required" : true,
 			"name" : "name",
 			"desc" : "Name of the consumer",
-			"value" : "Gatito dormilón IV"
+			"value" : "Example deployment"
                     },
                     {
 			"required" : true,
 			"name" : "picture",
-			"desc" : "Foto del consumer",
-			"value" : "https://c24e867c169a525707e0-bfbd62e61283d807ee2359a795242ecb.ssl.cf3.rackcdn.com/imagenes/gato/etapas-clave-de-su-vida/gatitos/nuevo-gatito-en-casa/gatito-durmiendo-en-cama.jpg"
+			"desc" : "Consumer server Picture",
+			"value" : "http://vignette2.wikia.nocookie.net/creepypasta/images/2/27/Finn-El-Humano-Cuerpo-Entero-psd84986.png/revision/latest?cb=20130822044826&path-prefix=es"
                     },
                     {
 			"required" : true,
 			"name" : "cv",
 			"desc" : "CV del consumer",
-			"value" : "Arquitecto alskdj aslkdj "
+			"value" : "laksjd laksdj laksjd laks jdlkas jdlkas jd"
                     }
 		]
             },

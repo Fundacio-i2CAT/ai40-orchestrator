@@ -20,7 +20,7 @@ OVNFD_EXAMPLE = {
     "name": "omupi",
     "vdu":
     {
-        "vm_image": "6478c4b7-bb85-4721-b499-3be57fd3d6a6",
+        "vm_image": "52f07518-3b32-4dfa-b067-2b0f53ceb0e1",
         "vm_image_format": "openstack_id",
         "shell": "#!/bin/bash\\necho 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCTyrMs/iliz2PPAGACyGWwC7OqoIDgoStpiiXcJIAElaLiiAhlOdhCJP6okE2WzkuMf4XD80fVm/yikrjSRTVwph981KEEcAH+mRWThkoItaPqDLPh79AJfT1Ud48FQbG8MZu91X+E4ecnYQH/1bPRxiumWQLNrHmIhY8aIKv/xPCF8zZBYjG6BK/g2L22h4Ky6VI07uyzHyIk78OxUZTpQcb+jnFpJlVOZreRLc8RE6pDF17h4ZhrEmv0tvdWiubk46cbEUwOvGq9wWxFKReEQubC+7/2WNcQnkAylDxzbR9pF/RlomuwcBWSycQ8RVpmr8T1cydaBpi9cbBB2DOn alfonso@knightmare' >> /root/.ssh/authorized_keys",
         "storage_amount": 6,
@@ -39,7 +39,7 @@ CATALOG_EXAMPLE = {
 	],
 	"name_image" : "OMPUPI40",
 	"tenor_url" : "http://localhost:4000",
-        "vm_image": "ea2e3551-fc46-44d4-891a-c09a10bfa39e",
+        "vm_image": "52f07518-3b32-4dfa-b067-2b0f53ceb0e1",
         "vm_image_format": "openstack_id",
 	"flavor" : "m1.medium",
 	"consumer_params" : [
@@ -211,7 +211,7 @@ class OrchestratorTestCase(unittest.TestCase):
         self.post_ns(False)
         self.instantiate_ns()
 
-    def atest_07(self):
+    def test_07(self):
         """Posts service/instance one round mode"""
         url = '{0}/service/instance'.format(BASE_URL)
         resp = requests.post(url, headers={'Content-Type': 'application/json'},

@@ -17,7 +17,7 @@ import datetime
 
 CONFIG = ConfigParser.RawConfigParser()
 CONFIG.read('config.cfg')
-POP_ID = int(CONFIG.get('tenor','default_pop'))
+POP_ID = int(CONFIG.get('tenor','i2cat_pop'))
 
 HOST = CONFIG.get('flask', 'host')
 PREFIX = CONFIG.get('flask', 'prefix')
