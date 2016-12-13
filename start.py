@@ -176,21 +176,26 @@ class PoP(flask_restful.Resource):
     def __init__(self):
         pass
 
-    def get(self, pop_id=None):
+    def get(self, pop_id=None, resource=None):
         ids = TenorPoP.get_pop_ids()
         result = []
         if pop_id:
             for pid in ids:
                 if pid == int(pop_id):
                     tpop = TenorPoP(pid)
-                    return {'flavors': tpop.get_flavor_details()}
-            abort(404, message='{0} PoP not found'.format(pop_id))
+                    if not resource:
+                        return {'pop_id': pop_id, 'name': tpop.get_name()}
+                    if resource == 'flavors':
+                        return {'flavors': tpop.get_flavor_details()}
+                    elif resource == 'networks':
+                        return {'networks': tpop.get_network_details()}
+            if resource:
+                abort(404, message='{0} PoP not found or resource {1} not in (networks,flavors)'.format(pop_id,resource))
         for pop_sid in ids:
             my_pop = TenorPoP(pop_sid)
             result.append({'pop_id': pop_sid,
                            'name': my_pop.get_name()})
         return result
-
 
 class ServiceInstance(flask_restful.Resource):
     """Service instance resources"""
@@ -359,7 +364,8 @@ API_V2.add_resource(NS,
 
 API_V2.add_resource(PoP,
                     '/pop',
-                    '/pop/<pop_id>')
+                    '/pop/<pop_id>',
+                    '/pop/<pop_id>/<resource>')
 
 if __name__ == "__main__":
     print "Industrial Platform 4.0 Orchestrator"

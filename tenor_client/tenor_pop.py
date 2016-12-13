@@ -27,6 +27,23 @@ class TenorPoP(object):
         pop = json.loads(resp.text)
         return pop['name']
 
+    def get_network_details(self):
+        url = '{0}/pops/networks/{1}'.format(DEFAULT_TENOR_URL,self._pop_id)
+        try:
+            resp = requests.get(url)
+        except:
+            raise IOError('{0} PoP unreachable'.format(self._pop_id))
+        try:
+            networks = json.loads(resp.text)
+        except:
+            raise ValueError('Decoding PoP response json response failed')
+        network_details = []
+        for network in networks["networks"]:
+            network_details.append({'name': network['name'],
+                                   'id': network['id'],
+                                   'router_external': network['router:external']})
+        return network_details
+
     def get_flavor_details(self):
         url = '{0}/pops/flavours/{1}'.format(DEFAULT_TENOR_URL,self._pop_id)
         try:
