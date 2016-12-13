@@ -182,7 +182,7 @@ $ curl -XGET http://localhost:8082/orchestrator/api/v0.1/pop
 
 
 ```
-$ curl -XGET http://localhost:8082/orchestrator/api/v0.1/pop/21
+$ curl -XGET http://localhost:8082/orchestrator/api/v0.1/pop/21/flavors
 200
 {
     "flavors": [
@@ -212,4 +212,34 @@ $ curl -XGET http://localhost:8082/orchestrator/api/v0.1/pop/21
         }
     ]
 }
+```
+
+## Get Networks available on a PoP
+
+
+```
+$ curl -XGET http://localhost:8082/orchestrator/api/v0.1/pop/21/networks
+200
+{
+    "networks": [
+        {
+            "id": "d2c87db8-8e6a-499e-86dc-a7022b169f89", 
+            "name": "ext-abast_aspy-net", 
+            "router_external": true
+        }, 
+        {
+            "id": "06f3db53-56c2-49b6-ab4e-5a8a5c836689", 
+            "name": "ext-backup-net", 
+            "router_external": true
+        }, 
+        {
+            "id": "88aa11d8-f39d-480f-b048-12660beb2d49", 
+            "name": "ext-abast_enuve-net", 
+            "router_external": true
+        }, 
+        {
+            "id": "fb2677ae-a502-4d9f-b58a-ba0cfcf40e66", 
+            "name": "ext-enisa_integracion-net", 
+            "router_external": true
+        }
 ```
