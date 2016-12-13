@@ -1,0 +1,23 @@
+[
+    {
+	"_id" : 1,
+	"name" : "infrRepository-Pop-ID",
+	"host" : "84.88.40.75",
+	"user" : "tenor_user",
+	"password" : "secretsecret",
+	"tenant_name" : "tenor_tenant",
+	"is_admin" : false,
+	"description" : "Description",
+	"extra_info" : "keystone-endpoint=http://84.88.40.75:35357/v2.0 orch-endpoint=http://84.88.40.75:8004/v1 compute-endpoint=http://84.88.40.75:8774/v2.1 neutron-endpoint=http://84.88.40.75:9696/v2.0 dns=8.8.8.8"
+    },
+    { "_id" : 21,
+      "name" : "Adam",
+      "host" : "87.236.219.10",
+      "user" : "i2cat",
+      "password" : "c5QWZTSv9gn0",
+      "tenant_name" : "i2cat",
+      "is_admin" : false,
+      "description" : "Pop_description",
+      "extra_info" : "keystone-endpoint=http://87.236.219.10:5000/v3 orch-endpoint=http://87.236.219.10:8004/v1 compute-endpoint=http://87.236.219.10:8774/v2.1 neutron-endpoint=http://87.236.219.10:9696/v2.0 dns=8.8.8.8"
+    }
+]

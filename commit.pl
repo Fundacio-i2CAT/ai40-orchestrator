@@ -7,7 +7,7 @@ my $name = shift @ARGV || die "\nLack of commit name\n\n";
 map { $name .= " $_"; } @ARGV;
 
 my @files = (
-	     "keys/dcs.json",
+	     "dcs.json",
 	     "chunkUploader/repoServer.py",
 	     "chunkUploader/send.pl",
 	     "chunkUploader/requirements.txt",
